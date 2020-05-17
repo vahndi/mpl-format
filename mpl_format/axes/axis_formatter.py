@@ -78,6 +78,13 @@ class AxisFormatter(object):
         self._axis.set_major_formatter(tick)
         return self
 
+    def set_label_size(self, font_size: int) -> 'AxisFormatter':
+        """
+        Set the font size for the axis label.
+        """
+        self._axis.label.set_fontsize(font_size)
+        return self
+
     def set_tick_label_size(self, font_size: int) -> 'AxisFormatter':
         """
         Set the font size for the axis tick labels.
