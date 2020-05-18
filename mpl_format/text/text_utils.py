@@ -6,7 +6,8 @@ from matplotlib.text import Text
 from mpl_format.settings import MAX_LABEL_WIDTH
 
 
-def wrap_text(text: Union[str, Text], max_width: int = None) -> str:
+def wrap_text(text: Union[str, Text, Iterable[str], Iterable[Text]],
+              max_width: int = None) -> Union[str, List[str]]:
     """
     Wrap text that exceeds a given width of characters with new lines.
 
@@ -14,10 +15,15 @@ def wrap_text(text: Union[str, Text], max_width: int = None) -> str:
     :param max_width: The maximum character width per line.
     """
     max_chars = max_width or MAX_LABEL_WIDTH
+
+    if isinstance(text, Text):
+        text = text.get_text()
+
+    if not isinstance(text, str):
+        return [wrap_text(t, max_width) for t in text]
+
     if isinstance(text, str):
         return '\n'.join(wrap(text=text, width=max_chars))
-    elif isinstance(text, Text):
-        return '\n'.join(wrap(text=text.get_text(), width=max_chars))
     else:
         raise ValueError(f'Cannot wrap text for type {type(text)}.')
 
