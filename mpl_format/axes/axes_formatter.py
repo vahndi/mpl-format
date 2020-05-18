@@ -196,12 +196,14 @@ class AxesFormatter(object):
         Set the font size for the x-axis tick labels.
         """
         self.x_axis.set_tick_label_size(font_size)
+        return self
 
     def set_y_tick_label_size(self, font_size: int) -> 'AxesFormatter':
         """
         Set the font size for the y-axis tick labels.
         """
         self.y_axis.set_tick_label_size(font_size)
+        return self
 
     def set_tick_label_sizes(self, font_size: int) -> 'AxesFormatter':
         """
@@ -305,7 +307,7 @@ class AxesFormatter(object):
 
     # endregion
 
-    # rotation
+    # region rotation
 
     def rotate_x_label(self, rotation: int, how: str = 'absolute') -> 'AxesFormatter':
         """
@@ -395,6 +397,7 @@ class AxesFormatter(object):
         :param file_type: The type of file to save.
         """
         save_plot(plot_object=self._axes, file_path=file_path, file_type=file_type)
+        return self
 
     def tight_layout(self) -> 'AxesFormatter':
         """
