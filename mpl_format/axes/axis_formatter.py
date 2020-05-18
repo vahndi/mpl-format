@@ -5,7 +5,7 @@ from matplotlib.ticker import StrMethodFormatter
 from typing import Union, Dict, Callable
 
 from mpl_format.text.text_formatter import TextFormatter
-from mpl_format.text.text_utils import wrap_text
+from mpl_format.text.text_utils import wrap_text, map_text
 
 
 class AxisFormatter(object):
@@ -133,14 +133,7 @@ class AxisFormatter(object):
         :param mapping: Dictionary or a function mapping old text to new text.
         """
         labels = [label.get_text() for label in self._axis.get_ticklabels()]
-        if isinstance(mapping, dict):
-            new_labels = [label if label not in mapping.keys()
-                          else mapping[label] for label in labels]
-        elif callable(mapping):
-            new_labels = [mapping(label) for label in labels]
-        else:
-            raise TypeError('mapping must be a dict or callable')
-        self._axis.set_ticklabels(new_labels)
+        self._axis.set_ticklabels(map_text(labels, mapping))
         return self
 
     def set_scale_log(self) -> 'AxisFormatter':

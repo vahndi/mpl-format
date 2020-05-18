@@ -1,5 +1,5 @@
 from textwrap import wrap
-from typing import Union
+from typing import Union, Dict, Callable, List, Iterable
 
 from matplotlib.text import Text
 
@@ -36,3 +36,25 @@ def remove_parenthesized_text(text: Union[str, Text]) -> str:
         r_pos = text.index(')')
         text = text[:l_pos] + text[r_pos + 1:]
     return text
+
+
+def map_text(text: Union[str, Text, Iterable[str], Iterable[Text]],
+             mapping: Union[Dict[str, str], Callable[[str], str]]) -> Union[str, List[str]]:
+    """
+    Replace text if it matches one of the dictionary keys.
+
+    :param text: Text instance(s) to map.
+    :param mapping: Mappings to replace text.
+    """
+    if isinstance(text, Text):
+        text = text.get_text()
+    if not isinstance(text, str):
+        return [map_text(t, mapping) for t in text]
+
+    if isinstance(mapping, dict):
+        if text in mapping.keys():
+            return mapping[text]
+    elif callable(mapping):
+        return mapping(text)
+    else:
+        raise TypeError('mapping must be a dict or callable')
