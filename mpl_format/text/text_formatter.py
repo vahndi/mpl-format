@@ -86,3 +86,23 @@ class TextFormatter(object):
             self.to_string().replace(old, new)
         )
         return self
+
+    def set_size(self, font_size) -> 'TextFormatter':
+        """
+        Set the font size for the Text.
+        """
+        self._text.set_fontsize(font_size)
+        return self
+
+    def set_text(self, text: str) -> 'TextFormatter':
+        """
+        Set the text string.
+        """
+        self._text.set_text(text)
+
+    def clear(self) -> 'TextFormatter':
+        """
+        Clear the text string.
+        """
+        self.set_text('')
+        return self

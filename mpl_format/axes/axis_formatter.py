@@ -4,6 +4,7 @@ from matplotlib.text import Text
 from matplotlib.ticker import StrMethodFormatter
 from typing import Union, Dict, Callable
 
+from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
 
@@ -23,6 +24,13 @@ class AxisFormatter(object):
         Return the wrapped matplotlib Axis object.
         """
         return self._axis
+
+    @property
+    def label(self) -> TextFormatter:
+        """
+        Return a TextFormatter wrapping the axis label.
+        """
+        return TextFormatter(self._axis.label)
 
     def rotate_tick_labels(self, rotation: int, how: str = 'absolute') -> 'AxisFormatter':
         """
@@ -78,11 +86,18 @@ class AxisFormatter(object):
         self._axis.set_major_formatter(tick)
         return self
 
+    def set_label_text(self, text: str) -> 'AxisFormatter':
+        """
+        Set the text of the Axis label.
+        """
+        self.label.set_text(text)
+        return self
+
     def set_label_size(self, font_size: int) -> 'AxisFormatter':
         """
         Set the font size for the axis label.
         """
-        self._axis.label.set_fontsize(font_size)
+        self.label.set_size(font_size)
         return self
 
     def set_tick_label_size(self, font_size: int) -> 'AxisFormatter':
@@ -135,4 +150,24 @@ class AxisFormatter(object):
         Set the scale of the axis to logit.
         """
         self._axis._set_scale('logit')
+        return self
+
+    def set_inverted(self, inverted: bool = True) -> 'AxisFormatter':
+        """
+        Invert the Axis.
+        """
+        self._axis.set_inverted(inverted=inverted)
+        return self
+
+    def invert(self) -> 'AxisFormatter':
+        """
+        Invert the Axis.
+        """
+        self._axis.set_inverted(inverted=not self._axis.get_inverted())
+
+    def replace_label_text(self, old: str, new: str) -> 'AxisFormatter':
+        """
+        Replace the old label text with the new.
+        """
+        self.label.replace(old=old, new=new)
         return self
