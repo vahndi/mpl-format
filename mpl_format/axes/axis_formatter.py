@@ -17,6 +17,7 @@ class AxisFormatter(object):
         :param axis: The matplotlib Axis instance to wrap.
         """
         self._axis: Axis = axis
+        self._label: TextFormatter = TextFormatter(self._axis.label)
 
     @property
     def axis(self) -> Axis:
@@ -30,7 +31,17 @@ class AxisFormatter(object):
         """
         Return a TextFormatter wrapping the axis label.
         """
-        return TextFormatter(self._axis.label)
+        return self._label
+
+    def rotate_label(self, rotation: int, how: str = 'absolute') -> 'AxisFormatter':
+        """
+        Set the rotation of the axis label.
+
+        :param rotation: The rotation value to set in degrees.
+        :param how: 'absolute' or 'relative'
+        """
+        self.label.rotate(rotation, how)
+        return self
 
     def rotate_tick_labels(self, rotation: int, how: str = 'absolute') -> 'AxisFormatter':
         """
@@ -51,6 +62,14 @@ class AxisFormatter(object):
             plt.setp(self._axis.get_minorticklabels(), rotation=rotation)
         return self
 
+    def wrap_label(self, max_width: int) -> 'AxisFormatter':
+        """
+        Wrap the axis label text if it exceeds a given width of characters.
+        :param max_width: The maximum character width per line.
+        """
+        self.label.wrap(max_width=max_width)
+        return self
+
     def wrap_tick_labels(self, max_width: int) -> 'AxisFormatter':
         """
         Wrap the text for each tick label with new lines if it exceeds
@@ -63,7 +82,7 @@ class AxisFormatter(object):
             for text in self._axis.get_ticklabels()
         ])
 
-    def set_integer_format(self, separator: str = ',') -> 'AxisFormatter':
+    def set_format_integer(self, separator: str = ',') -> 'AxisFormatter':
         """
         Format an axis with currency symbols and separators.
 
@@ -74,7 +93,7 @@ class AxisFormatter(object):
         self._axis.set_major_formatter(tick)
         return self
 
-    def set_currency_format(self, symbol: str = '$', num_decimals: int = 0) -> 'AxisFormatter':
+    def set_format_currency(self, symbol: str = '$', num_decimals: int = 0) -> 'AxisFormatter':
         """
         Format an axis with currency symbols and separators.
 
@@ -124,28 +143,28 @@ class AxisFormatter(object):
         self._axis.set_ticklabels(new_labels)
         return self
 
-    def set_log_scale(self) -> 'AxisFormatter':
+    def set_scale_log(self) -> 'AxisFormatter':
         """
         Set the scale of the axis to logarithmic.
         """
         self._axis._set_scale('log')
         return self
 
-    def set_linear_scale(self) -> 'AxisFormatter':
+    def set_scale_linear(self) -> 'AxisFormatter':
         """
         Set the scale of the axis to logarithmic.
         """
         self._axis._set_scale('linear')
         return self
 
-    def set_symmetrical_log_scale(self) -> 'AxisFormatter':
+    def set_scale_symmetrical_log(self) -> 'AxisFormatter':
         """
         Set the scale of the axis to symmetrical logarithmic.
         """
         self._axis._set_scale('symlog')
         return self
 
-    def set_logit_scale(self) -> 'AxisFormatter':
+    def set_scale_logit(self) -> 'AxisFormatter':
         """
         Set the scale of the axis to logit.
         """
