@@ -5,6 +5,7 @@ from typing import Optional, Union, Dict, Callable
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.io_utils import save_plot
+from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
@@ -25,6 +26,11 @@ class AxesFormatter(object):
         self._x_axis: AxisFormatter = AxisFormatter(self._axes.xaxis)
         self._y_axis: AxisFormatter = AxisFormatter(self._axes.yaxis)
         self._title: TextFormatter = TextFormatter(self._axes.title)
+        legend = self._axes.get_legend()
+        if legend is None:
+            self._legend = None
+        else:
+            self._legend = LegendFormatter(legend)
 
     # region properties
 
@@ -48,6 +54,14 @@ class AxesFormatter(object):
         Return an AxisFormatter for the y-axis of the wrapped Axes.
         """
         return self._y_axis
+
+    @property
+    def legend(self) -> LegendFormatter:
+        """
+        Return a LegendFormatter for the legend of the wrapped Axes, if there is one.
+        :return:
+        """
+        return self._legend
 
     @property
     def title(self) -> TextFormatter:
@@ -289,6 +303,7 @@ class AxesFormatter(object):
         Remove the legend from the Axes.
         """
         self._axes.get_legend().remove()
+        self._legend = None
         return self
 
     def remove_x_ticks(self) -> 'AxesFormatter':
@@ -419,3 +434,10 @@ class AxesFormatter(object):
         """
         self.y_axis.invert()
         return self
+
+    def add_legend(self) -> LegendFormatter:
+        """
+        Add a legend to the axes.
+        """
+        self._legend = LegendFormatter(self._axes.legend())
+        return self._legend

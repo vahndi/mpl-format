@@ -87,18 +87,54 @@ class TextFormatter(object):
         )
         return self
 
+    def set_text(self, text: str) -> 'TextFormatter':
+        """
+        Set the text string.
+        """
+        self._text.set_text(text)
+
     def set_size(self, font_size) -> 'TextFormatter':
         """
         Set the font size for the Text.
         """
         self._text.set_fontsize(font_size)
         return self
+    
+    def set_size_xx_small(self):
+        self.set_size('xx-small')
+        return self
 
-    def set_text(self, text: str) -> 'TextFormatter':
-        """
-        Set the text string.
-        """
-        self._text.set_text(text)
+    def set_size_x_small(self):
+        self.set_size('x-small')
+        return self
+
+    def set_size_small(self):
+        self.set_size('small')
+        return self
+
+    def set_size_medium(self):
+        self.set_size('medium')
+        return self
+
+    def set_size_large(self):
+        self.set_size('large')
+        return self
+
+    def set_size_x_large(self):
+        self.set_size('x-large')
+        return self
+
+    def set_size_xx_large(self):
+        self.set_size('xx-large')
+        return self
+
+    def set_size_larger(self):
+        self.set_size('larger')
+        return self
+
+    def set_size_smaller(self):
+        self.set_size('smaller')
+        return self
 
     def clear(self) -> 'TextFormatter':
         """
