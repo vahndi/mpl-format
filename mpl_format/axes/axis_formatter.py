@@ -81,6 +81,7 @@ class AxisFormatter(object):
             wrap_text(text, max_width)
             for text in self._axis.get_ticklabels()
         ])
+        return self
 
     def set_format_integer(self, separator: str = ',') -> 'AxisFormatter':
         """
@@ -129,6 +130,13 @@ class AxisFormatter(object):
         self.label.set_text(text)
         return self
 
+    def remove_label(self) -> 'AxisFormatter':
+        """
+        Remove the Axis label.
+        """
+        self.set_label_text('')
+        return self
+
     def set_label_size(self, font_size: int) -> 'AxisFormatter':
         """
         Set the font size for the axis label.
@@ -153,32 +161,37 @@ class AxisFormatter(object):
         self._axis.set_ticklabels(map_text(labels, mapping))
         return self
 
+    def set_scale(self, scale: str) -> 'AxisFormatter':
+
+        self._axis._set_scale(scale)
+        return self
+
     def set_scale_log(self) -> 'AxisFormatter':
         """
         Set the scale of the axis to logarithmic.
         """
-        self._axis._set_scale('log')
+        self.set_scale('log')
         return self
 
     def set_scale_linear(self) -> 'AxisFormatter':
         """
         Set the scale of the axis to logarithmic.
         """
-        self._axis._set_scale('linear')
+        self.set_scale('linear')
         return self
 
     def set_scale_symmetrical_log(self) -> 'AxisFormatter':
         """
         Set the scale of the axis to symmetrical logarithmic.
         """
-        self._axis._set_scale('symlog')
+        self.set_scale('symlog')
         return self
 
     def set_scale_logit(self) -> 'AxisFormatter':
         """
         Set the scale of the axis to logit.
         """
-        self._axis._set_scale('logit')
+        self.set_scale('logit')
         return self
 
     def set_inverted(self, inverted: bool = True) -> 'AxisFormatter':
@@ -193,6 +206,7 @@ class AxisFormatter(object):
         Invert the Axis.
         """
         self._axis.set_inverted(inverted=not self._axis.get_inverted())
+        return self
 
     def replace_label_text(self, old: str, new: str) -> 'AxisFormatter':
         """

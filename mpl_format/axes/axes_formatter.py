@@ -320,6 +320,20 @@ class AxesFormatter(object):
         self._axes.set_yticks([])
         return self
 
+    def remove_x_label(self) -> 'AxesFormatter':
+        """
+        Remove the label from the x-axis.
+        """
+        self.x_axis.remove_label()
+        return self
+
+    def remove_y_label(self) -> 'AxesFormatter':
+        """
+        Remove the label from the y-axis.
+        """
+        self.y_axis.remove_label()
+        return self
+
     # endregion
 
     # region rotation
