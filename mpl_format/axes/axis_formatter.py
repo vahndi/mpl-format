@@ -1,7 +1,7 @@
 from matplotlib.axis import Axis
 import matplotlib.pyplot as plt
 from matplotlib.text import Text
-from matplotlib.ticker import StrMethodFormatter
+from matplotlib.ticker import StrMethodFormatter, FuncFormatter
 from typing import Union, Dict, Callable
 
 from mpl_format.text.text_formatter import TextFormatter
@@ -103,6 +103,23 @@ class AxisFormatter(object):
         fmt = '%s{x:,.%sf}' % (symbol, num_decimals)
         tick = StrMethodFormatter(fmt)
         self._axis.set_major_formatter(tick)
+        return self
+
+    def set_format_percent(self, num_decimals: int = 0,
+                           multiply_100: bool = True) -> 'AxisFormatter':
+        """
+        Format an axis as a percentage.
+
+        :param num_decimals: Number of decimal places for the resulting label.
+        :param multiply_100: Whether to multiply the existing value by 100 before formatting.
+        """
+        def percent_formatter(s, _):
+            s = float(s)
+            if multiply_100:
+                s *= 100
+            return f'{s:.{num_decimals}f}%'
+
+        self._axis.set_major_formatter(FuncFormatter(percent_formatter))
         return self
 
     def set_label_text(self, text: str) -> 'AxisFormatter':
