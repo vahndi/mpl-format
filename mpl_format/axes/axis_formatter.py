@@ -161,6 +161,15 @@ class AxisFormatter(object):
         self._axis.set_ticklabels(map_text(labels, mapping))
         return self
 
+    def map_label(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxisFormatter':
+        """
+        Map the label text using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.label.map(mapping)
+        return self
+
     def set_scale(self, scale: str) -> 'AxisFormatter':
 
         self._axis._set_scale(scale)

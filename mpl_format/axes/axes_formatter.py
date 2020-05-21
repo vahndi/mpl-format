@@ -266,6 +266,34 @@ class AxesFormatter(object):
 
     # region map labels
 
+    def map_x_axis_label(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+        """
+        Map the label text for the x-axis using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.x_axis.map_label(mapping)
+        return self
+
+    def map_y_axis_label(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+        """
+        Map the label text for the y-axis using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.y_axis.map_label(mapping)
+        return self
+
+    def map_axis_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+        """
+        Map the label text for the x and y axes using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.map_x_axis_label(mapping)
+        self.map_y_axis_label(mapping)
+        return self
+
     def map_x_tick_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
         """
         Map the tick label text for the x-axis using a dictionary or function.

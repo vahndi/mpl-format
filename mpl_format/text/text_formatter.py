@@ -92,6 +92,7 @@ class TextFormatter(object):
         Set the text string.
         """
         self._text.set_text(text)
+        return self
 
     def set_size(self, font_size) -> 'TextFormatter':
         """
