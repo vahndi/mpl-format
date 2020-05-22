@@ -32,6 +32,7 @@ class FigureFormatter(object):
                                         sharex=share_x, sharey=share_y,
                                         figsize=fig_size)
             self._axes: Union[Axes, ndarray] = axes
+            self._figure: Figure = figure
         self._has_array = isinstance(self._axes, ndarray)
 
     @property
