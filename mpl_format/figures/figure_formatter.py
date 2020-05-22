@@ -15,23 +15,29 @@ class FigureFormatter(object):
 
     share_values = ('all', 'row', 'col', 'none')
 
-    def __init__(self, axes: Axes = None,
+    def __init__(self, fig_or_axes: Union[Figure, Axes] = None,
                  n_rows: int = 1, n_cols: int = 1,
                  fig_size: Tuple[int, int] = (16, 9),
                  share_x: str = 'none',
                  share_y: str = 'none'):
 
-        if axes is not None:
-            self._figure: Figure = axes.figure
-            self._axes = axes
+        if fig_or_axes is not None:
+            if isinstance(fig_or_axes, Figure):
+                self._figure = fig_or_axes
+                self._axes = fig_or_axes.axes
+            elif isinstance(fig_or_axes, Axes):
+                self._figure = fig_or_axes.figure
+                self._axes = fig_or_axes
+            else:
+                raise ValueError('Can only instantiate a new FigureFormatter from an Axes or Figure instance.')
         else:
             assert share_x in self.share_values
             assert share_y in self.share_values
             self._fig_size: Tuple[int, int] = fig_size
-            figure, axes = plt.subplots(nrows=n_rows, ncols=n_cols,
-                                        sharex=share_x, sharey=share_y,
-                                        figsize=fig_size)
-            self._axes: Union[Axes, ndarray] = axes
+            figure, fig_or_axes = plt.subplots(nrows=n_rows, ncols=n_cols,
+                                               sharex=share_x, sharey=share_y,
+                                               figsize=fig_size)
+            self._axes: Union[Axes, ndarray] = fig_or_axes
             self._figure: Figure = figure
         self._has_array = isinstance(self._axes, ndarray)
 
