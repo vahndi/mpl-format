@@ -1,4 +1,5 @@
 from matplotlib.axes import Axes
+import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import Optional, Union, Dict, Callable
 
@@ -76,6 +77,15 @@ class AxesFormatter(object):
         Set the text of the Axes title.
         """
         self.title.set_text(text)
+        return self
+
+    def map_title_text(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+        """
+        Map the label text for the title using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.title.map(mapping=mapping)
         return self
 
     def set_x_label_text(self, text: str) -> 'AxesFormatter':
@@ -326,6 +336,13 @@ class AxesFormatter(object):
 
     # region remove
 
+    def remove_title(self) -> 'AxesFormatter':
+        """
+        Remove the title from the Axes.
+        """
+        self.set_title_text('')
+        return self
+
     def remove_legend(self) -> 'AxesFormatter':
         """
         Remove the legend from the Axes.
@@ -488,3 +505,10 @@ class AxesFormatter(object):
         """
         self._legend = LegendFormatter(self._axes.legend())
         return self._legend
+
+    @staticmethod
+    def show():
+        """
+        Show the figure for the axes.
+        """
+        plt.show()
