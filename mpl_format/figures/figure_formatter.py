@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -6,6 +8,7 @@ from typing import Tuple, Union, Dict, Callable, List
 
 from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray
+from mpl_format.io_utils import save_plot
 
 
 class FigureFormatter(object):
@@ -175,6 +178,16 @@ class FigureFormatter(object):
         """
         self.map_x_axis_labels(mapping=mapping)
         self.map_y_axis_labels(mapping=mapping)
+        return self
+
+    def save(self, file_path: Union[str, Path], file_type: str = 'png') -> 'FigureFormatter':
+        """
+        Save the plot to disk.
+
+        :param file_path: The file path to save the plot object to.
+        :param file_type: The type of file to save.
+        """
+        save_plot(plot_object=self._figure, file_path=file_path, file_type=file_type)
         return self
 
     @staticmethod
