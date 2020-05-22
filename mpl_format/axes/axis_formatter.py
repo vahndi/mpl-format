@@ -33,6 +33,36 @@ class AxisFormatter(object):
         """
         return self._label
 
+    # region labels
+
+    def set_label_text(self, text: str) -> 'AxisFormatter':
+        """
+        Set the text of the Axis label.
+        """
+        self.label.set_text(text)
+        return self
+
+    def set_label_font_family(self, font_name: str) -> 'AxisFormatter':
+
+        self.label.set_font_family(font_name)
+        return self
+
+    def replace_label_text(self, old: str, new: str) -> 'AxisFormatter':
+        """
+        Replace the old label text with the new.
+        """
+        self.label.replace(old=old, new=new)
+        return self
+
+    def map_label_text(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxisFormatter':
+        """
+        Map the label text using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.label.map(mapping)
+        return self
+
     def rotate_label(self, rotation: int, how: str = 'absolute') -> 'AxisFormatter':
         """
         Set the rotation of the axis label.
@@ -42,6 +72,32 @@ class AxisFormatter(object):
         """
         self.label.rotate(rotation, how)
         return self
+
+    def remove_label(self) -> 'AxisFormatter':
+        """
+        Remove the Axis label.
+        """
+        self.set_label_text('')
+        return self
+
+    def wrap_label(self, max_width: int) -> 'AxisFormatter':
+        """
+        Wrap the axis label text if it exceeds a given width of characters.
+        :param max_width: The maximum character width per line.
+        """
+        self.label.wrap(max_width=max_width)
+        return self
+
+    def set_label_size(self, font_size: int) -> 'AxisFormatter':
+        """
+        Set the font size for the axis label.
+        """
+        self.label.set_size(font_size)
+        return self
+
+    # endregion
+
+    # region tick labels
 
     def rotate_tick_labels(self, rotation: int, how: str = 'absolute') -> 'AxisFormatter':
         """
@@ -60,14 +116,6 @@ class AxisFormatter(object):
             plt.setp(self._axis.get_majorticklabels(), rotation=rotation)
         if self._axis.get_minorticklabels():
             plt.setp(self._axis.get_minorticklabels(), rotation=rotation)
-        return self
-
-    def wrap_label(self, max_width: int) -> 'AxisFormatter':
-        """
-        Wrap the axis label text if it exceeds a given width of characters.
-        :param max_width: The maximum character width per line.
-        """
-        self.label.wrap(max_width=max_width)
         return self
 
     def wrap_tick_labels(self, max_width: int) -> 'AxisFormatter':
@@ -123,27 +171,6 @@ class AxisFormatter(object):
         self._axis.set_major_formatter(FuncFormatter(percent_formatter))
         return self
 
-    def set_label_text(self, text: str) -> 'AxisFormatter':
-        """
-        Set the text of the Axis label.
-        """
-        self.label.set_text(text)
-        return self
-
-    def remove_label(self) -> 'AxisFormatter':
-        """
-        Remove the Axis label.
-        """
-        self.set_label_text('')
-        return self
-
-    def set_label_size(self, font_size: int) -> 'AxisFormatter':
-        """
-        Set the font size for the axis label.
-        """
-        self.label.set_size(font_size)
-        return self
-
     def set_tick_label_size(self, font_size: int) -> 'AxisFormatter':
         """
         Set the font size for the axis tick labels.
@@ -151,7 +178,7 @@ class AxisFormatter(object):
         self._axis.set_tick_params(labelsize=font_size)
         return self
 
-    def map_tick_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxisFormatter':
+    def map_tick_label_text(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxisFormatter':
         """
         Map the tick label text using a dictionary or function.
 
@@ -161,14 +188,9 @@ class AxisFormatter(object):
         self._axis.set_ticklabels(map_text(labels, mapping))
         return self
 
-    def map_label(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxisFormatter':
-        """
-        Map the label text using a dictionary or function.
+    # endregion
 
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        self.label.map(mapping)
-        return self
+    # region set scale
 
     def set_scale(self, scale: str) -> 'AxisFormatter':
 
@@ -203,6 +225,10 @@ class AxisFormatter(object):
         self.set_scale('logit')
         return self
 
+    # endregion
+
+    # region inversion
+
     def set_inverted(self, inverted: bool = True) -> 'AxisFormatter':
         """
         Invert the Axis.
@@ -217,9 +243,4 @@ class AxisFormatter(object):
         self._axis.set_inverted(inverted=not self._axis.get_inverted())
         return self
 
-    def replace_label_text(self, old: str, new: str) -> 'AxisFormatter':
-        """
-        Replace the old label text with the new.
-        """
-        self.label.replace(old=old, new=new)
-        return self
+    # endregion

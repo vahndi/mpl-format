@@ -272,7 +272,7 @@ class AxesFormatter(object):
 
         :param mapping: Dictionary or a function mapping old text to new text.
         """
-        self.x_axis.map_label(mapping)
+        self.x_axis.map_label_text(mapping)
         return self
 
     def map_y_axis_label(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
@@ -281,7 +281,7 @@ class AxesFormatter(object):
 
         :param mapping: Dictionary or a function mapping old text to new text.
         """
-        self.y_axis.map_label(mapping)
+        self.y_axis.map_label_text(mapping)
         return self
 
     def map_axis_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
@@ -300,7 +300,7 @@ class AxesFormatter(object):
 
         :param mapping: Dictionary or a function mapping old text to new text.
         """
-        self.x_axis.map_tick_labels(mapping)
+        self.x_axis.map_tick_label_text(mapping)
         return self
 
     def map_y_tick_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
@@ -309,7 +309,7 @@ class AxesFormatter(object):
 
         :param mapping: Dictionary or a function mapping old text to new text.
         """
-        self.y_axis.map_tick_labels(mapping)
+        self.y_axis.map_tick_label_text(mapping)
         return self
 
     def map_tick_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
@@ -407,6 +407,11 @@ class AxesFormatter(object):
         return self
 
     # endregion
+
+    def set_title_font_family(self, font_name: str) -> 'AxesFormatter':
+
+        self.title.set_font_family(font_name)
+        return self
 
     def set_x_lim(self, left: Optional[float] = None, right: Optional[float] = None) -> 'AxesFormatter':
         """

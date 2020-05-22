@@ -94,6 +94,15 @@ class TextFormatter(object):
         self._text.set_text(text)
         return self
 
+    def clear(self) -> 'TextFormatter':
+        """
+        Clear the text string.
+        """
+        self.set_text('')
+        return self
+
+    # region set size
+
     def set_size(self, font_size) -> 'TextFormatter':
         """
         Set the font size for the Text.
@@ -137,9 +146,73 @@ class TextFormatter(object):
         self.set_size('smaller')
         return self
 
-    def clear(self) -> 'TextFormatter':
+    # endregion
+
+    # region set font family
+
+    def set_font_family(self, font_name: str) -> 'TextFormatter':
         """
-        Clear the text string.
+        Set the font family to the given font name.
+
+        :param font_name: Name of the font to set.
         """
-        self.set_text('')
+        self._text.set_fontfamily(fontname=font_name)
         return self
+
+    def set_font_family_serif(self) -> 'TextFormatter':
+        """
+        Set the font family to 'serif'
+        """
+        self.set_font_family('serif')
+        return self
+
+    def set_font_family_sans_serif(self) -> 'TextFormatter':
+        """
+        Set the font family to 'sans-serif'
+        """
+        self.set_font_family('sans-serif')
+        return self
+
+    def set_font_family_cursive(self) -> 'TextFormatter':
+        """
+        Set the font family to 'cursive'
+        """
+        self.set_font_family('cursive')
+        return self
+
+    def set_font_family_fantasy(self) -> 'TextFormatter':
+        """
+        Set the font family to 'fantasy'
+        """
+        self.set_font_family('fantasy')
+        return self
+
+    def set_font_family_monospace(self) -> 'TextFormatter':
+        """
+        Set the font family to 'monospace'
+        """
+        self.set_font_family('monospace')
+        return self
+
+    def set_font_family_benton_sans_f(self) -> 'TextFormatter':
+        """
+        Set the font family to 'BentonSansF'
+        """
+        self.set_font_family('BentonSansF')
+        return self
+
+    def set_font_family_quarto(self) -> 'TextFormatter':
+        """
+        Set the font family to 'Quarto'
+        """
+        self.set_font_family('Quarto')
+        return self
+
+    def set_font_family_calibri(self) -> 'TextFormatter':
+        """
+        Set the font family to 'Calibri'
+        """
+        self.set_font_family('Calibri')
+        return self
+
+    # endregion
