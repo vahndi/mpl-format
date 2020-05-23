@@ -2,6 +2,7 @@ from typing import Dict, Union, Callable
 
 from matplotlib.text import Text
 
+from mpl_format.compound_types import FontSize
 from mpl_format.text.text_utils import wrap_text, remove_parenthesized_text
 
 
@@ -55,7 +56,7 @@ class TextFormatter(object):
 
     def map(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'TextFormatter':
         """
-        Replace label text if it matches one of the dictionary keys.
+        Replace text using a dictionary or function.
 
         :param mapping: Mappings to replace text.
         """
@@ -103,7 +104,7 @@ class TextFormatter(object):
 
     # region set size
 
-    def set_size(self, font_size) -> 'TextFormatter':
+    def set_size(self, font_size: FontSize) -> 'TextFormatter':
         """
         Set the font size for the Text.
         """

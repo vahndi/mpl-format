@@ -4,15 +4,16 @@ from setuptools import find_packages
 setup(
     name='mpl_format',
     packages=find_packages(),
-    version='0.24',
+    version='0.25',
     license='MIT',
     description='Library for easier formatting of matplotlib plots written in a functional style.',
     author='Vahndi Minah',
     url='https://github.com/vahndi/mpl-format',
-    download_url='https://github.com/vahndi/mpl-format/archive/v_0.24.tar.gz',
+    download_url='https://github.com/vahndi/mpl-format/archive/v_0.25.tar.gz',
     keywords=['matplotlib'],
     install_requires=[
         'matplotlib',
+        'numpy',
         'seaborn',
     ],
     classifiers=[

@@ -1,10 +1,16 @@
+from autopep8 import List
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import Optional, Union, Dict, Callable
 
+from matplotlib.collections import PathCollection
+from matplotlib.font_manager import FontProperties
+from numpy.core.records import ndarray
+
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
+from mpl_format.compound_types import FontSize, Color
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.text.text_formatter import TextFormatter
@@ -499,11 +505,91 @@ class AxesFormatter(object):
         self.y_axis.invert()
         return self
 
-    def add_legend(self) -> LegendFormatter:
+    def add_legend(self,
+                   handles: Optional[List[PathCollection]] = None,
+                   labels: Optional[List[str]] = None,
+                   n_cols: Optional[int] = None,
+                   font_size: Optional[str] = None,
+                   font_properties: Optional[Union[FontProperties, dict]] = None,
+                   line_points: Optional[int] = None,
+                   scatter_points: Optional[int] = None,
+                   scatter_y_offsets: Optional[ndarray] = None,
+                   marker_scale: Optional[float] = None,
+                   frame_on: Optional[bool] = None,
+                   shadow: Optional[bool] = None,
+                   frame_alpha: Optional[float] = None,
+                   face_color: Optional[Color] = None,
+                   edge_color: Optional[Color] = None,
+                   mode: Optional[str] = None,
+                   title: Optional[str] = None,
+                   title_font_size: Optional[FontSize] = None,
+                   label_spacing: Optional[float] = None,
+                   handle_length: Optional[float] = None,
+                   handle_text_pad: Optional[float] = None,
+                   border_axes_pad: Optional[float] = None,
+                   column_spacing: Optional[float] = None) -> 'LegendFormatter':
         """
-        Add a legend to the axes.
+        Add a legend to the Axes.
+
+        :param handles: A list of Artists (lines, patches) to be added to the legend.
+        :param labels: A list of labels to show next to the artists. The length of handles and labels should be the
+                       same. If they are not, they are truncated to the smaller of both lengths.
+        :param n_cols: The number of columns that the legend has. Default is 1.
+        :param font_size: The font size of the legend. If the value is numeric the size will be the absolute font size
+                          in points. String values are relative to the current default font size. This argument is only
+                          used if font_properties is not specified.
+        :param font_properties: The font properties of the legend. If None (default), the current matplotlib.rcParams
+                                will be used.
+        :param line_points: The number of marker points in the legend when creating a legend entry for a Line2D (line).
+                           Default is None, which means using rcParams["legend.numpoints"] (default: 1).
+        :param scatter_points: The number of marker points in the legend when creating a legend entry for a
+                               PathCollection (scatter plot). Default is None, which means using
+                               rcParams["legend.scatterpoints"] (default: 1).
+        :param scatter_y_offsets: The vertical offset (relative to the font size) for the markers created for a scatter
+                                  plot legend entry. 0.0 is at the base the legend text, and 1.0 is at the top. To draw
+                                  all markers at the same height, set to [0.5]. Default is [0.375, 0.5, 0.3125].
+        :param marker_scale: The relative size of legend markers compared with the originally drawn ones. Default is
+                             None, which means using rcParams["legend.markerscale"] (default: 1.0).
+        :param frame_on: Whether the legend should be drawn on a patch (frame). Default is None, which means using
+                         rcParams["legend.frameon"] (default: True).
+        :param shadow: Whether to draw a shadow behind the legend. Default is None, which means using
+                       rcParams["legend.shadow"] (default: False).
+        :param frame_alpha: The alpha transparency of the legend's background. Default is None, which means using
+                            rcParams["legend.framealpha"] (default: 0.8). If shadow is activated and framealpha is None,
+                            the default value is ignored.
+        :param face_color: The legend's background color. Default is None, which means using
+                           rcParams["legend.facecolor"] (default: 'inherit'). If "inherit", use
+                           rcParams["axes.facecolor"] (default: 'white').
+        :param edge_color: The legend's background patch edge color. Default is None, which means using
+                           rcParams["legend.edgecolor"] (default: '0.8'). If "inherit", use take
+                           rcParams["axes.edgecolor"] (default: 'black').
+        :param mode: If mode is set to "expand" the legend will be horizontally expanded to fill the axes area
+                     (or bbox_to_anchor if defines the legend's size).
+        :param title: The legend's title. Default is no title (None).
+        :param title_font_size: The fontsize of the legend's title. Default is the default fontsize.
+        :param label_spacing: The fractional whitespace inside the legend border, in font-size units. Default is None,
+                              which means using rcParams["legend.borderpad"] (default: 0.4).
+        :param handle_length: The length of the legend handles, in font-size units. Default is None,
+                              which means using rcParams["legend.handlelength"] (default: 2.0).
+        :param handle_text_pad: The pad between the legend handle and text, in font-size units. Default is None,
+                                which means using rcParams["legend.handletextpad"] (default: 0.8).
+        :param border_axes_pad: The pad between the axes and legend border, in font-size units. Default is None,
+                                which means using rcParams["legend.borderaxespad"] (default: 0.5).
+        :param column_spacing: The spacing between columns, in font-size units. Default is None, which means using
+                               rcParams["legend.columnspacing"] (default: 2.0).
         """
-        self._legend = LegendFormatter(self._axes.legend())
+        kwargs = {}
+        for kwarg, mpl_arg in zip(
+            [handles, labels, n_cols, font_properties, font_size, line_points, scatter_points, scatter_y_offsets,
+             marker_scale, frame_on, shadow, frame_alpha, face_color, edge_color, mode, title,
+             title_font_size, label_spacing, handle_length, handle_text_pad, border_axes_pad, column_spacing],
+            ['handles', 'labels', 'ncol', 'prop', 'fontsize', 'numpoints', 'scatterpoints', 'scatteryoffsets',
+             'markerscale', 'frameon', 'shadow', 'framealpha', 'facecolor', 'edgecolor', 'mode', 'title',
+             'title_fontsize', 'labelspacing', 'handlelength', 'handletextpad', 'borderaxespad', 'columnspacing']
+        ):
+            if kwarg is not None:
+                kwargs[mpl_arg] = kwarg
+        self._legend = LegendFormatter(self._axes.legend(**kwargs))
         return self._legend
 
     @staticmethod
