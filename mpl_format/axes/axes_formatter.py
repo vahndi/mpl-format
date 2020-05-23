@@ -430,6 +430,81 @@ class AxesFormatter(object):
 
     # endregion
 
+    # region spans
+
+    def add_h_line(self, y: float = 0, x_min: float = 0, x_max: float = 1,
+                   color: Optional[Color] = None, alpha: Optional[float] = None,
+                   line_style: Optional[str] = None, line_width: Optional[float] = None,
+                   marker_edge_color: Optional[Color] = None, marker_edge_width: Optional[Color] = None,
+                   marker_face_color: Optional[Color] = None, marker_size: Optional[float] = None) -> 'AxesFormatter':
+        """
+        Add a horizontal line to the plot.
+
+        :param y: y position in data coordinates of the horizontal line
+        :param x_min: Should be between 0 and 1, 0 being the far left of the plot, 1 the far right of the plot
+        :param x_max: Should be between 0 and 1, 0 being the far left of the plot, 1 the far right of the plot
+        :param color: Color of the line
+        :param alpha: Opacity of the line
+        :param line_style: One of {'-', '--', '-.', ':', ''}
+        :param line_width: Width of the line
+        :param marker_edge_color: Color for the edges of the line markers
+        :param marker_edge_width: Width for the edges of the line markers
+        :param marker_face_color: Color for the markers
+        :param marker_size: Size of the markers.
+        """
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [color, line_style, line_width, marker_edge_color, marker_edge_width, marker_face_color, marker_size,
+             alpha],
+            ['c', 'ls', 'lw', 'mec', 'mew', 'mfc', 'ms', 'alpha']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+
+        self._axes.axhline(
+            y=y, xmin=x_min, xmax=x_max,
+            **kwargs
+        )
+        return self
+
+
+    def add_v_line(self, x: float = 0, y_min: float = 0, y_max: float = 1,
+                   color: Optional[Color] = None, alpha: Optional[float] = None,
+                   line_style: Optional[str] = None, line_width: Optional[float] = None,
+                   marker_edge_color: Optional[Color] = None, marker_edge_width: Optional[Color] = None,
+                   marker_face_color: Optional[Color] = None, marker_size: Optional[float] = None) -> 'AxesFormatter':
+        """
+        Add a vertical line to the plot.
+
+        :param x: x position in data coordinates of the vertical line
+        :param y_min: Should be between 0 and 1, 0 being the bottom of the plot, 1 the top of the plot
+        :param y_max: Should be between 0 and 1, 0 being the bottom of the plot, 1 the top of the plot
+        :param color: Color of the line
+        :param alpha: Opacity of the line
+        :param line_style: One of {'-', '--', '-.', ':', ''}
+        :param line_width: Width of the line
+        :param marker_edge_color: Color for the edges of the line markers
+        :param marker_edge_width: Width for the edges of the line markers
+        :param marker_face_color: Color for the markers
+        :param marker_size: Size of the markers.
+        """
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [color, line_style, line_width, marker_edge_color, marker_edge_width, marker_face_color, marker_size,
+             alpha],
+            ['c', 'ls', 'lw', 'mec', 'mew', 'mfc', 'ms', 'alpha']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+
+        self._axes.axvline(
+            x=x, ymin=y_min, ymax=y_max,
+            **kwargs
+        )
+        return self
+
+    # endregion
+
     def set_title_font_family(self, font_name: str) -> 'AxesFormatter':
 
         self.title.set_font_family(font_name)
