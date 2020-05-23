@@ -10,7 +10,7 @@ from numpy.core.records import ndarray
 
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
-from mpl_format.compound_types import FontSize, Color
+from mpl_format.compound_types import FontSize, Color, LegendLocation
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.text.text_formatter import TextFormatter
@@ -508,6 +508,7 @@ class AxesFormatter(object):
     def add_legend(self,
                    handles: Optional[List[PathCollection]] = None,
                    labels: Optional[List[str]] = None,
+                   location: Optional[LegendLocation] = None,
                    n_cols: Optional[int] = None,
                    font_size: Optional[str] = None,
                    font_properties: Optional[Union[FontProperties, dict]] = None,
@@ -534,6 +535,7 @@ class AxesFormatter(object):
         :param handles: A list of Artists (lines, patches) to be added to the legend.
         :param labels: A list of labels to show next to the artists. The length of handles and labels should be the
                        same. If they are not, they are truncated to the smaller of both lengths.
+        :param location: The legend location.
         :param n_cols: The number of columns that the legend has. Default is 1.
         :param font_size: The font size of the legend. If the value is numeric the size will be the absolute font size
                           in points. String values are relative to the current default font size. This argument is only
@@ -582,10 +584,12 @@ class AxesFormatter(object):
         for kwarg, mpl_arg in zip(
             [handles, labels, n_cols, font_properties, font_size, line_points, scatter_points, scatter_y_offsets,
              marker_scale, frame_on, shadow, frame_alpha, face_color, edge_color, mode, title,
-             title_font_size, label_spacing, handle_length, handle_text_pad, border_axes_pad, column_spacing],
+             title_font_size, label_spacing, handle_length, handle_text_pad, border_axes_pad, column_spacing,
+             location],
             ['handles', 'labels', 'ncol', 'prop', 'fontsize', 'numpoints', 'scatterpoints', 'scatteryoffsets',
              'markerscale', 'frameon', 'shadow', 'framealpha', 'facecolor', 'edgecolor', 'mode', 'title',
-             'title_fontsize', 'labelspacing', 'handlelength', 'handletextpad', 'borderaxespad', 'columnspacing']
+             'title_fontsize', 'labelspacing', 'handlelength', 'handletextpad', 'borderaxespad', 'columnspacing',
+             'loc']
         ):
             if kwarg is not None:
                 kwargs[mpl_arg] = kwarg

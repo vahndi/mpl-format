@@ -6,3 +6,4 @@ from typing import TypeVar, Tuple
 PlotObject = TypeVar('PlotObject', Axes, Figure, JointGrid, PairGrid)
 Color = TypeVar('Color', str, Tuple[float, float, float, float])
 FontSize = TypeVar('FontSize', str, float, int)
+LegendLocation = TypeVar('LegendLocation', str, Tuple[float, float])
