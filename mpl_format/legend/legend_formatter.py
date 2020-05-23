@@ -4,7 +4,7 @@ from matplotlib.legend import Legend
 from numpy import ndarray
 from typing import Union, List, Optional, Dict, Callable
 
-from mpl_format.compound_types import Color, FontSize
+from mpl_format.compound_types import Color, FontSize, LegendLocation
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import map_text
 
@@ -34,7 +34,7 @@ class LegendFormatter(object):
         """
         Set the legend location.
         """
-        self._legend._set_loc(location)
+        self.recreate_legend(location=location)
         return self
 
     def set_location_best(self) -> 'LegendFormatter':
@@ -125,6 +125,7 @@ class LegendFormatter(object):
 
     def recreate_legend(self, handles: Optional[List[PathCollection]] = None,
                         labels: Optional[List[str]] = None,
+                        location: Optional[LegendLocation] = None,
                         n_cols: Optional[int] = None,
                         font_size: Optional[str] = None,
                         font_properties: Optional[Union[FontProperties, dict]] = None,
@@ -150,6 +151,7 @@ class LegendFormatter(object):
         :param handles: A list of Artists (lines, patches) to be added to the legend.
         :param labels: A list of labels to show next to the artists. The length of handles and labels should be the
                        same. If they are not, they are truncated to the smaller of both lengths.
+        :param location: The location of the legend.
         :param n_cols: The number of columns that the legend has. Default is 1.
         :param font_size: The font size of the legend. If the value is numeric the size will be the absolute font size
                           in points. String values are relative to the current default font size. This argument is only
@@ -198,13 +200,20 @@ class LegendFormatter(object):
         for kwarg, mpl_arg in zip(
             [handles, labels, n_cols, font_properties, font_size, line_points, scatter_points, scatter_y_offsets,
              marker_scale, frame_on, shadow, frame_alpha, face_color, edge_color, mode, title,
-             title_font_size, label_spacing, handle_length, handle_text_pad, border_axes_pad, column_spacing],
+             title_font_size, label_spacing, handle_length, handle_text_pad, border_axes_pad, column_spacing,
+             location],
             ['handles', 'labels', 'ncol', 'prop', 'fontsize', 'numpoints', 'scatterpoints', 'scatteryoffsets',
              'markerscale', 'frameon', 'shadow', 'framealpha', 'facecolor', 'edgecolor', 'mode', 'title',
-             'title_fontsize', 'labelspacing', 'handlelength', 'handletextpad', 'borderaxespad', 'columnspacing']
+             'title_fontsize', 'labelspacing', 'handlelength', 'handletextpad', 'borderaxespad', 'columnspacing',
+             'loc']
         ):
             if kwarg is not None:
                 kwargs[mpl_arg] = kwarg
+
+        if 'handles' not in kwargs.keys():
+            kwargs['handles'] = self._legend.legendHandles
+        if 'labels' not in kwargs.keys():
+            kwargs['labels'] = [text.get_text() for text in self._legend.texts]
 
         self._legend = self._legend.axes.legend(**kwargs)
         return self
@@ -218,7 +227,8 @@ class LegendFormatter(object):
 
         :param indices: The indices of the legend entries to remove.
         """
-        handles, labels = self._legend.axes.get_legend_handles_labels()
+        handles = self._legend.legendHandles
+        labels = [text.get_text() for text in self._legend.texts]
         for entry_index in sorted(indices, reverse=True):
             handles.pop(entry_index)
             labels.pop(entry_index)
