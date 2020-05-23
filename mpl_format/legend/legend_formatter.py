@@ -219,11 +219,32 @@ class LegendFormatter(object):
         :param indices: The indices of the legend entries to remove.
         """
         handles, labels = self._legend.axes.get_legend_handles_labels()
-        self.recreate_legend(handles=handles, labels=labels)
         for entry_index in sorted(indices, reverse=True):
             handles.pop(entry_index)
             labels.pop(entry_index)
-        self.recreate_legend(handles=handles, labels=labels)
+        legend = self._legend
+        self.recreate_legend(
+            handles=handles, labels=labels,
+            n_cols=legend._ncol,
+            font_properties=legend.prop,
+            line_points=legend.numpoints,
+            scatter_points=legend.scatterpoints,
+            scatter_y_offsets=legend._scatteryoffsets,
+            marker_scale=legend.markerscale,
+            frame_on=legend.get_frame_on(),
+            shadow=legend.shadow,
+            frame_alpha=legend.get_frame().get_alpha(),
+            face_color=legend.get_frame().get_facecolor(),
+            edge_color=legend.get_frame().get_edgecolor(),
+            mode=legend._mode,
+            title=legend.get_title().get_text(),
+            title_font_size=legend.get_title().get_fontsize(),
+            label_spacing=legend.labelspacing,
+            handle_length=legend.handlelength,
+            handle_text_pad=legend.handletextpad,
+            border_axes_pad=legend.borderaxespad,
+            column_spacing=legend.columnspacing
+        )
         return self
 
     def map_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'LegendFormatter':

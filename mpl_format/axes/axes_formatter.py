@@ -1,8 +1,7 @@
-from autopep8 import List
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 from pathlib import Path
-from typing import Optional, Union, Dict, Callable
+from typing import Optional, Union, Dict, Callable, List
 
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
@@ -528,7 +527,7 @@ class AxesFormatter(object):
                    handle_length: Optional[float] = None,
                    handle_text_pad: Optional[float] = None,
                    border_axes_pad: Optional[float] = None,
-                   column_spacing: Optional[float] = None) -> 'LegendFormatter':
+                   column_spacing: Optional[float] = None) -> LegendFormatter:
         """
         Add a legend to the Axes.
 
