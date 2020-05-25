@@ -4,6 +4,7 @@ from matplotlib.text import Text
 from matplotlib.ticker import StrMethodFormatter, FuncFormatter
 from typing import Union, Dict, Callable
 
+from mpl_format.compound_types import FontSize
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text, map_text
 
@@ -38,18 +39,27 @@ class AxisFormatter(object):
     def set_label_text(self, text: str) -> 'AxisFormatter':
         """
         Set the text of the Axis label.
+
+        :param text: Text for the Axis label.
         """
         self.label.set_text(text)
         return self
 
     def set_label_font_family(self, font_name: str) -> 'AxisFormatter':
+        """
+        Set the font family for the Axis label.
 
+        :param font_name: Name of the font to use.
+        """
         self.label.set_font_family(font_name)
         return self
 
     def replace_label_text(self, old: str, new: str) -> 'AxisFormatter':
         """
         Replace the old label text with the new.
+
+        :param old: The old label text to replace.
+        :param new: The new label text to replace.
         """
         self.label.replace(old=old, new=new)
         return self
@@ -83,14 +93,17 @@ class AxisFormatter(object):
     def wrap_label(self, max_width: int) -> 'AxisFormatter':
         """
         Wrap the axis label text if it exceeds a given width of characters.
+
         :param max_width: The maximum character width per line.
         """
         self.label.wrap(max_width=max_width)
         return self
 
-    def set_label_size(self, font_size: int) -> 'AxisFormatter':
+    def set_label_size(self, font_size: FontSize) -> 'AxisFormatter':
         """
         Set the font size for the axis label.
+
+        :param font_size: The font size in points or size name.
         """
         self.label.set_size(font_size)
         return self
@@ -171,9 +184,11 @@ class AxisFormatter(object):
         self._axis.set_major_formatter(FuncFormatter(percent_formatter))
         return self
 
-    def set_tick_label_size(self, font_size: int) -> 'AxisFormatter':
+    def set_tick_label_size(self, font_size: FontSize) -> 'AxisFormatter':
         """
         Set the font size for the axis tick labels.
+
+        :param font_size: The font size in points or size name.
         """
         self._axis.set_tick_params(labelsize=font_size)
         return self
@@ -193,7 +208,11 @@ class AxisFormatter(object):
     # region set scale
 
     def set_scale(self, scale: str) -> 'AxisFormatter':
+        """
+        Set the scale for the Axis.
 
+        :param scale: One of ['log', 'linear', 'symlog', 'logit']
+        """
         self._axis._set_scale(scale)
         return self
 
@@ -231,14 +250,16 @@ class AxisFormatter(object):
 
     def set_inverted(self, inverted: bool = True) -> 'AxisFormatter':
         """
-        Invert the Axis.
+        Set the Axis inversion property.
+
+        :param inverted: True or False.
         """
         self._axis.set_inverted(inverted=inverted)
         return self
 
     def invert(self) -> 'AxisFormatter':
         """
-        Invert the Axis.
+        Flip the Axis inversion property.
         """
         self._axis.set_inverted(inverted=not self._axis.get_inverted())
         return self
