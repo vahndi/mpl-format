@@ -80,6 +80,8 @@ class AxesFormatter(object):
     def set_title_text(self, text: str) -> 'AxesFormatter':
         """
         Set the text of the Axes title.
+
+        :param text: The text to use for the Axes title.
         """
         self.title.set_text(text)
         return self
@@ -96,6 +98,8 @@ class AxesFormatter(object):
     def set_x_label_text(self, text: str) -> 'AxesFormatter':
         """
         Set the text for the x-axis label.
+
+        :param text: The text to use for the Axis label.
         """
         self.x_axis.set_label_text(text)
         return self
@@ -103,6 +107,8 @@ class AxesFormatter(object):
     def set_y_label_text(self, text: str) -> 'AxesFormatter':
         """
         Set the text for the y-axis label.
+
+        :param text: The text to use for the Axis label.
         """
         self.y_axis.set_label_text(text)
         return self
@@ -191,52 +197,66 @@ class AxesFormatter(object):
 
     # region set font sizes
 
-    def set_title_size(self, font_size: int) -> 'AxesFormatter':
+    def set_title_size(self, font_size: FontSize) -> 'AxesFormatter':
         """
         Set the font size for the title of the wrapped Axes.
+
+        :param font_size: Size of the font in points, or size name.
         """
         self.title.set_size(font_size)
         return self
 
-    def set_x_label_size(self, font_size: int) -> 'AxesFormatter':
+    def set_x_label_size(self, font_size: FontSize) -> 'AxesFormatter':
         """
         Set the font size for the x-axis label.
+
+        :param font_size: Size of the font in points, or size name.
         """
         self.x_axis.set_label_size(font_size)
         return self
 
-    def set_y_label_size(self, font_size: int) -> 'AxesFormatter':
+    def set_y_label_size(self, font_size: FontSize) -> 'AxesFormatter':
         """
         Set the font size for the x-axis label.
+
+        :param font_size: Size of the font in points, or size name.
         """
         self.y_axis.set_label_size(font_size)
         return self
 
-    def set_axis_label_sizes(self, font_size: int) -> 'AxesFormatter':
+    def set_axis_label_sizes(self, font_size: FontSize) -> 'AxesFormatter':
         """
         Set the font size for the axis labels.
+
+        :param font_size: Size of the font in points, or size name.
         """
         self.set_x_label_size(font_size)
         self.set_y_label_size(font_size)
         return self
 
-    def set_x_tick_label_size(self, font_size: int) -> 'AxesFormatter':
+    def set_x_tick_label_size(self, font_size: FontSize) -> 'AxesFormatter':
         """
         Set the font size for the x-axis tick labels.
+
+        :param font_size: Size of the font in points, or size name.
         """
         self.x_axis.set_tick_label_size(font_size)
         return self
 
-    def set_y_tick_label_size(self, font_size: int) -> 'AxesFormatter':
+    def set_y_tick_label_size(self, font_size: FontSize) -> 'AxesFormatter':
         """
         Set the font size for the y-axis tick labels.
+
+        :param font_size: Size of the font in points, or size name.
         """
         self.y_axis.set_tick_label_size(font_size)
         return self
 
-    def set_tick_label_sizes(self, font_size: int) -> 'AxesFormatter':
+    def set_tick_label_sizes(self, font_size: FontSize) -> 'AxesFormatter':
         """
         Set the font size for the tick labels of the wrapped Axes.
+
+        :param font_size: Size of the font in points, or size name.
         """
         self.set_x_tick_label_size(font_size)
         self.set_y_tick_label_size(font_size)
@@ -467,7 +487,6 @@ class AxesFormatter(object):
         )
         return self
 
-
     def add_v_line(self, x: float = 0, y_min: float = 0, y_max: float = 1,
                    color: Optional[Color] = None, alpha: Optional[float] = None,
                    line_style: Optional[str] = None, line_width: Optional[float] = None,
@@ -506,7 +525,11 @@ class AxesFormatter(object):
     # endregion
 
     def set_title_font_family(self, font_name: str) -> 'AxesFormatter':
+        """
+        Set the font family for the Axes title.
 
+        :param font_name: Name of the font.
+        """
         self.title.set_font_family(font_name)
         return self
 
@@ -544,6 +567,8 @@ class AxesFormatter(object):
     def set_axis_below(self, value: bool) -> 'AxesFormatter':
         """
         Set whether axis ticks and gridlines are above or below most artists.
+
+        :param value: True or False
         """
         self._axes.set_axisbelow(b=value)
         return self
