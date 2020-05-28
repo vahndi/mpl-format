@@ -1,9 +1,8 @@
-from pathlib import Path
-
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-from numpy import ndarray
+from numpy import array, ndarray
+from pathlib import Path
 from typing import Tuple, Union, Dict, Callable, List
 
 from mpl_format.axes.axes_formatter import AxesFormatter
@@ -25,6 +24,8 @@ class FigureFormatter(object):
             if isinstance(fig_or_axes, Figure):
                 self._figure = fig_or_axes
                 self._axes = fig_or_axes.axes
+                if isinstance(self._axes, list):
+                    self._axes = array(self._axes)
             elif isinstance(fig_or_axes, Axes):
                 self._figure = fig_or_axes.figure
                 self._axes = fig_or_axes
@@ -39,7 +40,7 @@ class FigureFormatter(object):
                                                figsize=fig_size)
             self._axes: Union[Axes, ndarray] = fig_or_axes
             self._figure: Figure = figure
-        self._has_array = isinstance(self._axes, ndarray)
+        self._has_array = isinstance(self._axes, ndarray) or isinstance(self._axes, list)
 
     @property
     def axes(self) -> Union[AxesFormatter, AxesFormatterArray]:

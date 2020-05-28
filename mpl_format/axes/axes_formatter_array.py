@@ -11,7 +11,7 @@ class AxesFormatterArray(object):
 
         self._axes = empty_like(axes, dtype=AxesFormatter)
         if axes.ndim == 1:
-            for i in axes.shape[0]:
+            for i in range(axes.shape[0]):
                 self._axes[i] = AxesFormatter(axes[i])
         elif axes.ndim == 2:
             for i in range(axes.shape[0]):
