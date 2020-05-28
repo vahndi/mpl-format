@@ -187,6 +187,19 @@ class FigureFormatter(object):
         self.map_y_axis_labels(mapping=mapping)
         return self
 
+    def wrap_axes_titles(self, max_width: int) -> 'FigureFormatter':
+        """
+        Wrap the text for each Axes title if it exceeds a given width of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        if not self._has_array:
+            self.single.wrap_title(max_width=max_width)
+        else:
+            for axf in self.multi.flat:
+                axf.wrap_title(max_width=max_width)
+        return self
+
     def save(self, file_path: Union[str, Path], file_type: str = 'png') -> 'FigureFormatter':
         """
         Save the plot to disk.
