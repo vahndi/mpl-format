@@ -564,7 +564,7 @@ class AxesFormatter(object):
         self._axes.grid(b=value, which=which, axis=axis)
         return self
 
-    def set_axis_below(self, value: bool) -> 'AxesFormatter':
+    def set_axis_below(self, value: bool = True) -> 'AxesFormatter':
         """
         Set whether axis ticks and gridlines are above or below most artists.
 

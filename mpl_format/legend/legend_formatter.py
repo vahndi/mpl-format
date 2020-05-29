@@ -289,7 +289,7 @@ class LegendFormatter(object):
         self._legend.get_frame().set_edgecolor(color)
         return self
 
-    def set_frame_on(self, on: bool) -> 'LegendFormatter':
+    def set_frame_on(self, on: bool = True) -> 'LegendFormatter':
         """
         Turn the frame on or off.
         """
@@ -357,7 +357,7 @@ class LegendFormatter(object):
         self.recreate_legend(scatter_points=num_points)
         return self
 
-    def set_shadow(self, on: bool) -> 'LegendFormatter':
+    def set_shadow(self, on: bool = True) -> 'LegendFormatter':
         """
         Turn the shadow on or off for the legend frame.
         """
