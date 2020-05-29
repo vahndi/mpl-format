@@ -1,7 +1,8 @@
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-from numpy import array, ndarray
+from numpy import ndarray
+from numpy.ma import reshape
 from pathlib import Path
 from typing import Tuple, Union, Dict, Callable, List
 
@@ -23,9 +24,12 @@ class FigureFormatter(object):
         if fig_or_axes is not None:
             if isinstance(fig_or_axes, Figure):
                 self._figure = fig_or_axes
-                self._axes = fig_or_axes.axes
-                if isinstance(self._axes, list):
-                    self._axes = array(self._axes)
+                axes_list = self._figure.axes
+                rows_cols = (
+                    axes_list[0].get_subplotspec().get_topmost_subplotspec()
+                                .get_gridspec().get_geometry()
+                )
+                self._axes = reshape(axes_list, rows_cols)
             elif isinstance(fig_or_axes, Axes):
                 self._figure = fig_or_axes.figure
                 self._axes = fig_or_axes
