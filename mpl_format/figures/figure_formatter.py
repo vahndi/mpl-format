@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from numpy import ndarray
 from numpy.ma import reshape
 from pathlib import Path
-from typing import Tuple, Union, Dict, Callable, List
+from typing import Tuple, Union, Dict, Callable, List, Optional
 
 from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray
@@ -76,41 +76,105 @@ class FigureFormatter(object):
         else:
             raise TypeError('FigureFormatter holds a single Axes.')
 
-    def set_axes_title_text(
+    def _set_text_property(
             self,
-            text: Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]
+            text: Union[str, List[str], Callable[[int, int], str], Callable[[int], str]],
+            method: Callable[[AxesFormatter, str], AxesFormatter]
     ) -> 'FigureFormatter':
         """
-        Set the title of each Axes using a string, list of strings or function that returns a string based on the
-        row and column or the flat index of the Axes.
+        Set a text property of each Axes using a string, list of strings,
+        or function that returns a string based on the row and column or the flat index of the Axes.
 
         :param text: Title or titles to set
+        :param method: Method to call to format the text.
         """
         if not self._has_array:
             if not isinstance(text, str):
                 raise TypeError('text must be a str for a single Axes.')
             else:
-                self.single.set_title_text(text)
+                method(self.single, text)
         else:
             if isinstance(text, str):
                 for axf in self.multi.flat:
-                    axf.set_title_text(text)
+                    method(axf, text)
             elif isinstance(text, list):
                 if len(text) != self.multi.size:
-                    raise ValueError(f'There are {self.multi.size} Axes and {len(text)} labels.')
+                    raise ValueError(f'There are {self.multi.size} Axes and {len(text)} strings.')
                 else:
                     for axf, t in zip(self.multi.flat, text):
-                        axf.set_title_text(t)
+                        method(axf, t)
             elif callable(text):
                 try:
                     for row in range(self.multi.shape[0]):
                         for col in range(self.multi.shape[1]):
-                            self.multi[row, col].set_title_text(text(row, col))
+                            method(self.multi[row, col], text(row, col))
                 except TypeError:
                     for a, axf in enumerate(self.multi.flat):
-                        axf.set_title_text(text(a))
+                        method(axf, text(a))
             else:
-                raise TypeError(f'Wrong type passed to set_axes_title_text: {type(text)}')
+                raise TypeError(f'Wrong type passed to _set_text_property: {type(text)}')
+        return self
+
+    def set_axes_title_text(
+            self,
+            text: Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]
+    ) -> 'FigureFormatter':
+        """
+        Set the title text of each Axes using a string, list of strings,
+        or function that returns a string based on the row and column or the flat index of the Axes.
+
+        :param text: Title or titles to set.
+        """
+        def set_text(axes_formatter: AxesFormatter, string: str) -> AxesFormatter:
+            return axes_formatter.set_title_text(string)
+
+        self._set_text_property(text=text, method=set_text)
+        return self
+
+    def set_axes_x_label_text(
+            self,
+            text: Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]
+    ) -> 'FigureFormatter':
+        """
+        Set the x-label text of each Axes using a string, list of strings,
+        or function that returns a string based on the row and column or the flat index of the Axes.
+
+        :param text: Label or labels to set.
+        """
+        def set_text(axes_formatter: AxesFormatter, string: str) -> AxesFormatter:
+            return axes_formatter.set_x_label_text(string)
+
+        self._set_text_property(text=text, method=set_text)
+        return self
+
+    def set_axes_y_label_text(
+            self,
+            text: Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]
+    ) -> 'FigureFormatter':
+        """
+        Set the x-label text of each Axes using a string, list of strings,
+        or function that returns a string based on the row and column or the flat index of the Axes.
+
+        :param text: Label or labels to set.
+        """
+        def set_text(axes_formatter: AxesFormatter, string: str) -> AxesFormatter:
+            return axes_formatter.set_y_label_text(string)
+
+        self._set_text_property(text=text, method=set_text)
+        return self
+
+    def set_axes_text(
+            self,
+            title: Optional[Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]] = None,
+            x_label: Optional[Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]] = None,
+            y_label: Optional[Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]] = None
+    ) -> 'FigureFormatter':
+        if title is not None:
+            self.set_axes_title_text(title)
+        if x_label is not None:
+            self.set_axes_x_label_text(x_label)
+        if y_label is not None:
+            self.set_axes_y_label_text(y_label)
         return self
 
     def map_axes_title_text(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'FigureFormatter':
