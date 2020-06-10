@@ -19,11 +19,10 @@ def wrap_text(text: Union[str, Text, Iterable[str], Iterable[Text]],
     if isinstance(text, Text):
         text = text.get_text()
 
-    if not isinstance(text, str):
-        return [wrap_text(t, max_width) for t in text]
-
     if isinstance(text, str):
         return '\n'.join(wrap(text=text, width=max_chars))
+    elif isinstance(text, Iterable):
+        return [wrap_text(t, max_width) for t in text]
     else:
         raise ValueError(f'Cannot wrap text for type {type(text)}.')
 
@@ -44,8 +43,10 @@ def remove_parenthesized_text(text: Union[str, Text]) -> str:
     return text
 
 
-def map_text(text: Union[str, Text, Iterable[str], Iterable[Text]],
-             mapping: Union[Dict[str, str], Callable[[str], str]]) -> Union[str, List[str]]:
+def map_text(
+        text: Union[str, Text, Iterable[str], Iterable[Text]],
+        mapping: Union[Dict[str, str], Callable[[str], str]]
+) -> Union[str, List[str]]:
     """
     Replace text if it matches one of the dictionary keys.
 

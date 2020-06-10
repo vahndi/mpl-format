@@ -6,7 +6,8 @@ setup(
     packages=find_packages(),
     version='0.259',
     license='MIT',
-    description='Library for easier formatting of matplotlib plots written in a functional style.',
+    description='Library for easier formatting of matplotlib plots written in '
+                'a functional style.',
     author='Vahndi Minah',
     url='https://github.com/vahndi/mpl-format',
     download_url='https://github.com/vahndi/mpl-format/archive/v_0.259.tar.gz',

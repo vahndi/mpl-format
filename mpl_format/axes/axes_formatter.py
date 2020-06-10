@@ -86,7 +86,9 @@ class AxesFormatter(object):
         self.title.set_text(text)
         return self
 
-    def map_title_text(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+    def map_title_text(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxesFormatter':
         """
         Map the label text for the title using a dictionary or function.
 
@@ -146,7 +148,8 @@ class AxesFormatter(object):
 
     def wrap_x_label(self, max_width: int) -> 'AxesFormatter':
         """
-        Wrap the text for the x-axis label if it exceeds a given width of characters.
+        Wrap the text for the x-axis label if it exceeds a given width of
+        characters.
 
         :param max_width: The maximum character width per line.
         """
@@ -155,7 +158,8 @@ class AxesFormatter(object):
 
     def wrap_y_label(self, max_width: int) -> 'AxesFormatter':
         """
-        Wrap the text for the y-axis label if it exceeds a given width of characters.
+        Wrap the text for the y-axis label if it exceeds a given width of
+        characters.
 
         :param max_width: The maximum character width per line.
         """
@@ -164,8 +168,8 @@ class AxesFormatter(object):
 
     def wrap_x_tick_labels(self, max_width: int) -> 'AxesFormatter':
         """
-        Wrap the text for each tick label on the x-axis with new lines if it exceeds
-        a given width of characters.
+        Wrap the text for each tick label on the x-axis with new lines if it
+        exceeds a given width of characters.
 
         :param max_width: The maximum character width per line.
         """
@@ -174,8 +178,8 @@ class AxesFormatter(object):
 
     def wrap_y_tick_labels(self, max_width: int) -> 'AxesFormatter':
         """
-        Wrap the text for each tick label on the y-axes with new lines if it exceeds
-        a given width of characters.
+        Wrap the text for each tick label on the y-axes with new lines if it
+        exceeds a given width of characters.
 
         :param max_width: The maximum character width per line.
         """
@@ -184,8 +188,8 @@ class AxesFormatter(object):
 
     def wrap_tick_labels(self, max_width: int) -> 'AxesFormatter':
         """
-        Wrap the text for each tick label on each axis with new lines if it exceeds
-        a given width of characters.
+        Wrap the text for each tick label on each axis with new lines if it
+        exceeds a given width of characters.
 
         :param max_width: The maximum character width per line.
         """
@@ -266,9 +270,11 @@ class AxesFormatter(object):
             self,
             title: Optional[int] = None,
             axis_labels: Optional[int] = None,
-            x_axis_label: Optional[int] = None, y_axis_label: Optional[int] = None,
+            x_axis_label: Optional[int] = None,
+            y_axis_label: Optional[int] = None,
             tick_labels: Optional[int] = None,
-            x_tick_labels: Optional[int] = None, y_tick_labels: Optional[int] = None,
+            x_tick_labels: Optional[int] = None,
+            y_tick_labels: Optional[int] = None,
             legend: Optional[int] = None,
             figure_title: Optional[int] = None
     ) -> 'AxesFormatter':
@@ -301,7 +307,9 @@ class AxesFormatter(object):
 
     # region map labels
 
-    def map_x_axis_label(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+    def map_x_axis_label(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxesFormatter':
         """
         Map the label text for the x-axis using a dictionary or function.
 
@@ -310,7 +318,9 @@ class AxesFormatter(object):
         self.x_axis.map_label_text(mapping)
         return self
 
-    def map_y_axis_label(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+    def map_y_axis_label(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxesFormatter':
         """
         Map the label text for the y-axis using a dictionary or function.
 
@@ -319,7 +329,9 @@ class AxesFormatter(object):
         self.y_axis.map_label_text(mapping)
         return self
 
-    def map_axis_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+    def map_axis_labels(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxesFormatter':
         """
         Map the label text for the x and y axes using a dictionary or function.
 
@@ -329,7 +341,9 @@ class AxesFormatter(object):
         self.map_y_axis_label(mapping)
         return self
 
-    def map_x_tick_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+    def map_x_tick_labels(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxesFormatter':
         """
         Map the tick label text for the x-axis using a dictionary or function.
 
@@ -338,7 +352,9 @@ class AxesFormatter(object):
         self.x_axis.map_tick_label_text(mapping)
         return self
 
-    def map_y_tick_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+    def map_y_tick_labels(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxesFormatter':
         """
         Map the tick label text for the y-axis using a dictionary or function.
 
@@ -347,7 +363,9 @@ class AxesFormatter(object):
         self.y_axis.map_tick_label_text(mapping)
         return self
 
-    def map_tick_labels(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxesFormatter':
+    def map_tick_labels(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxesFormatter':
         """
         Map the tick label text using a dictionary or function.
 
@@ -408,7 +426,9 @@ class AxesFormatter(object):
 
     # region rotation
 
-    def rotate_x_label(self, rotation: int, how: str = 'absolute') -> 'AxesFormatter':
+    def rotate_x_label(self,
+                       rotation: int,
+                       how: str = 'absolute') -> 'AxesFormatter':
         """
         Set the rotation of the x-axis label.
 
@@ -418,7 +438,9 @@ class AxesFormatter(object):
         self.x_axis.rotate_label(rotation, how)
         return self
 
-    def rotate_y_label(self, rotation: int, how: str = 'absolute') -> 'AxesFormatter':
+    def rotate_y_label(self,
+                       rotation: int,
+                       how: str = 'absolute') -> 'AxesFormatter':
         """
         Set the rotation of the x-axis label.
 
@@ -428,7 +450,9 @@ class AxesFormatter(object):
         self.y_axis.rotate_label(rotation, how)
         return self
 
-    def rotate_x_tick_labels(self, rotation: int, how: str = 'absolute') -> 'AxesFormatter':
+    def rotate_x_tick_labels(self,
+                             rotation: int,
+                             how: str = 'absolute') -> 'AxesFormatter':
         """
         Set the rotation of the x-axis tick labels.
 
@@ -438,7 +462,9 @@ class AxesFormatter(object):
         self.x_axis.rotate_tick_labels(rotation=rotation, how=how)
         return self
 
-    def rotate_y_tick_labels(self, rotation: int, how: str = 'absolute') -> 'AxesFormatter':
+    def rotate_y_tick_labels(self,
+                             rotation: int,
+                             how: str = 'absolute') -> 'AxesFormatter':
         """
         Set the rotation of the y-axis tick labels.
 
@@ -453,16 +479,22 @@ class AxesFormatter(object):
     # region spans
 
     def add_h_line(self, y: float = 0, x_min: float = 0, x_max: float = 1,
-                   color: Optional[Color] = None, alpha: Optional[float] = None,
-                   line_style: Optional[str] = None, line_width: Optional[float] = None,
-                   marker_edge_color: Optional[Color] = None, marker_edge_width: Optional[Color] = None,
-                   marker_face_color: Optional[Color] = None, marker_size: Optional[float] = None) -> 'AxesFormatter':
+                   color: Optional[Color] = None,
+                   alpha: Optional[float] = None,
+                   line_style: Optional[str] = None,
+                   line_width: Optional[float] = None,
+                   marker_edge_color: Optional[Color] = None,
+                   marker_edge_width: Optional[Color] = None,
+                   marker_face_color: Optional[Color] = None,
+                   marker_size: Optional[float] = None) -> 'AxesFormatter':
         """
         Add a horizontal line to the plot.
 
         :param y: y position in data coordinates of the horizontal line
-        :param x_min: Should be between 0 and 1, 0 being the far left of the plot, 1 the far right of the plot
-        :param x_max: Should be between 0 and 1, 0 being the far left of the plot, 1 the far right of the plot
+        :param x_min: Between 0 and 1, 0 being the far left of the plot,
+                      1 the far right of the plot
+        :param x_max: Between 0 and 1, 0 being the far left of the plot,
+                      1 the far right of the plot
         :param color: Color of the line
         :param alpha: Opacity of the line
         :param line_style: One of {'-', '--', '-.', ':', ''}
@@ -489,9 +521,12 @@ class AxesFormatter(object):
 
     def add_v_line(self, x: float = 0, y_min: float = 0, y_max: float = 1,
                    color: Optional[Color] = None, alpha: Optional[float] = None,
-                   line_style: Optional[str] = None, line_width: Optional[float] = None,
-                   marker_edge_color: Optional[Color] = None, marker_edge_width: Optional[Color] = None,
-                   marker_face_color: Optional[Color] = None, marker_size: Optional[float] = None) -> 'AxesFormatter':
+                   line_style: Optional[str] = None,
+                   line_width: Optional[float] = None,
+                   marker_edge_color: Optional[Color] = None,
+                   marker_edge_width: Optional[Color] = None,
+                   marker_face_color: Optional[Color] = None,
+                   marker_size: Optional[float] = None) -> 'AxesFormatter':
         """
         Add a vertical line to the plot.
 
@@ -509,8 +544,8 @@ class AxesFormatter(object):
         """
         kwargs = {}
         for arg, mpl_arg in zip(
-            [color, line_style, line_width, marker_edge_color, marker_edge_width, marker_face_color, marker_size,
-             alpha],
+            [color, line_style, line_width, marker_edge_color,
+             marker_edge_width, marker_face_color, marker_size, alpha],
             ['c', 'ls', 'lw', 'mec', 'mew', 'mfc', 'ms', 'alpha']
         ):
             if arg is not None:
@@ -533,7 +568,8 @@ class AxesFormatter(object):
         self.title.set_font_family(font_name)
         return self
 
-    def set_x_lim(self, left: Optional[float] = None, right: Optional[float] = None) -> 'AxesFormatter':
+    def set_x_lim(self, left: Optional[float] = None,
+                  right: Optional[float] = None) -> 'AxesFormatter':
         """
         Set the limits of the x-axis.
 
@@ -543,7 +579,8 @@ class AxesFormatter(object):
         self._axes.set_xlim(left=left, right=right)
         return self
 
-    def set_y_lim(self, bottom: Optional[float] = None, top: Optional[float] = None) -> 'AxesFormatter':
+    def set_y_lim(self, bottom: Optional[float] = None,
+                  top: Optional[float] = None) -> 'AxesFormatter':
         """
         Set the limits of the x-axis.
 
@@ -553,7 +590,9 @@ class AxesFormatter(object):
         self._axes.set_ylim(bottom=bottom, top=top)
         return self
 
-    def grid(self, value: bool, which: str = 'major', axis: str = 'both') -> 'AxesFormatter':
+    def grid(self, value: bool,
+             which: str = 'major',
+             axis: str = 'both') -> 'AxesFormatter':
         """
         Turn the grid on or off.
 
@@ -564,7 +603,8 @@ class AxesFormatter(object):
         self._axes.grid(b=value, which=which, axis=axis)
         return self
 
-    def set_axis_below(self, value: bool = True) -> 'AxesFormatter':
+    def set_axis_below(self,
+                       value: bool = True) -> 'AxesFormatter':
         """
         Set whether axis ticks and gridlines are above or below most artists.
 
@@ -573,14 +613,18 @@ class AxesFormatter(object):
         self._axes.set_axisbelow(b=value)
         return self
 
-    def save(self, file_path: Union[str, Path], file_type: str = 'png') -> 'AxesFormatter':
+    def save(self,
+             file_path: Union[str, Path],
+             file_type: str = 'png') -> 'AxesFormatter':
         """
         Save the plot to disk.
 
         :param file_path: The file path to save the plot object to.
         :param file_type: The type of file to save.
         """
-        save_plot(plot_object=self._axes, file_path=file_path, file_type=file_type)
+        save_plot(plot_object=self._axes,
+                  file_path=file_path,
+                  file_type=file_type)
         return self
 
     def tight_layout(self) -> 'AxesFormatter':
@@ -604,91 +648,123 @@ class AxesFormatter(object):
         self.y_axis.invert()
         return self
 
-    def add_legend(self,
-                   handles: Optional[List[PathCollection]] = None,
-                   labels: Optional[List[str]] = None,
-                   location: Optional[LegendLocation] = None,
-                   n_cols: Optional[int] = None,
-                   font_size: Optional[str] = None,
-                   font_properties: Optional[Union[FontProperties, dict]] = None,
-                   line_points: Optional[int] = None,
-                   scatter_points: Optional[int] = None,
-                   scatter_y_offsets: Optional[ndarray] = None,
-                   marker_scale: Optional[float] = None,
-                   frame_on: Optional[bool] = None,
-                   shadow: Optional[bool] = None,
-                   frame_alpha: Optional[float] = None,
-                   face_color: Optional[Color] = None,
-                   edge_color: Optional[Color] = None,
-                   mode: Optional[str] = None,
-                   title: Optional[str] = None,
-                   title_font_size: Optional[FontSize] = None,
-                   label_spacing: Optional[float] = None,
-                   handle_length: Optional[float] = None,
-                   handle_text_pad: Optional[float] = None,
-                   border_axes_pad: Optional[float] = None,
-                   column_spacing: Optional[float] = None) -> LegendFormatter:
+    def add_legend(
+            self,
+            handles: Optional[List[PathCollection]] = None,
+            labels: Optional[List[str]] = None,
+            location: Optional[LegendLocation] = None,
+            n_cols: Optional[int] = None,
+            font_size: Optional[str] = None,
+            font_properties: Optional[Union[FontProperties, dict]] = None,
+            line_points: Optional[int] = None,
+            scatter_points: Optional[int] = None,
+            scatter_y_offsets: Optional[ndarray] = None,
+            marker_scale: Optional[float] = None,
+            frame_on: Optional[bool] = None,
+            shadow: Optional[bool] = None,
+            frame_alpha: Optional[float] = None,
+            face_color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            mode: Optional[str] = None,
+            title: Optional[str] = None,
+            title_font_size: Optional[FontSize] = None,
+            label_spacing: Optional[float] = None,
+            handle_length: Optional[float] = None,
+            handle_text_pad: Optional[float] = None,
+            border_axes_pad: Optional[float] = None,
+            column_spacing: Optional[float] = None
+    ) -> LegendFormatter:
         """
         Add a legend to the Axes.
 
-        :param handles: A list of Artists (lines, patches) to be added to the legend.
-        :param labels: A list of labels to show next to the artists. The length of handles and labels should be the
-                       same. If they are not, they are truncated to the smaller of both lengths.
+        :param handles: A list of Artists (lines, patches) to be added to the
+                        legend.
+        :param labels: A list of labels to show next to the artists. The length
+                       of handles and labels should be the same. If they are not,
+                       they are truncated to the smaller of both lengths.
         :param location: The legend location.
         :param n_cols: The number of columns that the legend has. Default is 1.
-        :param font_size: The font size of the legend. If the value is numeric the size will be the absolute font size
-                          in points. String values are relative to the current default font size. This argument is only
-                          used if font_properties is not specified.
-        :param font_properties: The font properties of the legend. If None (default), the current matplotlib.rcParams
-                                will be used.
-        :param line_points: The number of marker points in the legend when creating a legend entry for a Line2D (line).
-                           Default is None, which means using rcParams["legend.numpoints"] (default: 1).
-        :param scatter_points: The number of marker points in the legend when creating a legend entry for a
-                               PathCollection (scatter plot). Default is None, which means using
+        :param font_size: The font size of the legend. If the value is numeric
+                          the size will be the absolute font size in points.
+                          String values are relative to the current default font
+                          size. This argument is only used if font_properties is
+                          not specified.
+        :param font_properties: The font properties of the legend. If None
+                                (default), the current matplotlib.rcParams will
+                                be used.
+        :param line_points: The number of marker points in the legend when
+                            creating a legend entry for a Line2D (line).
+                            Default is None, which means using
+                            rcParams["legend.numpoints"] (default: 1).
+        :param scatter_points: The number of marker points in the legend when
+                               creating a legend entry for a PathCollection
+                               (scatter plot). Default is None, which means using
                                rcParams["legend.scatterpoints"] (default: 1).
-        :param scatter_y_offsets: The vertical offset (relative to the font size) for the markers created for a scatter
-                                  plot legend entry. 0.0 is at the base the legend text, and 1.0 is at the top. To draw
-                                  all markers at the same height, set to [0.5]. Default is [0.375, 0.5, 0.3125].
-        :param marker_scale: The relative size of legend markers compared with the originally drawn ones. Default is
-                             None, which means using rcParams["legend.markerscale"] (default: 1.0).
-        :param frame_on: Whether the legend should be drawn on a patch (frame). Default is None, which means using
+        :param scatter_y_offsets: The vertical offset (relative to the font size)
+                                  for the markers created for a scatter plot
+                                  legend entry. 0.0 is at the base the legend
+                                  text, and 1.0 is at the top. To draw all
+                                  markers at the same height, set to [0.5].
+                                  Default is [0.375, 0.5, 0.3125].
+        :param marker_scale: The relative size of legend markers compared with
+                             the originally drawn ones. Default is None, which
+                             means using rcParams["legend.markerscale"]
+                             (default: 1.0).
+        :param frame_on: Whether the legend should be drawn on a patch (frame).
+                         Default is None, which means using
                          rcParams["legend.frameon"] (default: True).
-        :param shadow: Whether to draw a shadow behind the legend. Default is None, which means using
-                       rcParams["legend.shadow"] (default: False).
-        :param frame_alpha: The alpha transparency of the legend's background. Default is None, which means using
-                            rcParams["legend.framealpha"] (default: 0.8). If shadow is activated and framealpha is None,
-                            the default value is ignored.
-        :param face_color: The legend's background color. Default is None, which means using
-                           rcParams["legend.facecolor"] (default: 'inherit'). If "inherit", use
+        :param shadow: Whether to draw a shadow behind the legend. Default is
+                       None, which means using rcParams["legend.shadow"]
+                       (default: False).
+        :param frame_alpha: The alpha transparency of the legend's background.
+                            Default is None, which means using
+                            rcParams["legend.framealpha"] (default: 0.8). If
+                            shadow is activated and framealpha is None, the
+                            default value is ignored.
+        :param face_color: The legend's background color. Default is None, which
+                           means using rcParams["legend.facecolor"]
+                           (default: 'inherit'). If "inherit", use
                            rcParams["axes.facecolor"] (default: 'white').
-        :param edge_color: The legend's background patch edge color. Default is None, which means using
-                           rcParams["legend.edgecolor"] (default: '0.8'). If "inherit", use take
+        :param edge_color: The legend's background patch edge color. Default is
+                           None, which means using rcParams["legend.edgecolor"]
+                           (default: '0.8'). If "inherit", use take
                            rcParams["axes.edgecolor"] (default: 'black').
-        :param mode: If mode is set to "expand" the legend will be horizontally expanded to fill the axes area
-                     (or bbox_to_anchor if defines the legend's size).
+        :param mode: If mode is set to "expand" the legend will be horizontally
+                     expanded to fill the axes area (or bbox_to_anchor if
+                     defines the legend's size).
         :param title: The legend's title. Default is no title (None).
-        :param title_font_size: The fontsize of the legend's title. Default is the default fontsize.
-        :param label_spacing: The fractional whitespace inside the legend border, in font-size units. Default is None,
-                              which means using rcParams["legend.borderpad"] (default: 0.4).
-        :param handle_length: The length of the legend handles, in font-size units. Default is None,
-                              which means using rcParams["legend.handlelength"] (default: 2.0).
-        :param handle_text_pad: The pad between the legend handle and text, in font-size units. Default is None,
-                                which means using rcParams["legend.handletextpad"] (default: 0.8).
-        :param border_axes_pad: The pad between the axes and legend border, in font-size units. Default is None,
-                                which means using rcParams["legend.borderaxespad"] (default: 0.5).
-        :param column_spacing: The spacing between columns, in font-size units. Default is None, which means using
+        :param title_font_size: The fontsize of the legend's title. Default is
+                                the default fontsize.
+        :param label_spacing: The fractional whitespace inside the legend border,
+                              in font-size units. Default is None, which means
+                              using rcParams["legend.borderpad"] (default: 0.4).
+        :param handle_length: The length of the legend handles, in font-size
+                              units. Default is None, which means using
+                              rcParams["legend.handlelength"] (default: 2.0).
+        :param handle_text_pad: The pad between the legend handle and text, in
+                                font-size units. Default is None, which means
+                                using rcParams["legend.handletextpad"]
+                                (default: 0.8).
+        :param border_axes_pad: The pad between the axes and legend border, in
+                                font-size units. Default is None,
+                                which means using
+                                rcParams["legend.borderaxespad"] (default: 0.5).
+        :param column_spacing: The spacing between columns, in font-size units.
+                               Default is None, which means using
                                rcParams["legend.columnspacing"] (default: 2.0).
         """
         kwargs = {}
         for kwarg, mpl_arg in zip(
-            [handles, labels, n_cols, font_properties, font_size, line_points, scatter_points, scatter_y_offsets,
-             marker_scale, frame_on, shadow, frame_alpha, face_color, edge_color, mode, title,
-             title_font_size, label_spacing, handle_length, handle_text_pad, border_axes_pad, column_spacing,
-             location],
-            ['handles', 'labels', 'ncol', 'prop', 'fontsize', 'numpoints', 'scatterpoints', 'scatteryoffsets',
-             'markerscale', 'frameon', 'shadow', 'framealpha', 'facecolor', 'edgecolor', 'mode', 'title',
-             'title_fontsize', 'labelspacing', 'handlelength', 'handletextpad', 'borderaxespad', 'columnspacing',
-             'loc']
+            [handles, labels, n_cols, font_properties, font_size,
+             line_points, scatter_points, scatter_y_offsets, marker_scale,
+             frame_on, shadow, frame_alpha, face_color, edge_color,
+             mode, title, title_font_size, label_spacing, handle_length,
+             handle_text_pad, border_axes_pad, column_spacing, location],
+            ['handles', 'labels', 'ncol', 'prop', 'fontsize',
+             'numpoints', 'scatterpoints', 'scatteryoffsets', 'markerscale',
+             'frameon', 'shadow', 'framealpha', 'facecolor', 'edgecolor',
+             'mode', 'title', 'title_fontsize', 'labelspacing', 'handlelength',
+             'handletextpad', 'borderaxespad', 'columnspacing', 'loc']
         ):
             if kwarg is not None:
                 kwargs[mpl_arg] = kwarg

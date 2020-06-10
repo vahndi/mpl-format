@@ -165,10 +165,17 @@ class FigureFormatter(object):
 
     def set_axes_text(
             self,
-            title: Optional[Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]] = None,
+            title: Optional[Union[str, List[str],  Callable[[int, int], str], Callable[[int], str]]] = None,
             x_label: Optional[Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]] = None,
             y_label: Optional[Union[str, List[str], Callable[[int, int], str], Callable[[int], str]]] = None
     ) -> 'FigureFormatter':
+        """
+        Set the text for each Axes' title, x_label or y_label.
+
+        :param title: Axes titles.
+        :param x_label: Axes x-labels.
+        :param y_label: Axes y-labels.
+        """
         if title is not None:
             self.set_axes_title_text(title)
         if x_label is not None:
