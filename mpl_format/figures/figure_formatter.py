@@ -24,7 +24,8 @@ class FigureFormatter(object):
                  n_rows: int = 1, n_cols: int = 1,
                  fig_size: Tuple[int, int] = (16, 9),
                  share_x: str = 'none',
-                 share_y: str = 'none'):
+                 share_y: str = 'none',
+                 constrained_layout: bool = True):
 
         if fig_or_axes is not None:
             if isinstance(fig_or_axes, Figure):
@@ -45,9 +46,12 @@ class FigureFormatter(object):
             assert share_x in self.share_values
             assert share_y in self.share_values
             self._fig_size: Tuple[int, int] = fig_size
-            figure, axes = plt.subplots(nrows=n_rows, ncols=n_cols,
-                                        sharex=share_x, sharey=share_y,
-                                        figsize=fig_size)
+            figure, axes = plt.subplots(
+                nrows=n_rows, ncols=n_cols,
+                sharex=share_x, sharey=share_y,
+                figsize=fig_size,
+                constrained_layout=constrained_layout
+            )
             self._axes: Union[Axes, ndarray] = axes
             self._figure: Figure = figure
         self._has_array = (
