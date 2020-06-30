@@ -3,7 +3,7 @@ from matplotlib.axes import Axes
 
 
 def new_axes(width: int = None, height: int = None,
-             constrained_layout: bool = True) -> Axes:
+             constrained_layout: bool = False) -> Axes:
     """
     Return new matplotlib axes.
     """
