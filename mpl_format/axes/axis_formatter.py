@@ -6,6 +6,7 @@ from typing import Union, Dict, Callable
 
 from mpl_format.compound_types import FontSize
 from mpl_format.text.text_formatter import TextFormatter
+from mpl_format.text.text_list_formatter import TextListFormatter
 from mpl_format.text.text_utils import wrap_text, map_text
 
 
@@ -33,6 +34,13 @@ class AxisFormatter(object):
         Return a TextFormatter wrapping the axis label.
         """
         return self._label
+
+    @property
+    def tick_labels(self) -> TextListFormatter:
+
+        return TextListFormatter([
+            text for text in self._axis.get_ticklabels()
+        ])
 
     # region labels
 

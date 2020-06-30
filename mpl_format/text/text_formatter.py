@@ -3,7 +3,7 @@ from typing import Dict, Union, Callable
 from matplotlib.text import Text
 
 from mpl_format.compound_types import FontSize
-from mpl_format.text.text_utils import wrap_text, remove_parenthesized_text
+from mpl_format.text.text_utils import wrap_text, remove_parenthesized_text, HORIZONTAL_ALIGNMENTS, VERTICAL_ALIGNMENTS
 
 
 class TextFormatter(object):
@@ -116,39 +116,39 @@ class TextFormatter(object):
         self._text.set_fontsize(font_size)
         return self
     
-    def set_size_xx_small(self):
+    def set_size_xx_small(self) -> 'TextFormatter':
         self.set_size('xx-small')
         return self
 
-    def set_size_x_small(self):
+    def set_size_x_small(self) -> 'TextFormatter':
         self.set_size('x-small')
         return self
 
-    def set_size_small(self):
+    def set_size_small(self) -> 'TextFormatter':
         self.set_size('small')
         return self
 
-    def set_size_medium(self):
+    def set_size_medium(self) -> 'TextFormatter':
         self.set_size('medium')
         return self
 
-    def set_size_large(self):
+    def set_size_large(self) -> 'TextFormatter':
         self.set_size('large')
         return self
 
-    def set_size_x_large(self):
+    def set_size_x_large(self) -> 'TextFormatter':
         self.set_size('x-large')
         return self
 
-    def set_size_xx_large(self):
+    def set_size_xx_large(self) -> 'TextFormatter':
         self.set_size('xx-large')
         return self
 
-    def set_size_larger(self):
+    def set_size_larger(self) -> 'TextFormatter':
         self.set_size('larger')
         return self
 
-    def set_size_smaller(self):
+    def set_size_smaller(self) -> 'TextFormatter':
         self.set_size('smaller')
         return self
 
@@ -220,5 +220,59 @@ class TextFormatter(object):
         """
         self.set_font_family('Calibri')
         return self
+
+    # endregion
+
+    # region set alignment
+
+    def set_ha(self, alignment: str) -> 'TextFormatter':
+
+        if alignment not in HORIZONTAL_ALIGNMENTS:
+            raise ValueError(
+                f'alignment must be one of {HORIZONTAL_ALIGNMENTS}'
+            )
+        self._text.set_horizontalalignment(align=alignment)
+        return self
+
+    def set_ha_left(self) -> 'TextFormatter':
+
+        return self.set_ha('left')
+
+    def set_ha_center(self) -> 'TextFormatter':
+
+        return self.set_ha('center')
+
+    def set_ha_right(self) -> 'TextFormatter':
+
+        return self.set_ha('right')
+
+    def set_va(self, alignment: str) -> 'TextFormatter':
+
+        if alignment not in VERTICAL_ALIGNMENTS:
+            raise ValueError(
+                f'alignment must be one of {VERTICAL_ALIGNMENTS}'
+            )
+        self._text.set_verticalalignment(align=alignment)
+        return self
+
+    def set_va_top(self) -> 'TextFormatter':
+
+        return self.set_va('top')
+
+    def set_va_center(self) -> 'TextFormatter':
+
+        return self.set_va('center')
+
+    def set_va_bottom(self) -> 'TextFormatter':
+
+        return self.set_va('bottom')
+
+    def set_va_baseline(self) -> 'TextFormatter':
+
+        return self.set_va('baseline')
+
+    def set_va_center_baseline(self) -> 'TextFormatter':
+
+        return self.set_va('center_baseline')
 
     # endregion

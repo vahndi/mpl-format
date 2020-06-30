@@ -4,6 +4,11 @@ from textwrap import wrap
 from typing import Union, Dict, Callable, List, Iterable
 
 
+HORIZONTAL_ALIGNMENTS = ('left', 'center', 'right')
+VERTICAL_ALIGNMENTS = ('top', 'center', 'bottom',
+                       'baseline', 'center_baseline')
+
+
 def wrap_text(text: Union[str, Text, Iterable[str], Iterable[Text]],
               max_width: int = None) -> Union[str, List[str]]:
     """
