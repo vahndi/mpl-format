@@ -19,14 +19,19 @@ from mpl_format.text.text_utils import wrap_text
 class AxesFormatter(object):
 
     def __init__(self, axes: Optional[Axes] = None,
-                 width: Optional[int] = None, height: Optional[int] = None):
+                 width: Optional[int] = None, height: Optional[int] = None,
+                 constrained_layout: bool = False):
         """
         Create a new AxesFormatter
 
         :param axes: The matplotlib Axes instance to wrap.
+        :param width: Width of new Axes, if none are given.
+        :param height: Height of new Axes, if none are given.
+        :param constrained_layout: Option for constrained_layout of new Axes.
         """
         if axes is None:
-            self._axes: Axes = new_axes(width=width, height=height)
+            self._axes: Axes = new_axes(width=width, height=height,
+                                        constrained_layout=constrained_layout)
         else:
             self._axes: Axes = axes
         self._x_axis: AxisFormatter = AxisFormatter(self._axes.xaxis)
