@@ -39,11 +39,14 @@ class TextFormatter(object):
         self._text.set_text(wrapped)
         return self
 
-    def rotate(self, rotation: Union[str, int], how: str = 'absolute') -> 'TextFormatter':
+    def rotate(
+            self, rotation: Union[str, int], how: str = 'absolute'
+    ) -> 'TextFormatter':
         """
         Set the rotation of the text.
 
-        :param rotation: The rotation value to set in degrees, 'horizontal' or 'vertical'.
+        :param rotation: The rotation value to set in degrees, 'horizontal'
+                         or 'vertical'.
         :param how: 'absolute' or 'relative'
         """
         if how == 'relative' and not isinstance(rotation, str):
@@ -54,7 +57,9 @@ class TextFormatter(object):
             raise ValueError("`how` must be 'absolute' or 'relative'")
         return self
 
-    def map(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'TextFormatter':
+    def map(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'TextFormatter':
         """
         Replace text using a dictionary or function.
 

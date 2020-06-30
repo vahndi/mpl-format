@@ -1,9 +1,7 @@
+from matplotlib.text import Text
+from mpl_format.settings import MAX_LABEL_WIDTH
 from textwrap import wrap
 from typing import Union, Dict, Callable, List, Iterable
-
-from matplotlib.text import Text
-
-from mpl_format.settings import MAX_LABEL_WIDTH
 
 
 def wrap_text(text: Union[str, Text, Iterable[str], Iterable[Text]],
@@ -61,6 +59,8 @@ def map_text(
     if isinstance(mapping, dict):
         if text in mapping.keys():
             return mapping[text]
+        else:
+            return text
     elif callable(mapping):
         return mapping(text)
     else:

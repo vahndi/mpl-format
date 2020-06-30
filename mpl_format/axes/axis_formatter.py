@@ -64,7 +64,9 @@ class AxisFormatter(object):
         self.label.replace(old=old, new=new)
         return self
 
-    def map_label_text(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxisFormatter':
+    def map_label_text(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxisFormatter':
         """
         Map the label text using a dictionary or function.
 
@@ -73,7 +75,9 @@ class AxisFormatter(object):
         self.label.map(mapping)
         return self
 
-    def rotate_label(self, rotation: int, how: str = 'absolute') -> 'AxisFormatter':
+    def rotate_label(
+            self, rotation: int, how: str = 'absolute'
+    ) -> 'AxisFormatter':
         """
         Set the rotation of the axis label.
 
@@ -112,7 +116,9 @@ class AxisFormatter(object):
 
     # region tick labels
 
-    def rotate_tick_labels(self, rotation: int, how: str = 'absolute') -> 'AxisFormatter':
+    def rotate_tick_labels(
+            self, rotation: int, how: str = 'absolute'
+    ) -> 'AxisFormatter':
         """
         Set the rotation of axis tick labels.
 
@@ -155,12 +161,15 @@ class AxisFormatter(object):
         self._axis.set_major_formatter(tick)
         return self
 
-    def set_format_currency(self, symbol: str = '$', num_decimals: int = 0) -> 'AxisFormatter':
+    def set_format_currency(
+            self, symbol: str = '$', num_decimals: int = 0
+    ) -> 'AxisFormatter':
         """
         Format an axis with currency symbols and separators.
 
         :param symbol: The currency symbol to use.
-        :param num_decimals: The number of decimal places to use (typically 0 or 2).
+        :param num_decimals: The number of decimal places to use
+                             (typically 0 or 2).
         """
         fmt = '%s{x:,.%sf}' % (symbol, num_decimals)
         tick = StrMethodFormatter(fmt)
@@ -173,7 +182,8 @@ class AxisFormatter(object):
         Format an axis as a percentage.
 
         :param num_decimals: Number of decimal places for the resulting label.
-        :param multiply_100: Whether to multiply the existing value by 100 before formatting.
+        :param multiply_100: Whether to multiply the existing value by 100
+                             before formatting.
         """
         def percent_formatter(s, _):
             s = float(s)
@@ -193,7 +203,9 @@ class AxisFormatter(object):
         self._axis.set_tick_params(labelsize=font_size)
         return self
 
-    def map_tick_label_text(self, mapping: Union[Dict[str, str], Callable[[str], str]]) -> 'AxisFormatter':
+    def map_tick_label_text(
+            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+    ) -> 'AxisFormatter':
         """
         Map the tick label text using a dictionary or function.
 

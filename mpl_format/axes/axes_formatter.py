@@ -506,7 +506,9 @@ class AxesFormatter(object):
         """
         kwargs = {}
         for arg, mpl_arg in zip(
-            [color, line_style, line_width, marker_edge_color, marker_edge_width, marker_face_color, marker_size,
+            [color, line_style, line_width,
+             marker_edge_color, marker_edge_width,
+             marker_face_color, marker_size,
              alpha],
             ['c', 'ls', 'lw', 'mec', 'mew', 'mfc', 'ms', 'alpha']
         ):
@@ -531,8 +533,10 @@ class AxesFormatter(object):
         Add a vertical line to the plot.
 
         :param x: x position in data coordinates of the vertical line
-        :param y_min: Should be between 0 and 1, 0 being the bottom of the plot, 1 the top of the plot
-        :param y_max: Should be between 0 and 1, 0 being the bottom of the plot, 1 the top of the plot
+        :param y_min: Should be between 0 and 1, with 0 being the bottom of the
+                      plot, and 1 the top of the plot
+        :param y_max: Should be between 0 and 1, with 0 being the bottom of the
+                      plot, and 1 the top of the plot
         :param color: Color of the line
         :param alpha: Opacity of the line
         :param line_style: One of {'-', '--', '-.', ':', ''}
@@ -680,8 +684,8 @@ class AxesFormatter(object):
         :param handles: A list of Artists (lines, patches) to be added to the
                         legend.
         :param labels: A list of labels to show next to the artists. The length
-                       of handles and labels should be the same. If they are not,
-                       they are truncated to the smaller of both lengths.
+                       of handles and labels should be the same. If they are
+                       not, they are truncated to the smaller of both lengths.
         :param location: The legend location.
         :param n_cols: The number of columns that the legend has. Default is 1.
         :param font_size: The font size of the legend. If the value is numeric

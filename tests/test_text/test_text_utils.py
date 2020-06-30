@@ -1,7 +1,7 @@
 from matplotlib.text import Text
 from unittest.case import TestCase
 
-from mpl_format.text.text_utils import wrap_text
+from mpl_format.text.text_utils import wrap_text, map_text
 
 
 class TestTextUtils(TestCase):
@@ -30,3 +30,10 @@ class TestTextUtils(TestCase):
         expected = [self.a_to_z__wrapped_5, self.digits__wrapped_5]
         wrapped = wrap_text(text=[self.a_to_z, self.digits], max_width=5)
         self.assertEqual(expected, wrapped)
+
+    def test_map_text(self):
+
+        mapping = {'a': 'A', 'b': 'B'}
+        self.assertEqual('A', map_text(text='a', mapping=mapping))
+        self.assertEqual('B', map_text(text='b', mapping=mapping))
+        self.assertEqual('c', map_text(text='c', mapping=mapping))
