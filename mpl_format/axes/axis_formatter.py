@@ -39,7 +39,7 @@ class AxisFormatter(object):
     def tick_labels(self) -> TextListFormatter:
 
         return TextListFormatter([
-            text for text in self._axis.get_ticklabels()
+            TextFormatter(text) for text in self._axis.get_ticklabels()
         ])
 
     # region labels

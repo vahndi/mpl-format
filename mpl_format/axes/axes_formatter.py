@@ -9,7 +9,7 @@ from numpy.core.records import ndarray
 
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
-from mpl_format.compound_types import FontSize, Color, LegendLocation
+from mpl_format.compound_types import FontSize, Color, LegendLocation, FloatOrFloats
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.text.text_formatter import TextFormatter
@@ -483,7 +483,9 @@ class AxesFormatter(object):
 
     # region spans
 
-    def add_h_line(self, y: float = 0, x_min: float = 0, x_max: float = 1,
+    def add_h_line(self, y: Union[float, str] = 0,
+                   x_min: Union[float, str] = 0,
+                   x_max: Union[float, str] = 1,
                    color: Optional[Color] = None,
                    alpha: Optional[float] = None,
                    line_style: Optional[str] = None,
@@ -526,7 +528,9 @@ class AxesFormatter(object):
         )
         return self
 
-    def add_v_line(self, x: float = 0, y_min: float = 0, y_max: float = 1,
+    def add_v_line(self, x: Union[float, str] = 0,
+                   y_min: Union[float, str] = 0,
+                   y_max: Union[float, str] = 1,
                    color: Optional[Color] = None, alpha: Optional[float] = None,
                    line_style: Optional[str] = None,
                    line_width: Optional[float] = None,
@@ -564,6 +568,44 @@ class AxesFormatter(object):
             x=x, ymin=y_min, ymax=y_max,
             **kwargs
         )
+        return self
+
+    def add_h_lines(self, y: FloatOrFloats,
+                    x_min: FloatOrFloats, x_max: FloatOrFloats,
+                    colors='k', line_styles: str = 'solid',
+                    label: Optional[str] = '') -> 'AxesFormatter':
+        """
+        Plot horizontal lines at each y from x_min to x_max.
+
+        :param y: x-indexes where to plot the lines.
+        :param x_min: Beginning of each or all lines.
+        :param x_max: End of each or all lines.
+        :param colors: Line colors.
+        :param line_styles: One of {'solid', 'dashed', 'dashdot', 'dotted'}
+        :param label: Label.
+        """
+        self._axes.hlines(y=y, xmin=x_min, xmax=x_max,
+                          colors=colors, linestyles=line_styles,
+                          label=label)
+        return self
+
+    def add_v_lines(self, x: FloatOrFloats,
+                    y_min: FloatOrFloats, y_max: FloatOrFloats,
+                    colors='k', line_styles: str = 'solid',
+                    label: Optional[str] = '') -> 'AxesFormatter':
+        """
+        Plot vertical lines at each x from y_min to y_max.
+
+        :param x: x-indexes where to plot the lines.
+        :param y_min: Beginning of each or all lines.
+        :param y_max: End of each or all lines.
+        :param colors: Line colors.
+        :param line_styles: One of {'solid', 'dashed', 'dashdot', 'dotted'}
+        :param label: Label.
+        """
+        self._axes.vlines(x=x, ymin=y_min, ymax=y_max,
+                          colors=colors, linestyles=line_styles,
+                          label=label)
         return self
 
     # endregion
