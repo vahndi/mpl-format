@@ -9,7 +9,7 @@ from numpy.core.records import ndarray
 
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
-from mpl_format.compound_types import FontSize, Color, LegendLocation, FloatOrFloats
+from mpl_format.compound_types import FontSize, Color, LegendLocation, FloatOrFloats, ArrayLike
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.text.text_formatter import TextFormatter
@@ -608,10 +608,10 @@ class AxesFormatter(object):
                           label=label)
         return self
 
-    def fill_between(self, x: ndarray,
-                     y1: Union[float, ndarray],
-                     y2: Union[float, ndarray],
-                     where: Optional[ndarray] = None,
+    def fill_between(self, x: ArrayLike,
+                     y1: Union[float, ArrayLike],
+                     y2: Union[float, ArrayLike],
+                     where: Optional[ArrayLike] = None,
                      interpolate: bool = False,
                      step: Optional[str] = None,
                      color: Optional[Color] = None,
@@ -760,7 +760,7 @@ class AxesFormatter(object):
             font_properties: Optional[Union[FontProperties, dict]] = None,
             line_points: Optional[int] = None,
             scatter_points: Optional[int] = None,
-            scatter_y_offsets: Optional[ndarray] = None,
+            scatter_y_offsets: Optional[ArrayLike] = None,
             marker_scale: Optional[float] = None,
             frame_on: Optional[bool] = None,
             shadow: Optional[bool] = None,

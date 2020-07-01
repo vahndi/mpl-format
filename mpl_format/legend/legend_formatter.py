@@ -1,10 +1,9 @@
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.legend import Legend
-from numpy import ndarray
 from typing import Union, List, Optional, Dict, Callable
 
-from mpl_format.compound_types import Color, FontSize, LegendLocation
+from mpl_format.compound_types import Color, FontSize, LegendLocation, ArrayLike
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import map_text
 
@@ -131,7 +130,7 @@ class LegendFormatter(object):
                         font_properties: Optional[Union[FontProperties, dict]] = None,
                         line_points: Optional[int] = None,
                         scatter_points: Optional[int] = None,
-                        scatter_y_offsets: Optional[ndarray] = None,
+                        scatter_y_offsets: Optional[ArrayLike] = None,
                         marker_scale: Optional[float] = None,
                         frame_on: Optional[bool] = None,
                         shadow: Optional[bool] = None,

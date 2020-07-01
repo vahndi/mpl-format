@@ -61,6 +61,8 @@ def map_text(
     if not isinstance(text, str):
         return [map_text(t, mapping) for t in text]
 
+    if mapping is None:
+        return text
     if isinstance(mapping, dict):
         if text in mapping.keys():
             return mapping[text]
