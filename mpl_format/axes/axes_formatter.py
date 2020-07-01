@@ -608,6 +608,57 @@ class AxesFormatter(object):
                           label=label)
         return self
 
+    def fill_between(self, x: ndarray,
+                     y1: Union[float, ndarray],
+                     y2: Union[float, ndarray],
+                     where: Optional[ndarray] = None,
+                     interpolate: bool = False,
+                     step: Optional[str] = None,
+                     color: Optional[Color] = None,
+                     alpha: Optional[float] = None,
+                     line_style: Optional[str] = None,
+                     line_width: Optional[float] = None,
+                     edge_color: Optional[Color] = None,
+                     face_color: Optional[Color] = None) -> 'AxesFormatter':
+        """
+        Make filled polygons between two curves.
+
+        :param x: An N-length array of the x data.
+        :param y1: An N-length array (or scalar) of the y data.
+        :param y2: An N-length array (or scalar) of the y data.
+        :param where: If None, default to fill between everywhere. If not None,
+                      it is an N-length numpy boolean array and the fill will
+                      only happen over the regions where where==True.
+        :param interpolate: If True, interpolate between the two lines to find
+                            the precise point of intersection. Otherwise, the
+                            start and end points of the filled region will only
+                            occur on explicit values in the x array.
+        :param step: One of {‘pre’, ‘post’, ‘mid’}. If not None, fill with step
+                     logic.
+        :param color: matplotlib color arg or sequence of rgba tuples
+        :param alpha: Opacity.
+        :param line_style: One of {'-', '--', '-.', ':', ''}
+        :param line_width: float or sequence of floats
+        :param edge_color: matplotlib color spec or sequence of specs
+        :param face_color: matplotlib color spec or sequence of specs
+        """
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [color, alpha, line_style, line_width, edge_color, face_color],
+            ['color', 'alpha', 'line_style',
+             'line_width', 'edge_color', 'face_color']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+
+        self._axes.fill_between(
+            x=x, y1=y1, y2=y2,
+            where=where, interpolate=interpolate,
+            step=step,
+            **kwargs
+        )
+        return self
+
     # endregion
 
     def set_title_font_family(self, font_name: str) -> 'AxesFormatter':
