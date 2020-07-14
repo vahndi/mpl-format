@@ -69,8 +69,8 @@ class AxesFormatter(object):
     @property
     def legend(self) -> LegendFormatter:
         """
-        Return a LegendFormatter for the legend of the wrapped Axes, if there is one.
-        :return:
+        Return a LegendFormatter for the legend of the wrapped Axes,
+        if there is one.
         """
         return self._legend
 
@@ -657,6 +657,27 @@ class AxesFormatter(object):
             step=step,
             **kwargs
         )
+        return self
+
+    # endregion
+
+    # region colors
+
+    def set_face_color(self, color: Color) -> 'AxesFormatter':
+
+        self._axes.set_facecolor(color)
+        return self
+
+    def set_frame_color(self, color: Color) -> 'AxesFormatter':
+
+        for pos in ['top', 'bottom', 'right', 'left']:
+            self._axes.spines[pos].set_edgecolor(color)
+        return self
+
+    def set_tick_color(self, color: Color) -> 'AxesFormatter':
+
+        self.x_axis.set_tick_color(color=color)
+        self.y_axis.set_tick_color(color=color)
         return self
 
     # endregion

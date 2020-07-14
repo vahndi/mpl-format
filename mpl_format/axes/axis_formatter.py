@@ -1,10 +1,11 @@
 from matplotlib.axis import Axis
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from matplotlib.text import Text
 from matplotlib.ticker import StrMethodFormatter, FuncFormatter
 from typing import Union, Dict, Callable
 
-from mpl_format.compound_types import FontSize
+from mpl_format.compound_types import FontSize, Color
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_list_formatter import TextListFormatter
 from mpl_format.text.text_utils import wrap_text, map_text
@@ -41,6 +42,14 @@ class AxisFormatter(object):
         return TextListFormatter([
             TextFormatter(text) for text in self._axis.get_ticklabels()
         ])
+
+    def set_tick_color(self, color: Color) -> 'AxisFormatter':
+
+        tick: Line2D
+        for tick in self._axis.get_ticklines():
+            tick.set_color(color=color)
+
+        return self
 
     # region labels
 
