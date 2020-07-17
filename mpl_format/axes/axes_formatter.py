@@ -5,13 +5,14 @@ from typing import Optional, Union, Dict, Callable, List
 
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
-from numpy.core.records import ndarray
+from matplotlib.patches import Rectangle
 
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.compound_types import FontSize, Color, LegendLocation, FloatOrFloats, ArrayLike
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
+from mpl_format.patches.patches_formatter import PatchesFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
@@ -30,8 +31,10 @@ class AxesFormatter(object):
         :param constrained_layout: Option for constrained_layout of new Axes.
         """
         if axes is None:
-            self._axes: Axes = new_axes(width=width, height=height,
-                                        constrained_layout=constrained_layout)
+            self._axes: Axes = new_axes(
+                width=width, height=height,
+                constrained_layout=constrained_layout
+            )
         else:
             self._axes: Axes = axes
         self._x_axis: AxisFormatter = AxisFormatter(self._axes.xaxis)
@@ -679,6 +682,20 @@ class AxesFormatter(object):
         self.x_axis.set_tick_color(color=color)
         self.y_axis.set_tick_color(color=color)
         return self
+
+    # endregion
+
+    # region shapes
+
+    @property
+    def rectangles(self) -> PatchesFormatter:
+        """
+        Return a list of the Rectangles on the axes.
+        """
+        return PatchesFormatter([
+            r for r in self._axes.get_children()
+            if isinstance(r, Rectangle)
+        ])
 
     # endregion
 
