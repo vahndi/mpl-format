@@ -671,6 +671,17 @@ class AxesFormatter(object):
         self._axes.set_facecolor(color)
         return self
 
+    def get_frame_color(self) -> Union[Color, List[Color]]:
+        """
+        Return the color of the frame if all edges are the same color,
+        otherwise a list of the top, bottom, left and right colors.
+        """
+        colors = self.frame_colors
+        if len(set(colors)) == 1:
+            return colors[0]
+        else:
+            return self.get_frame_colors()
+
     def set_frame_color(self, color: Color) -> 'AxesFormatter':
 
         for pos in ['top', 'bottom', 'left', 'right']:
@@ -678,7 +689,9 @@ class AxesFormatter(object):
         return self
 
     def get_frame_colors(self) -> List[Color]:
-
+        """
+        Return the colors of the top, bottom, left and right edges of the Axes.
+        """
         return [
             self._axes.spines[pos].get_edgecolor()
             for pos in ['top', 'bottom', 'left', 'right']
