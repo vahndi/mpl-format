@@ -673,9 +673,16 @@ class AxesFormatter(object):
 
     def set_frame_color(self, color: Color) -> 'AxesFormatter':
 
-        for pos in ['top', 'bottom', 'right', 'left']:
+        for pos in ['top', 'bottom', 'left', 'right']:
             self._axes.spines[pos].set_edgecolor(color)
         return self
+
+    def get_frame_colors(self) -> List[Color]:
+
+        return [
+            self._axes.spines[pos].get_edgecolor()
+            for pos in ['top', 'bottom', 'left', 'right']
+        ]
 
     def set_tick_color(self, color: Color) -> 'AxesFormatter':
 

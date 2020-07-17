@@ -1,6 +1,5 @@
-from typing import List, Iterable
-
 from matplotlib.patches import Patch
+from typing import List, Iterable
 
 from mpl_format.compound_types import Color
 
