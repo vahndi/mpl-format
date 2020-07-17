@@ -12,7 +12,7 @@ from mpl_format.axes.axis_utils import new_axes
 from mpl_format.compound_types import FontSize, Color, LegendLocation, FloatOrFloats, ArrayLike
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
-from mpl_format.patches.patches_formatter import PatchesFormatter
+from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
@@ -688,11 +688,11 @@ class AxesFormatter(object):
     # region shapes
 
     @property
-    def rectangles(self) -> PatchesFormatter:
+    def rectangles(self) -> PatchListFormatter:
         """
         Return a list of the Rectangles on the axes.
         """
-        return PatchesFormatter([
+        return PatchListFormatter([
             r for r in self._axes.get_children()
             if isinstance(r, Rectangle)
         ])

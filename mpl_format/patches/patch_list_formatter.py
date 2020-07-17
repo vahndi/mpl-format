@@ -5,7 +5,7 @@ from matplotlib.patches import Patch
 from mpl_format.compound_types import Color
 
 
-class PatchesFormatter(object):
+class PatchListFormatter(object):
 
     def __init__(self, patches: List[Patch]):
 
