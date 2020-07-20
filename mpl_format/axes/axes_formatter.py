@@ -1,7 +1,7 @@
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 from pathlib import Path
-from typing import Optional, Union, Dict, Callable, List
+from typing import Optional, Union, Dict, Callable, List, Tuple
 
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
@@ -728,6 +728,20 @@ class AxesFormatter(object):
         self.title.set_font_family(font_name)
         return self
 
+    # region limits
+
+    def get_x_lim(self) -> Tuple[float, float]:
+        """
+        Return the x-axis view limits.
+        """
+        return self._axes.get_xlim()
+
+    def get_y_lim(self) -> Tuple[float, float]:
+        """
+        Return the y-axis view limits.
+        """
+        return self._axes.get_ylim()
+
     def set_x_lim(self, left: Optional[float] = None,
                   right: Optional[float] = None) -> 'AxesFormatter':
         """
@@ -742,13 +756,67 @@ class AxesFormatter(object):
     def set_y_lim(self, bottom: Optional[float] = None,
                   top: Optional[float] = None) -> 'AxesFormatter':
         """
-        Set the limits of the x-axis.
+        Set the limits of the y-axis.
 
         :param bottom: Lower limit.
         :param top: Upper limit.
         """
         self._axes.set_ylim(bottom=bottom, top=top)
         return self
+
+    def get_x_min(self) -> float:
+        """
+        Return the x-axis lower view limit.
+        """
+        return self.get_x_lim()[0]
+
+    def get_x_max(self) -> float:
+        """
+        Return the x-axis upper view limit.
+        """
+        return self.get_x_lim()[1]
+
+    def set_x_min(self, left: float = None) -> 'AxesFormatter':
+        """
+        Set the x-axis lower view limit.
+        """
+        self.set_x_lim(left, None)
+        return self
+
+    def set_x_max(self, right: float = None) -> 'AxesFormatter':
+        """
+        Set the x-axis upper view limit.
+        """
+        self.set_x_lim(None, right)
+        return self
+
+    def get_y_min(self) -> float:
+        """
+        Return the y-axis lower view limit.
+        """
+        return self.get_y_lim()[0]
+
+    def get_y_max(self) -> float:
+        """
+        Return the y-axis upper view limit.
+        """
+        return self.get_y_lim()[1]
+
+    def set_y_min(self, left: float = None) -> 'AxesFormatter':
+        """
+        Set the y-axis lower view limit.
+        """
+        self.set_y_lim(left, None)
+        return self
+
+    def set_y_max(self, right: float = None) -> 'AxesFormatter':
+        """
+        Set the y-axis upper view limit.
+        """
+        self.set_y_lim(None, right)
+        return self
+
+    # endregion
 
     def grid(self, value: bool,
              which: str = 'major',
