@@ -13,6 +13,7 @@ setup(
     download_url='https://github.com/vahndi/mpl-format/archive/v_0.269.tar.gz',
     keywords=['matplotlib'],
     install_requires=[
+        'compound-types',
         'matplotlib',
         'numpy',
         'seaborn',

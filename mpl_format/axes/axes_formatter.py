@@ -1,20 +1,21 @@
-from matplotlib.axes import Axes
+from compound_types.arrays import ArrayLike
+from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
+    DictOrDictIterable
 import matplotlib.pyplot as plt
-from pathlib import Path
-from typing import Optional, Union, Dict, Callable, List, Tuple
-
+from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle
-
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
-from mpl_format.compound_types import FontSize, Color, LegendLocation, FloatOrFloats, ArrayLike
+from mpl_format.compound_types import FontSize, Color, LegendLocation
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
+from pathlib import Path
+from typing import Optional, Union, Dict, Callable, List, Tuple, Iterable
 
 
 class AxesFormatter(object):
@@ -573,8 +574,9 @@ class AxesFormatter(object):
         )
         return self
 
-    def add_h_lines(self, y: FloatOrFloats,
-                    x_min: FloatOrFloats, x_max: FloatOrFloats,
+    def add_h_lines(self, y: FloatOrFloatIterable,
+                    x_min: FloatOrFloatIterable,
+                    x_max: FloatOrFloatIterable,
                     colors='k', line_styles: str = 'solid',
                     label: Optional[str] = '') -> 'AxesFormatter':
         """
@@ -592,8 +594,9 @@ class AxesFormatter(object):
                           label=label)
         return self
 
-    def add_v_lines(self, x: FloatOrFloats,
-                    y_min: FloatOrFloats, y_max: FloatOrFloats,
+    def add_v_lines(self, x: FloatOrFloatIterable,
+                    y_min: FloatOrFloatIterable,
+                    y_max: FloatOrFloatIterable,
                     colors='k', line_styles: str = 'solid',
                     label: Optional[str] = '') -> 'AxesFormatter':
         """
@@ -676,7 +679,7 @@ class AxesFormatter(object):
         Return the color of the frame if all edges are the same color,
         otherwise a list of the top, bottom, left and right colors.
         """
-        colors = self.frame_colors
+        colors = self.get_frame_colors()
         if len(set(colors)) == 1:
             return colors[0]
         else:
@@ -716,6 +719,40 @@ class AxesFormatter(object):
             r for r in self._axes.get_children()
             if isinstance(r, Rectangle)
         ])
+
+    def add_text(
+            self, x: FloatOrFloatIterable,
+            y: FloatOrFloatIterable,
+            text: StrOrStrIterable,
+            font_dict: Optional[DictOrDictIterable] = None,
+            **kwargs
+    ) -> 'AxesFormatter':
+        """
+        Add a single or multiple text blocks to the plot.
+
+        :param x: x-coordinate(s) of the text.
+        :param y: y-coordinate(s) of the text.
+        :param text: String or iterable of text strings to add.
+        :param font_dict: A dictionary to override the default text properties.
+                          If font_dict is None, the defaults are determined by
+                          your rc parameters.
+        :param kwargs: Other miscellaneous Text parameters.
+        """
+        if isinstance(x, Iterable) or isinstance(y, Iterable):
+            if not isinstance(x, Iterable):
+                x = [x] * len(y)
+            elif not isinstance(y, Iterable):
+                y = [y] * len(x)
+            if isinstance(text, str):
+                text = [text] * len(x)
+            if type(font_dict) in (type(None), dict):
+                font_dict = [font_dict] * len(x)
+        for x_i, y_i, text_i, font_dict_i in zip(x, y, text, font_dict):
+            self._axes.text(
+                x=x_i, y=y_i, s=text_i,
+                fontdict=font_dict_i, **kwargs
+            )
+        return self
 
     # endregion
 
