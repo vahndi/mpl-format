@@ -743,10 +743,14 @@ class AxesFormatter(object):
                 x = [x] * len(y)
             elif not isinstance(y, Iterable):
                 y = [y] * len(x)
+        else:
+            x = [x]
+            y = [y]
             if isinstance(text, str):
                 text = [text] * len(x)
             if type(font_dict) in (type(None), dict):
                 font_dict = [font_dict] * len(x)
+
         for x_i, y_i, text_i, font_dict_i in zip(x, y, text, font_dict):
             self._axes.text(
                 x=x_i, y=y_i, s=text_i,
