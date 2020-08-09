@@ -70,6 +70,10 @@ class FigureFormatter(object):
             return AxesFormatterArray(self._axes)
 
     @property
+    def figure(self) -> Figure:
+        return self._figure
+
+    @property
     def single(self) -> AxesFormatter:
         """
         Return an AxesFormatter for the wrapped Axes.
