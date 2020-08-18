@@ -1,3 +1,5 @@
+from pandas import DataFrame
+
 from compound_types.arrays import ArrayLike
 from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
     DictOrDictIterable
@@ -614,9 +616,10 @@ class AxesFormatter(object):
                           label=label)
         return self
 
-    def fill_between(self, x: ArrayLike,
-                     y1: Union[float, ArrayLike],
-                     y2: Union[float, ArrayLike],
+    def fill_between(self, x: Union[ArrayLike, str],
+                     y1: Union[float, ArrayLike, str],
+                     y2: Union[float, ArrayLike, str],
+                     data: Optional[DataFrame] = None,
                      where: Optional[ArrayLike] = None,
                      interpolate: bool = False,
                      step: Optional[str] = None,
@@ -629,9 +632,10 @@ class AxesFormatter(object):
         """
         Make filled polygons between two curves.
 
-        :param x: An N-length array of the x data.
-        :param y1: An N-length array (or scalar) of the y data.
-        :param y2: An N-length array (or scalar) of the y data.
+        :param x: N-length array of, or name of column with the x data.
+        :param y1: N-length array, scalar, or name of column with the y1 data.
+        :param y2: N-length array, scalar, or name of column with the y2 data.
+        :param data: Optional DataFrame with x, y1 and y2 columns.
         :param where: If None, default to fill between everywhere. If not None,
                       it is an N-length numpy boolean array and the fill will
                       only happen over the regions where where==True.
@@ -648,6 +652,15 @@ class AxesFormatter(object):
         :param edge_color: matplotlib color spec or sequence of specs
         :param face_color: matplotlib color spec or sequence of specs
         """
+        # get arrays from DataFrame
+        if data is not None:
+            if isinstance(x, str):
+                x = data[x]
+            if isinstance(y1, str):
+                y1 = data[y1]
+            if isinstance(y2, str):
+                y2 = data[y2]
+        # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
             [color, alpha, line_style, line_width, edge_color, face_color],
@@ -656,7 +669,7 @@ class AxesFormatter(object):
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
-
+        # call matplotlib method
         self._axes.fill_between(
             x=x, y1=y1, y2=y2,
             where=where, interpolate=interpolate,

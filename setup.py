@@ -16,6 +16,7 @@ setup(
         'compound-types',
         'matplotlib',
         'numpy',
+        'pandas',
         'seaborn',
     ],
     classifiers=[

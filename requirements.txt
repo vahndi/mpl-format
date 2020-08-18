@@ -1,4 +1,5 @@
 compound-types
 matplotlib
 numpy
+pandas
 seaborn
