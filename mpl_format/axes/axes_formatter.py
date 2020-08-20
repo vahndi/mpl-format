@@ -1,23 +1,25 @@
-from pandas import DataFrame
+from pathlib import Path
+from typing import Optional, Union, List, Tuple, Iterable
 
-from compound_types.arrays import ArrayLike
-from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle
+from pandas import DataFrame
+
+from compound_types.arrays import ArrayLike
+from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
+    DictOrDictIterable
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
-from mpl_format.compound_types import FontSize, Color, LegendLocation
+from mpl_format.compound_types import FontSize, Color, LegendLocation, \
+    StringMapper
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
-from pathlib import Path
-from typing import Optional, Union, Dict, Callable, List, Tuple, Iterable
 
 
 class AxesFormatter(object):
@@ -98,7 +100,7 @@ class AxesFormatter(object):
         return self
 
     def map_title_text(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the label text for the title using a dictionary or function.
@@ -319,7 +321,7 @@ class AxesFormatter(object):
     # region map labels
 
     def map_x_axis_label(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the label text for the x-axis using a dictionary or function.
@@ -330,7 +332,7 @@ class AxesFormatter(object):
         return self
 
     def map_y_axis_label(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the label text for the y-axis using a dictionary or function.
@@ -341,7 +343,7 @@ class AxesFormatter(object):
         return self
 
     def map_axis_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the label text for the x and y axes using a dictionary or function.
@@ -353,7 +355,7 @@ class AxesFormatter(object):
         return self
 
     def map_x_tick_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the tick label text for the x-axis using a dictionary or function.
@@ -364,7 +366,7 @@ class AxesFormatter(object):
         return self
 
     def map_y_tick_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the tick label text for the y-axis using a dictionary or function.
@@ -375,7 +377,7 @@ class AxesFormatter(object):
         return self
 
     def map_tick_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the tick label text using a dictionary or function.
