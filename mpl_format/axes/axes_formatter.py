@@ -419,6 +419,14 @@ class AxesFormatter(object):
         self._axes.set_yticks([])
         return self
 
+    def remove_axes_ticks(self) -> 'AxesFormatter':
+        """
+        Remove x- and y- ticks from the Axes.
+        """
+        self.remove_x_ticks()
+        self.remove_y_ticks()
+        return self
+
     def remove_x_label(self) -> 'AxesFormatter':
         """
         Remove the label from the x-axis.
