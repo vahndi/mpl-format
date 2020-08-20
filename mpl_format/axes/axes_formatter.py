@@ -441,6 +441,14 @@ class AxesFormatter(object):
         self.y_axis.remove_label()
         return self
 
+    def remove_axes_labels(self) -> 'AxesFormatter':
+        """
+        Remove the labels from the x- and y- axes.
+        """
+        self.remove_x_label()
+        self.remove_y_label()
+        return self
+
     # endregion
 
     # region rotation
