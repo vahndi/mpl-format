@@ -403,8 +403,10 @@ class AxesFormatter(object):
         """
         Remove the legend from the Axes.
         """
-        self._axes.get_legend().remove()
-        self._legend = None
+        legend = self._axes.get_legend()
+        if legend is not None:
+            legend.remove()
+            self._legend = None
         return self
 
     def remove_x_ticks(self) -> 'AxesFormatter':
