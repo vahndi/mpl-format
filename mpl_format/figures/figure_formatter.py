@@ -11,6 +11,7 @@ from mpl_format.axes.axes_formatter_array import AxesFormatterArray
 from mpl_format.compound_types import StringMapper
 from mpl_format.io_utils import save_plot
 
+
 TextSetter = TypeVar(
     'TextSetter',
     str, List[str], Callable[[int, int], str], Callable[[int], str]
@@ -302,6 +303,45 @@ class FigureFormatter(object):
         """
         self.map_x_axis_labels(mapping=mapping)
         self.map_y_axis_labels(mapping=mapping)
+        return self
+
+    def wrap_x_axis_labels(self, max_width: int) -> 'FigureFormatter':
+        """
+        Wrap the text for each X-Axis label if it exceeds a given width
+        of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.wrap_x_label(max_width=max_width)
+        else:
+            self.single.wrap_x_label(max_width=max_width)
+        return self
+
+    def wrap_y_axis_labels(self, max_width: int) -> 'FigureFormatter':
+        """
+        Wrap the text for each Y-Axis label if it exceeds a given width
+        of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.wrap_y_label(max_width=max_width)
+        else:
+            self.single.wrap_y_label(max_width=max_width)
+        return self
+
+    def wrap_axes_labels(self, max_width: int) -> 'FigureFormatter':
+        """
+        Wrap the text for each Axis label if it exceeds a given width
+        of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        self.wrap_x_axis_labels(max_width=max_width)
+        self.wrap_y_axis_labels(max_width=max_width)
         return self
 
     def wrap_axes_titles(self, max_width: int) -> 'FigureFormatter':
