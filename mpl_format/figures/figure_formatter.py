@@ -95,6 +95,8 @@ class FigureFormatter(object):
         else:
             raise TypeError('FigureFormatter holds a single Axes.')
 
+    # region set text
+
     def _set_text_property(
             self,
             text: TextSetter,
@@ -157,6 +159,21 @@ class FigureFormatter(object):
         self._set_text_property(text=text, method=set_text)
         return self
 
+    def map_axes_title_text(
+            self, mapping: StringMapper
+    ) -> 'FigureFormatter':
+        """
+        Map the label text for the x-axis using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        if not self._has_array:
+            self.single.map_title_text(mapping=mapping)
+        else:
+            for axf in self.multi.flat:
+                axf.map_title_text(mapping=mapping)
+        return self
+
     def set_axes_x_label_text(
             self,
             text: TextSetter
@@ -215,95 +232,7 @@ class FigureFormatter(object):
             self.set_axes_y_label_text(y_label)
         return self
 
-    def map_axes_title_text(
-            self, mapping: StringMapper
-    ) -> 'FigureFormatter':
-        """
-        Map the label text for the x-axis using a dictionary or function.
-
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        if not self._has_array:
-            self.single.map_title_text(mapping=mapping)
-        else:
-            for axf in self.multi.flat:
-                axf.map_title_text(mapping=mapping)
-        return self
-
-    def remove_x_axis_labels(self) -> 'FigureFormatter':
-        """
-        Remove the x-axis label for each Axes in the Figure.
-        """
-        if self._has_array:
-            for axf in self.multi.flat:
-                axf.remove_x_label()
-        else:
-            self.single.remove_x_label()
-        return self
-
-    def remove_y_axis_labels(self) -> 'FigureFormatter':
-        """
-        Remove the x-axis label for each Axes in the Figure.
-        """
-        if self._has_array:
-            for axf in self.multi.flat:
-                axf.remove_y_label()
-        else:
-            self.single.remove_y_label()
-        return self
-
-    def remove_axes_labels(self) -> 'FigureFormatter':
-        """
-        Remove the x-axis label for each Axes in the Figure.
-        """
-        self.remove_x_axis_labels()
-        self.remove_y_axis_labels()
-        return self
-
-    def map_x_axis_labels(
-            self, mapping: StringMapper
-    ) -> 'FigureFormatter':
-        """
-        Map the label text for each x-axis in the Figure using a dictionary
-        or function.
-
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        if self._has_array:
-            for axf in self.multi.flat:
-                axf.map_x_axis_label(mapping=mapping)
-        else:
-            self.single.map_x_axis_label(mapping=mapping)
-        return self
-
-    def map_y_axis_labels(
-            self, mapping: StringMapper
-    ) -> 'FigureFormatter':
-        """
-        Map the label text for each y-axis in the Figure using a dictionary
-        or function.
-
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        if self._has_array:
-            for axf in self.multi.flat:
-                axf.map_y_axis_label(mapping=mapping)
-        else:
-            self.single.map_y_axis_label(mapping=mapping)
-        return self
-
-    def map_axes_labels(
-            self, mapping: StringMapper
-    ) -> 'FigureFormatter':
-        """
-        Map the label text for each axis in the Figure using a dictionary
-        or function.
-
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        self.map_x_axis_labels(mapping=mapping)
-        self.map_y_axis_labels(mapping=mapping)
-        return self
+    # endregion
 
     # region wrap text
 
@@ -397,6 +326,183 @@ class FigureFormatter(object):
         """
         self.wrap_x_tick_labels(max_width=max_width)
         self.wrap_y_tick_labels(max_width=max_width)
+        return self
+
+    # endregion
+
+    # region map labels
+
+    def map_x_axis_labels(
+            self, mapping: StringMapper
+    ) -> 'FigureFormatter':
+        """
+        Map the label text for each x-axis in the Figure using a dictionary
+        or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.map_x_axis_label(mapping=mapping)
+        else:
+            self.single.map_x_axis_label(mapping=mapping)
+        return self
+
+    def map_y_axis_labels(
+            self, mapping: StringMapper
+    ) -> 'FigureFormatter':
+        """
+        Map the label text for each y-axis in the Figure using a dictionary
+        or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.map_y_axis_label(mapping=mapping)
+        else:
+            self.single.map_y_axis_label(mapping=mapping)
+        return self
+
+    def map_axis_labels(
+            self, mapping: StringMapper
+    ) -> 'FigureFormatter':
+        """
+        Map the label text for each axis in the Figure using a dictionary
+        or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.map_x_axis_labels(mapping=mapping)
+        self.map_y_axis_labels(mapping=mapping)
+        return self
+
+    def map_x_tick_labels(
+            self, mapping: StringMapper
+    ) -> 'FigureFormatter':
+        """
+        Map the tick label text for each x-axis using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.map_x_tick_labels(mapping=mapping)
+        else:
+            self.single.map_x_tick_labels(mapping=mapping)
+        return self
+
+    def map_y_tick_labels(
+            self, mapping: StringMapper
+    ) -> 'FigureFormatter':
+        """
+        Map the tick label text for each y-axis using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.map_y_tick_labels(mapping=mapping)
+        else:
+            self.single.map_y_tick_labels(mapping=mapping)
+        return self
+
+    def map_tick_labels(
+            self, mapping: StringMapper
+    ) -> 'FigureFormatter':
+        """
+        Map the tick label text for each axis using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.map_x_tick_labels(mapping=mapping)
+        self.map_y_tick_labels(mapping=mapping)
+        return self
+
+    # endregion
+
+    # region remove
+
+    def remove_titles(self) -> 'FigureFormatter':
+        """
+        Remove the title from each Axes.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.remove_title()
+        else:
+            self.single.remove_title()
+        return self
+
+    def remove_legends(self) -> 'FigureFormatter':
+        """
+        Remove the legend from each Axes.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.remove_legend()
+        else:
+            self.single.remove_legend()
+        return self
+
+    def remove_x_ticks(self) -> 'FigureFormatter':
+        """
+        Remove x-ticks from each Axes.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.remove_x_ticks()
+        else:
+            self.single.remove_x_ticks()
+        return self
+
+    def remove_y_ticks(self) -> 'FigureFormatter':
+        """
+        Remove y-ticks from each Axes.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.remove_y_ticks()
+        else:
+            self.single.remove_y_ticks()
+        return self
+
+    def remove_axes_ticks(self) -> 'FigureFormatter':
+        """
+        Remove ticks from each Axes.
+        """
+        self.remove_x_ticks()
+        self.remove_y_ticks()
+        return self
+
+    def remove_x_labels(self) -> 'FigureFormatter':
+        """
+        Remove the x-axis label from each Axes in the Figure.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.remove_x_label()
+        else:
+            self.single.remove_x_label()
+        return self
+
+    def remove_y_labels(self) -> 'FigureFormatter':
+        """
+        Remove the y-axis label from each Axes in the Figure.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.remove_y_label()
+        else:
+            self.single.remove_y_label()
+        return self
+
+    def remove_axes_labels(self) -> 'FigureFormatter':
+        """
+        Remove the x-axis label for each Axes in the Figure.
+        """
+        self.remove_x_labels()
+        self.remove_y_labels()
         return self
 
     # endregion
