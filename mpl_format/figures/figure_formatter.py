@@ -60,6 +60,8 @@ class FigureFormatter(object):
                 isinstance(self._axes, ndarray) or isinstance(self._axes, list)
         )
 
+    # region properties
+
     @property
     def axes(self) -> Union[AxesFormatter, AxesFormatterArray]:
         """
@@ -94,6 +96,8 @@ class FigureFormatter(object):
             return AxesFormatterArray(self._axes)
         else:
             raise TypeError('FigureFormatter holds a single Axes.')
+
+    # endregion
 
     # region set text
 
@@ -503,6 +507,74 @@ class FigureFormatter(object):
         """
         self.remove_x_labels()
         self.remove_y_labels()
+        return self
+
+    # endregion
+
+    # region rotation
+
+    def rotate_x_labels(self,
+                        rotation: int,
+                        how: str = 'absolute') -> 'FigureFormatter':
+        """
+        Set the rotation of each x-axis label.
+
+        :param rotation: The rotation value to set in degrees.
+        :param how: 'absolute' or 'relative'
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.rotate_x_label(rotation=rotation, how=how)
+        else:
+            self.single.rotate_x_label(rotation=rotation, how=how)
+        return self
+
+    def rotate_y_labels(self,
+                        rotation: int,
+                        how: str = 'absolute') -> 'FigureFormatter':
+        """
+        Set the rotation of each x-axis label.
+
+        :param rotation: The rotation value to set in degrees.
+        :param how: 'absolute' or 'relative'
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.rotate_y_label(rotation=rotation, how=how)
+        else:
+            self.single.rotate_y_label(rotation=rotation, how=how)
+        return self
+
+    def rotate_x_tick_labels(self,
+                             rotation: int,
+                             how: str = 'absolute') -> 'FigureFormatter':
+        """
+        Set the rotation of each x-axis' tick-labels.
+
+        :param rotation: The rotation value to set in degrees.
+        :param how: 'absolute' or 'relative'
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.rotate_x_tick_labels(rotation=rotation, how=how)
+        else:
+            self.single.rotate_x_tick_labels(rotation=rotation, how=how)
+        return self
+
+    def rotate_y_tick_labels(self,
+                             rotation: int,
+                             how: str = 'absolute') -> 'FigureFormatter':
+        """
+        Set the rotation of each y-axis' tick-labels.
+
+        :param rotation: The rotation value to set in degrees.
+        :param how: 'absolute' or 'relative'
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.rotate_y_tick_labels(rotation=rotation, how=how)
+        else:
+            self.single.rotate_y_tick_labels(rotation=rotation, how=how)
         return self
 
     # endregion
