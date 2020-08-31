@@ -358,6 +358,35 @@ class FigureFormatter(object):
                 axf.wrap_title(max_width=max_width)
         return self
 
+    def subplots_adjust(
+            self,
+            left: Optional[float] = None, right: Optional[float] = None,
+            top: Optional[float] = None, bottom: Optional[float] = None,
+            w_space: Optional[float] = None, h_space: Optional[float] = None
+    ) -> 'FigureFormatter':
+        """
+        Adjust the padding of the Figure.
+
+        :param left: The position of the left edge of the subplots,
+                     as a fraction of the figure width.
+        :param right: The position of the right edge of the subplots,
+                      as a fraction of the figure width.
+        :param top: The position of the top edge of the subplots,
+                    as a fraction of the figure height.
+        :param bottom: The position of the bottom edge of the subplots,
+                       as a fraction of the figure height.
+        :param w_space: The width of the padding between subplots,
+                        as a fraction of the average axes width.
+        :param h_space: The height of the padding between subplots,
+                        as a fraction of the average axes height.
+        """
+        self.figure.subplots_adjust(
+            left=left, right=right,
+            bottom=bottom, top=top,
+            wspace=w_space, hspace=h_space
+        )
+        return self
+
     def save(
             self, file_path: Union[str, Path], file_type: str = 'png'
     ) -> 'FigureFormatter':
