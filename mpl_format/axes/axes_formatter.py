@@ -859,13 +859,13 @@ class AxesFormatter(object):
 
     # endregion
 
-    def grid(self, value: bool,
+    def grid(self, value: bool = True,
              which: str = 'major',
              axis: str = 'both') -> 'AxesFormatter':
         """
         Turn the grid on or off.
 
-        :param value: True or False
+        :param value: True or False. Defaults to True.
         :param which: 'major', 'minor' or 'both'
         :param axis: 'x', 'y' or 'both
         """
