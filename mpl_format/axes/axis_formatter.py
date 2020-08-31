@@ -1,11 +1,10 @@
-from matplotlib.axis import Axis
 import matplotlib.pyplot as plt
+from matplotlib.axis import Axis
 from matplotlib.lines import Line2D
 from matplotlib.text import Text
 from matplotlib.ticker import StrMethodFormatter, FuncFormatter
-from typing import Union, Dict, Callable
 
-from mpl_format.compound_types import FontSize, Color
+from mpl_format.compound_types import FontSize, Color, StringMapper
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_list_formatter import TextListFormatter
 from mpl_format.text.text_utils import wrap_text, map_text
@@ -82,7 +81,7 @@ class AxisFormatter(object):
         return self
 
     def map_label_text(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxisFormatter':
         """
         Map the label text using a dictionary or function.
@@ -221,7 +220,7 @@ class AxisFormatter(object):
         return self
 
     def map_tick_label_text(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxisFormatter':
         """
         Map the tick label text using a dictionary or function.

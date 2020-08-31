@@ -1,21 +1,25 @@
-from compound_types.arrays import ArrayLike
-from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable
+from pathlib import Path
+from typing import Optional, Union, List, Tuple, Iterable
+
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle
+from pandas import DataFrame
+
+from compound_types.arrays import ArrayLike
+from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
+    DictOrDictIterable
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
-from mpl_format.compound_types import FontSize, Color, LegendLocation
+from mpl_format.compound_types import FontSize, Color, LegendLocation, \
+    StringMapper
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
-from pathlib import Path
-from typing import Optional, Union, Dict, Callable, List, Tuple, Iterable
 
 
 class AxesFormatter(object):
@@ -96,7 +100,7 @@ class AxesFormatter(object):
         return self
 
     def map_title_text(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the label text for the title using a dictionary or function.
@@ -317,7 +321,7 @@ class AxesFormatter(object):
     # region map labels
 
     def map_x_axis_label(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the label text for the x-axis using a dictionary or function.
@@ -328,7 +332,7 @@ class AxesFormatter(object):
         return self
 
     def map_y_axis_label(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the label text for the y-axis using a dictionary or function.
@@ -339,7 +343,7 @@ class AxesFormatter(object):
         return self
 
     def map_axis_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the label text for the x and y axes using a dictionary or function.
@@ -351,7 +355,7 @@ class AxesFormatter(object):
         return self
 
     def map_x_tick_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the tick label text for the x-axis using a dictionary or function.
@@ -362,7 +366,7 @@ class AxesFormatter(object):
         return self
 
     def map_y_tick_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the tick label text for the y-axis using a dictionary or function.
@@ -373,7 +377,7 @@ class AxesFormatter(object):
         return self
 
     def map_tick_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'AxesFormatter':
         """
         Map the tick label text using a dictionary or function.
@@ -399,8 +403,10 @@ class AxesFormatter(object):
         """
         Remove the legend from the Axes.
         """
-        self._axes.get_legend().remove()
-        self._legend = None
+        legend = self._axes.get_legend()
+        if legend is not None:
+            legend.remove()
+            self._legend = None
         return self
 
     def remove_x_ticks(self) -> 'AxesFormatter':
@@ -417,6 +423,14 @@ class AxesFormatter(object):
         self._axes.set_yticks([])
         return self
 
+    def remove_axes_ticks(self) -> 'AxesFormatter':
+        """
+        Remove x- and y- ticks from the Axes.
+        """
+        self.remove_x_ticks()
+        self.remove_y_ticks()
+        return self
+
     def remove_x_label(self) -> 'AxesFormatter':
         """
         Remove the label from the x-axis.
@@ -429,6 +443,14 @@ class AxesFormatter(object):
         Remove the label from the y-axis.
         """
         self.y_axis.remove_label()
+        return self
+
+    def remove_axes_labels(self) -> 'AxesFormatter':
+        """
+        Remove the labels from the x- and y- axes.
+        """
+        self.remove_x_label()
+        self.remove_y_label()
         return self
 
     # endregion
@@ -614,9 +636,10 @@ class AxesFormatter(object):
                           label=label)
         return self
 
-    def fill_between(self, x: ArrayLike,
-                     y1: Union[float, ArrayLike],
-                     y2: Union[float, ArrayLike],
+    def fill_between(self, x: Union[ArrayLike, str],
+                     y1: Union[float, ArrayLike, str],
+                     y2: Union[float, ArrayLike, str],
+                     data: Optional[DataFrame] = None,
                      where: Optional[ArrayLike] = None,
                      interpolate: bool = False,
                      step: Optional[str] = None,
@@ -629,9 +652,10 @@ class AxesFormatter(object):
         """
         Make filled polygons between two curves.
 
-        :param x: An N-length array of the x data.
-        :param y1: An N-length array (or scalar) of the y data.
-        :param y2: An N-length array (or scalar) of the y data.
+        :param x: N-length array of, or name of column with the x data.
+        :param y1: N-length array, scalar, or name of column with the y1 data.
+        :param y2: N-length array, scalar, or name of column with the y2 data.
+        :param data: Optional DataFrame with x, y1 and y2 columns.
         :param where: If None, default to fill between everywhere. If not None,
                       it is an N-length numpy boolean array and the fill will
                       only happen over the regions where where==True.
@@ -648,6 +672,15 @@ class AxesFormatter(object):
         :param edge_color: matplotlib color spec or sequence of specs
         :param face_color: matplotlib color spec or sequence of specs
         """
+        # get arrays from DataFrame
+        if data is not None:
+            if isinstance(x, str):
+                x = data[x]
+            if isinstance(y1, str):
+                y1 = data[y1]
+            if isinstance(y2, str):
+                y2 = data[y2]
+        # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
             [color, alpha, line_style, line_width, edge_color, face_color],
@@ -656,7 +689,7 @@ class AxesFormatter(object):
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
-
+        # call matplotlib method
         self._axes.fill_between(
             x=x, y1=y1, y2=y2,
             where=where, interpolate=interpolate,

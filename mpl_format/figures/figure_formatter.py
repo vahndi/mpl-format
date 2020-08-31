@@ -1,14 +1,15 @@
+from pathlib import Path
+from typing import Tuple, Union, Callable, List, Optional, TypeVar
+
+import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 from numpy import ndarray, reshape
-from pathlib import Path
-from typing import Tuple, Union, Dict, Callable, List, Optional, TypeVar
 
 from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray
+from mpl_format.compound_types import StringMapper
 from mpl_format.io_utils import save_plot
-
 
 TextSetter = TypeVar(
     'TextSetter',
@@ -68,6 +69,10 @@ class FigureFormatter(object):
             return AxesFormatter(self._axes)
         else:
             return AxesFormatterArray(self._axes)
+
+    @property
+    def figure(self) -> Figure:
+        return self._figure
 
     @property
     def single(self) -> AxesFormatter:
@@ -210,7 +215,7 @@ class FigureFormatter(object):
         return self
 
     def map_axes_title_text(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'FigureFormatter':
         """
         Map the label text for the x-axis using a dictionary or function.
@@ -255,7 +260,7 @@ class FigureFormatter(object):
         return self
 
     def map_x_axis_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'FigureFormatter':
         """
         Map the label text for each x-axis in the Figure using a dictionary
@@ -271,7 +276,7 @@ class FigureFormatter(object):
         return self
 
     def map_y_axis_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'FigureFormatter':
         """
         Map the label text for each y-axis in the Figure using a dictionary
@@ -287,7 +292,7 @@ class FigureFormatter(object):
         return self
 
     def map_axes_labels(
-            self, mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'FigureFormatter':
         """
         Map the label text for each axis in the Figure using a dictionary

@@ -5,7 +5,8 @@ from matplotlib.font_manager import FontProperties
 from matplotlib.legend import Legend
 
 from compound_types.arrays import ArrayLike
-from mpl_format.compound_types import Color, FontSize, LegendLocation
+from mpl_format.compound_types import Color, FontSize, LegendLocation, \
+    StringMapper
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import map_text
 
@@ -298,8 +299,7 @@ class LegendFormatter(object):
         return self
 
     def map_labels(
-            self,
-            mapping: Union[Dict[str, str], Callable[[str], str]]
+            self, mapping: StringMapper
     ) -> 'LegendFormatter':
         """
         Replace label text using a dictionary or function.

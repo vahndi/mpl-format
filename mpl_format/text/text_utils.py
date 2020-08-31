@@ -1,4 +1,7 @@
 from matplotlib.text import Text
+from pandas import Series
+
+from mpl_format.compound_types import StringMapper
 from mpl_format.settings import MAX_LABEL_WIDTH
 from textwrap import wrap
 from typing import Union, Dict, Callable, List, Iterable
@@ -48,7 +51,7 @@ def remove_parenthesized_text(text: Union[str, Text]) -> str:
 
 def map_text(
         text: Union[str, Text, Iterable[str], Iterable[Text]],
-        mapping: Union[Dict[str, str], Callable[[str], str]]
+        mapping: StringMapper
 ) -> Union[str, List[str]]:
     """
     Replace text if it matches one of the dictionary keys.
@@ -63,7 +66,7 @@ def map_text(
 
     if mapping is None:
         return text
-    if isinstance(mapping, dict):
+    if isinstance(mapping, dict) or isinstance(mapping, Series):
         if text in mapping.keys():
             return mapping[text]
         else:
