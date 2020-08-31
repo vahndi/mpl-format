@@ -305,7 +305,23 @@ class FigureFormatter(object):
         self.map_y_axis_labels(mapping=mapping)
         return self
 
-    def wrap_x_axis_labels(self, max_width: int) -> 'FigureFormatter':
+    # region wrap text
+
+    def wrap_titles(self, max_width: int) -> 'FigureFormatter':
+        """
+        Wrap the text for each Axes title if it exceeds a given width
+        of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        if not self._has_array:
+            self.single.wrap_title(max_width=max_width)
+        else:
+            for axf in self.multi.flat:
+                axf.wrap_title(max_width=max_width)
+        return self
+
+    def wrap_x_labels(self, max_width: int) -> 'FigureFormatter':
         """
         Wrap the text for each X-Axis label if it exceeds a given width
         of characters.
@@ -319,7 +335,7 @@ class FigureFormatter(object):
             self.single.wrap_x_label(max_width=max_width)
         return self
 
-    def wrap_y_axis_labels(self, max_width: int) -> 'FigureFormatter':
+    def wrap_y_labels(self, max_width: int) -> 'FigureFormatter':
         """
         Wrap the text for each Y-Axis label if it exceeds a given width
         of characters.
@@ -340,23 +356,50 @@ class FigureFormatter(object):
 
         :param max_width: The maximum character width per line.
         """
-        self.wrap_x_axis_labels(max_width=max_width)
-        self.wrap_y_axis_labels(max_width=max_width)
+        self.wrap_x_labels(max_width=max_width)
+        self.wrap_y_labels(max_width=max_width)
         return self
 
-    def wrap_axes_titles(self, max_width: int) -> 'FigureFormatter':
+    def wrap_x_tick_labels(self, max_width: int) -> 'FigureFormatter':
         """
-        Wrap the text for each Axes title if it exceeds a given width
-        of characters.
+        Wrap the text for each tick label on each x-axis if it exceeds a
+        given width of characters.
 
         :param max_width: The maximum character width per line.
         """
-        if not self._has_array:
-            self.single.wrap_title(max_width=max_width)
-        else:
+        if self._has_array:
             for axf in self.multi.flat:
-                axf.wrap_title(max_width=max_width)
+                axf.wrap_x_tick_labels(max_width=max_width)
+        else:
+            self.single.wrap_x_tick_labels(max_width=max_width)
         return self
+
+    def wrap_y_tick_labels(self, max_width: int) -> 'FigureFormatter':
+        """
+        Wrap the text for each tick label on each y-axis if it exceeds a
+        given width of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        if self._has_array:
+            for axf in self.multi.flat:
+                axf.wrap_y_tick_labels(max_width=max_width)
+        else:
+            self.single.wrap_y_tick_labels(max_width=max_width)
+        return self
+
+    def wrap_tick_labels(self, max_width: int) -> 'FigureFormatter':
+        """
+        Wrap the text for each tick label on each x- and y-axis if it exceeds a
+        given width of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        self.wrap_x_tick_labels(max_width=max_width)
+        self.wrap_y_tick_labels(max_width=max_width)
+        return self
+
+    # endregion
 
     def subplots_adjust(
             self,

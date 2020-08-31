@@ -179,6 +179,17 @@ class AxesFormatter(object):
         self.y_axis.wrap_label(max_width=max_width)
         return self
 
+    def wrap_axis_labels(self, max_width: int) -> 'AxesFormatter':
+        """
+        Wrap the texts for the x and y-axis labels if they exceeds a given width
+        of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        self.wrap_x_label(max_width=max_width)
+        self.wrap_y_label(max_width=max_width)
+        return self
+
     def wrap_x_tick_labels(self, max_width: int) -> 'AxesFormatter':
         """
         Wrap the text for each tick label on the x-axis with new lines if it
