@@ -608,6 +608,15 @@ class FigureFormatter(object):
         )
         return self
 
+    def tight_layout(self) -> 'FigureFormatter':
+        """
+        Call the tight_layout method on the wrapped Figure.
+        """
+        self.figure.tight_layout()
+        return self
+
+
+
     def save(
             self, file_path: Union[str, Path], file_type: str = 'png'
     ) -> 'FigureFormatter':
