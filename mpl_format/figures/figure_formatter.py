@@ -630,12 +630,12 @@ class FigureFormatter(object):
                   file_path=file_path, file_type=file_type)
         return self
 
-    @staticmethod
-    def show():
+    def show(self) -> 'FigureFormatter':
         """
         Show the figure.
         """
         plt.show()
+        return self
 
     def __getitem__(self, *args, **kwargs) -> AxesFormatter:
 

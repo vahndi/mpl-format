@@ -1084,9 +1084,9 @@ class AxesFormatter(object):
         self._legend = LegendFormatter(self._axes.legend(**kwargs))
         return self._legend
 
-    @staticmethod
-    def show():
+    def show(self) -> 'AxesFormatter':
         """
         Show the figure for the axes.
         """
         plt.show()
+        return self
