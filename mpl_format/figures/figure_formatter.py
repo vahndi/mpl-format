@@ -45,8 +45,10 @@ class FigureFormatter(object):
                 raise ValueError('Can only instantiate a new FigureFormatter '
                                  'from an Axes or Figure instance.')
         else:
-            assert share_x in self.share_values
-            assert share_y in self.share_values
+            if share_x not in self.share_values:
+                raise ValueError(f'share_x must be in {self.share_values}')
+            if share_y not in self.share_values:
+                raise ValueError(f'share_y must be in {self.share_values}')
             self._fig_size: Tuple[int, int] = fig_size
             figure, axes = plt.subplots(
                 nrows=n_rows, ncols=n_cols,
