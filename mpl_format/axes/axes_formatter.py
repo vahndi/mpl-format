@@ -7,7 +7,8 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
-    Ellipse, FancyArrow
+    Ellipse, FancyArrow, Patch, FancyArrowPatch
+from matplotlib.path import Path
 from pandas import DataFrame
 
 from compound_types.arrays import ArrayLike
@@ -20,7 +21,8 @@ from mpl_format.compound_types import FontSize, Color, LegendLocation, \
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
-from mpl_format.styles import LineStyle, CapStyle, JoinStyle
+from mpl_format.styles import LineStyle, CapStyle, JoinStyle, ArrowStyle, \
+    ConnectionStyle
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
@@ -1110,6 +1112,97 @@ class AxesFormatter(object):
             shape=shape,
             overhang=overhang,
             head_starts_at_zero=head_starts_at_zero,
+            **kwargs
+        )
+        self._axes.add_artist(arrow)
+        return self
+
+    def add_fancy_arrow_patch(
+            self, x: float, y: float, dx: float, dy: float,
+            path: Optional[Path] = None,
+            arrow_style: Union[str, ArrowStyle] = 'simple',
+            connection_style: Union[str, ConnectionStyle] = 'arc3',
+            tail_patch: Optional[Patch] = None,
+            head_patch: Optional[Patch] = None,
+            tail_shrink_factor: Optional[float] = 2,
+            head_shrink_factor: Optional[float] = 2,
+            mutation_scale: Optional[float] = 1,
+            mutation_aspect: Optional[float] = None,
+            dpi_cor: Optional[float] = 1,
+            alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            join_style: Optional[Union[str, JoinStyle]] = None,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None
+    ):
+        """
+        Like Arrow, but lets you set head width and head height independently.
+
+        :param x: The x-coordinate of the arrow tail.
+        :param y: The y-coordinate of the arrow tail.
+        :param dx: Arrow length in the x direction.
+        :param dy: Arrow length in the y direction.
+        :param path: If provided, an arrow is drawn along this path and
+                     tail_patch, head_patch, tail_shrink_factor, and
+                     head_shrink_factor are ignored.
+        :param arrow_style: Describes how the fancy arrow will be drawn.
+                            It can be string of the available arrowstyle names,
+                            with optional comma-separated attributes,
+                            or an ArrowStyle instance.
+                            The optional attributes are meant to be scaled with
+                            the mutation_scale.
+        :param connection_style: Describes how the arrow ends are connected.
+        :param tail_patch: Optional tail patch.
+        :param head_patch: Optional head patch.
+        :param tail_shrink_factor: Shrinking factor of the tail.
+        :param head_shrink_factor: Shrinking factor of the head.
+        :param mutation_scale: Value with which attributes of arrowstyle
+                               (e.g., head_length) will be scaled.
+        :param mutation_aspect: The height of the rectangle will be squeezed by
+                                this value before the mutation and the mutated
+                                box will be stretched by the inverse of it.
+        :param dpi_cor: dpi_cor is currently used for linewidth-related things
+                        and shrink factor. Mutation scale is affected by this.
+        :param alpha: Opacity.
+        :param cap_style: Cap style.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        arrow = FancyArrowPatch(
+            posA=(x, y), posB=(x + dx, y + dy),
+            path=path, arrowstyle=arrow_style,
+            connectionstyle=connection_style,
+            patchA=tail_patch, patchB=head_patch,
+            shrinkA=tail_shrink_factor, shrinkB=head_shrink_factor,
+            mutation_scale=mutation_scale, mutation_aspect=mutation_aspect,
+            dpi_cor=dpi_cor,
             **kwargs
         )
         self._axes.add_artist(arrow)
