@@ -21,8 +21,8 @@ from mpl_format.compound_types import FontSize, Color, LegendLocation, \
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
-from mpl_format.styles import LineStyle, CapStyle, JoinStyle, ArrowStyle, \
-    ConnectionStyle
+from mpl_format.styles import LINE_STYLE, CAP_STYLE, JOIN_STYLE, ARROW_STYLE, \
+    CONNECTION_STYLE
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
@@ -812,14 +812,14 @@ class AxesFormatter(object):
             angle: float = 0.0,
             theta_start: float = 0.0, theta_end: float = 360.0,
             alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
             fill: bool = True,
-            join_style: Optional[Union[str, JoinStyle]] = None,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None
     ):
         """
@@ -845,11 +845,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and isinstance(line_style, LineStyle):
+        if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
-        if cap_style and isinstance(cap_style, CapStyle):
+        if cap_style and isinstance(cap_style, CAP_STYLE):
             cap_style = cap_style.name
-        if join_style and isinstance(join_style, JoinStyle):
+        if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -873,14 +873,14 @@ class AxesFormatter(object):
             self, x: float, y: float, dx: float, dy: float,
             width: float = 1.0,
             alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
             fill: bool = True,
-            join_style: Optional[Union[str, JoinStyle]] = None,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None
     ):
         """
@@ -904,11 +904,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and isinstance(line_style, LineStyle):
+        if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
-        if cap_style and isinstance(cap_style, CapStyle):
+        if cap_style and isinstance(cap_style, CAP_STYLE):
             cap_style = cap_style.name
-        if join_style and isinstance(join_style, JoinStyle):
+        if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -931,15 +931,15 @@ class AxesFormatter(object):
             self, x: float, y: float,
             radius: float,
             alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
             fill: bool = True,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None,
-            join_style: Optional[Union[str, JoinStyle]] = None
+            join_style: Optional[Union[str, JOIN_STYLE]] = None
     ) -> 'AxesFormatter':
         """
         Add a rectangle to the Axes.
@@ -958,11 +958,11 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param cap_style: Cap style.
         """
-        if line_style and isinstance(line_style, LineStyle):
+        if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
-        if cap_style and isinstance(cap_style, CapStyle):
+        if cap_style and isinstance(cap_style, CAP_STYLE):
             cap_style = cap_style.name
-        if join_style and isinstance(join_style, JoinStyle):
+        if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -985,14 +985,14 @@ class AxesFormatter(object):
             self, x: float, y: float, width: float, height: float,
             angle: float = 0.0,
             alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
             fill: bool = True,
-            join_style: Optional[Union[str, JoinStyle]] = None,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None
     ):
         """
@@ -1014,11 +1014,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and isinstance(line_style, LineStyle):
+        if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
-        if cap_style and isinstance(cap_style, CapStyle):
+        if cap_style and isinstance(cap_style, CAP_STYLE):
             cap_style = cap_style.name
-        if join_style and isinstance(join_style, JoinStyle):
+        if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -1047,14 +1047,14 @@ class AxesFormatter(object):
             overhang: float = 0.0,
             head_starts_at_zero: bool = False,
             alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
             fill: bool = True,
-            join_style: Optional[Union[str, JoinStyle]] = None,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None
     ):
         """
@@ -1088,11 +1088,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and isinstance(line_style, LineStyle):
+        if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
-        if cap_style and isinstance(cap_style, CapStyle):
+        if cap_style and isinstance(cap_style, CAP_STYLE):
             cap_style = cap_style.name
-        if join_style and isinstance(join_style, JoinStyle):
+        if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -1120,8 +1120,8 @@ class AxesFormatter(object):
     def add_fancy_arrow_patch(
             self, x: float, y: float, dx: float, dy: float,
             path: Optional[Path] = None,
-            arrow_style: Union[str, ArrowStyle] = 'simple',
-            connection_style: Union[str, ConnectionStyle] = 'arc3',
+            arrow_style: Union[str, ARROW_STYLE] = 'simple',
+            connection_style: Union[str, CONNECTION_STYLE] = 'arc3',
             tail_patch: Optional[Patch] = None,
             head_patch: Optional[Patch] = None,
             tail_shrink_factor: Optional[float] = 2,
@@ -1130,14 +1130,14 @@ class AxesFormatter(object):
             mutation_aspect: Optional[float] = None,
             dpi_cor: Optional[float] = 1,
             alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
             fill: bool = True,
-            join_style: Optional[Union[str, JoinStyle]] = None,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None
     ):
         """
@@ -1179,13 +1179,13 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and isinstance(line_style, LineStyle):
+        if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
-        if cap_style and isinstance(cap_style, CapStyle):
+        if cap_style and isinstance(cap_style, CAP_STYLE):
             cap_style = cap_style.name
-        if join_style and isinstance(join_style, JoinStyle):
+        if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
-        if arrow_style and isinstance(arrow_style, ArrowStyle):
+        if arrow_style and isinstance(arrow_style, ARROW_STYLE):
             arrow_style = arrow_style.get_name()
         # convert args to matplotlib names
         kwargs = {}
@@ -1214,14 +1214,14 @@ class AxesFormatter(object):
             self, x: float, y: float, width: float, height: float,
             angle: float = 0.0,
             alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
             fill: bool = True,
-            join_style: Optional[Union[str, JoinStyle]] = None,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None
     ) -> 'AxesFormatter':
         """
@@ -1244,11 +1244,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and isinstance(line_style, LineStyle):
+        if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
-        if cap_style and isinstance(cap_style, CapStyle):
+        if cap_style and isinstance(cap_style, CAP_STYLE):
             cap_style = cap_style.name
-        if join_style and isinstance(join_style, JoinStyle):
+        if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -1278,10 +1278,10 @@ class AxesFormatter(object):
             face_color: Optional[Color] = None,
             fill: bool = True,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
-            join_style: Optional[Union[str, JoinStyle]] = None
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None
     ) -> 'AxesFormatter':
         """
         Add a rectangle to the Axes.
@@ -1303,11 +1303,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and isinstance(line_style, LineStyle):
+        if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
-        if cap_style and isinstance(cap_style, CapStyle):
+        if cap_style and isinstance(cap_style, CAP_STYLE):
             cap_style = cap_style.name
-        if join_style and isinstance(join_style, JoinStyle):
+        if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
