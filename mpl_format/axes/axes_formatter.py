@@ -7,7 +7,7 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
-    Ellipse
+    Ellipse, FancyArrow
 from pandas import DataFrame
 
 from compound_types.arrays import ArrayLike
@@ -882,7 +882,7 @@ class AxesFormatter(object):
             line_width: Optional[float] = None
     ):
         """
-        Add an elliptical arc, i.e. a segment of an ellipse.
+        Add an an arrow patch.
 
         :param x: The x-coordinate of the arrow tail.
         :param y: The y-coordinate of the arrow tail.
@@ -1033,6 +1033,86 @@ class AxesFormatter(object):
             **kwargs
         )
         self._axes.add_artist(ellipse)
+        return self
+
+    def add_fancy_arrow(
+            self, x: float, y: float, dx: float, dy: float,
+            width: float = 0.001,
+            length_includes_head: bool = False,
+            head_width: Optional[float] = None,
+            head_length: Optional[float] = None,
+            shape: str = 'full',
+            overhang: float = 0.0,
+            head_starts_at_zero: bool = False,
+            alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            join_style: Optional[Union[str, JoinStyle]] = None,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None
+    ):
+        """
+        Like Arrow, but lets you set head width and head height independently.
+
+        :param x: The x-coordinate of the arrow tail.
+        :param y: The y-coordinate of the arrow tail.
+        :param dx: Arrow length in the x direction.
+        :param dy: Arrow length in the y direction.
+        :param width: Width of full arrow tail.
+        :param length_includes_head: True if head is to be counted in
+                                     calculating the length.
+        :param head_width: Total width of the full arrow head
+        :param head_length: Length of arrow head
+        :param shape: Draw the left-half, right-half, or full arrow.
+                      One of ['full', 'left', 'right'].
+        :param overhang: Fraction that the arrow is swept back
+                         (0 overhang means triangular shape).
+                         Can be negative or greater than one.
+        :param head_starts_at_zero: If True, the head starts being drawn at
+                                    coordinate 0 instead of ending at
+                                    coordinate 0.
+        :param alpha: Opacity.
+        :param cap_style: Cap style.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        arrow = FancyArrow(
+            x=x, y=y, dx=dx, dy=dy, width=width,
+            length_includes_head=length_includes_head,
+            head_width=head_width,
+            head_length=head_length,
+            shape=shape,
+            overhang=overhang,
+            head_starts_at_zero=head_starts_at_zero,
+            **kwargs
+        )
+        self._axes.add_artist(arrow)
         return self
 
     def add_rectangle(
