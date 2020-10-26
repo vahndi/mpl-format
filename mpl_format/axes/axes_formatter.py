@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
-from matplotlib.patches import Rectangle, RegularPolygon, Circle
+from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
+    Ellipse
 from pandas import DataFrame
 
 from compound_types.arrays import ArrayLike
@@ -804,37 +805,43 @@ class AxesFormatter(object):
             )
         return self
 
-    def add_rectangle(
+    def add_arc(
             self, x: float, y: float, width: float, height: float,
             angle: float = 0.0,
-            fill: bool = True,
+            theta_start: float = 0.0, theta_end: float = 360.0,
             alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
+            fill: bool = True,
+            join_style: Optional[Union[str, JoinStyle]] = None,
+            label: Optional[str] = None,
             line_style: Optional[Union[str, LineStyle]] = None,
-            line_width: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
-            join_style: Optional[Union[str, JoinStyle]] = None
-    ) -> 'AxesFormatter':
+            line_width: Optional[float] = None
+    ):
         """
-        Add a rectangle to the Axes.
+        Add an elliptical arc, i.e. a segment of an ellipse.
 
-        :param x: The left rectangle coordinate.
-        :param y: The bottom rectangle coordinate.
-        :param width: Rectangle width.
-        :param height: Rectangle height.
+        :param x: The x-coordinate of the center of the ellipse.
+        :param y: The y-coordinate of the center of the ellipse.
+        :param width: The length of the horizontal axis.
+        :param height: The length of the vertical axis.
+        :param angle: Rotation of the ellipse in degrees (counterclockwise).
+        :param theta_start: Starting angle of the arc in degrees.
+                            Relative to angle, e.g. if angle = 45 and
+                            theta_start = 90 the absolute starting angle is 135.
+        :param theta_end: Ending angle of the arc in degrees.
         :param alpha: Opacity.
-        :param angle: Rotation in degrees anti-clockwise about xy
-                      (default is 0.0)
-        :param fill: Whether to fill the rectangle.
+        :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
         :param edge_color: Edge color.
         :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
-        :param cap_style: Cap style.
-        :param join_style: Join style.
         """
         if line_style and type(line_style) is LineStyle:
             line_style = line_style.name
@@ -845,16 +852,241 @@ class AxesFormatter(object):
         # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
-            [alpha, color, edge_color, face_color,
-             line_style, line_width, cap_style, join_style],
-            ['alpha', 'color', 'edgecolor', 'facecolor',
-             'linestyle', 'linewidth', 'capstyle', 'joinstyle']
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        arc = Arc(
+            xy=(x, y), width=width, height=height,
+             angle=angle, theta1=theta_start, theta2=theta_end,
+            **kwargs
+        )
+        self._axes.add_artist(arc)
+        return self
+
+    def add_arrow(
+            self, x: float, y: float, dx: float, dy: float,
+            width: float = 1.0,
+            alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            join_style: Optional[Union[str, JoinStyle]] = None,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None
+    ):
+        """
+        Add an elliptical arc, i.e. a segment of an ellipse.
+
+        :param x: The x-coordinate of the arrow tail.
+        :param y: The y-coordinate of the arrow tail.
+        :param dx: Arrow length in the x direction.
+        :param dy: Arrow length in the y direction.
+        :param width: Scale factor for the width of the arrow.
+                      With a default value of 1, the tail width is 0.2 and
+                      head width is 0.6.
+        :param alpha: Opacity.
+        :param cap_style: Cap style.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        arrow = Arrow(
+            x=x, y=y, dx=dx, dy=dy, width=width,
+            **kwargs
+        )
+        self._axes.add_artist(arrow)
+        return self
+
+    def add_circle(
+            self, x: float, y: float,
+            radius: float,
+            alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None,
+            join_style: Optional[Union[str, JoinStyle]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a rectangle to the Axes.
+
+        :param x: The left rectangle coordinate.
+        :param y: The bottom rectangle coordinate.
+        :param radius: The radius of the circle.
+        :param alpha: Opacity.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        :param cap_style: Cap style.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        polygon = Circle(
+            xy=(x, y), radius=radius, fill=fill,
+            **kwargs
+        )
+        self._axes.add_artist(polygon)
+        return self
+
+    def add_ellipse(
+            self, x: float, y: float, width: float, height: float,
+            angle: float = 0.0,
+            alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            join_style: Optional[Union[str, JoinStyle]] = None,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None
+    ):
+        """
+        Add an elliptical arc, i.e. a segment of an ellipse.
+
+        :param x: The x-coordinate of the center of the ellipse.
+        :param y: The y-coordinate of the center of the ellipse.
+        :param width: The length (diameter) of the horizontal axis.
+        :param height: The length (diameter) of the vertical axis.
+        :param angle: Rotation of the ellipse in degrees (counterclockwise).
+        :param alpha: Opacity.
+        :param cap_style: Cap style.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        ellipse = Ellipse(
+            xy=(x, y), width=width, height=height, angle=angle,
+            **kwargs
+        )
+        self._axes.add_artist(ellipse)
+        return self
+
+    def add_rectangle(
+            self, x: float, y: float, width: float, height: float,
+            angle: float = 0.0,
+            alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            join_style: Optional[Union[str, JoinStyle]] = None,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a rectangle to the Axes.
+
+        :param x: The left rectangle coordinate.
+        :param y: The bottom rectangle coordinate.
+        :param width: Rectangle width.
+        :param height: Rectangle height.
+        :param angle: Rotation in degrees anti-clockwise about xy
+                      (default is 0.0)
+        :param alpha: Opacity.
+        :param cap_style: Cap style.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         rectangle = Rectangle(
-            xy=(x, y), width=width, height=height,
-            angle=angle, fill=fill,
+            xy=(x, y), width=width, height=height, angle=angle,
             **kwargs
         )
         self._axes.add_artist(rectangle)
@@ -865,11 +1097,12 @@ class AxesFormatter(object):
             num_vertices: int,
             radius: float,
             angle: float = 0,
-            fill: bool = True,
             alpha: Optional[float] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
+            fill: bool = True,
+            label: Optional[str] = None,
             line_style: Optional[Union[str, LineStyle]] = None,
             line_width: Optional[float] = None,
             cap_style: Optional[Union[str, CapStyle]] = None,
@@ -884,15 +1117,16 @@ class AxesFormatter(object):
         :param radius: The distance from the center to each of the vertices.
         :param angle: Rotation in degrees anti-clockwise about xy
                             (default is 0.0)
-        :param fill: Whether to fill the rectangle.
         :param alpha: Opacity.
+        :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
         :param edge_color: Edge color.
         :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
-        :param cap_style: Cap style.
-        :param join_style: Join style.
         """
         if line_style and type(line_style) is LineStyle:
             line_style = line_style.name
@@ -903,68 +1137,16 @@ class AxesFormatter(object):
         # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
-            [alpha, color, edge_color, face_color,
-             line_style, line_width, cap_style, join_style],
-            ['alpha', 'color', 'edgecolor', 'facecolor',
-             'linestyle', 'linewidth', 'capstyle', 'joinstyle']
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         polygon = RegularPolygon(
             xy=(x, y), numVertices=num_vertices, radius=radius,
             fill=fill, orientation=pi * angle / 180,
-            **kwargs
-        )
-        self._axes.add_artist(polygon)
-        return self
-
-    def add_circle(
-            self, x: float, y: float,
-            radius: float,
-            fill: bool = True,
-            alpha: Optional[float] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            line_style: Optional[Union[str, LineStyle]] = None,
-            line_width: Optional[float] = None,
-            cap_style: Optional[Union[str, CapStyle]] = None,
-            join_style: Optional[Union[str, JoinStyle]] = None
-    ) -> 'AxesFormatter':
-        """
-        Add a rectangle to the Axes.
-
-        :param x: The left rectangle coordinate.
-        :param y: The bottom rectangle coordinate.
-        :param radius: The radius of the circle.
-        :param fill: Whether to fill the rectangle.
-        :param alpha: Opacity.
-        :param color: Use to set both the edge-color and the face-color.
-        :param edge_color: Edge color.
-        :param face_color: Face color.
-        :param line_style: Line style for edge.
-        :param line_width: Line width for edge.
-        :param cap_style: Cap style.
-        :param join_style: Join style.
-        """
-        if line_style and type(line_style) is LineStyle:
-            line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
-            cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
-            join_style = join_style.name
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, color, edge_color, face_color,
-             line_style, line_width, cap_style, join_style],
-            ['alpha', 'color', 'edgecolor', 'facecolor',
-             'linestyle', 'linewidth', 'capstyle', 'joinstyle']
-        ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        polygon = Circle(
-            xy=(x, y), radius=radius, fill=fill,
             **kwargs
         )
         self._axes.add_artist(polygon)
