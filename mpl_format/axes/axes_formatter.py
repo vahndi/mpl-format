@@ -1,3 +1,4 @@
+from math import pi
 from pathlib import Path
 from typing import Optional, Union, List, Tuple, Iterable
 
@@ -5,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
-from matplotlib.patches import Rectangle
+from matplotlib.patches import Rectangle, RegularPolygon, Circle
 from pandas import DataFrame
 
 from compound_types.arrays import ArrayLike
@@ -18,6 +19,7 @@ from mpl_format.compound_types import FontSize, Color, LegendLocation, \
 from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
+from mpl_format.styles import LineStyle, CapStyle, JoinStyle
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
@@ -802,6 +804,172 @@ class AxesFormatter(object):
             )
         return self
 
+    def add_rectangle(
+            self, x: float, y: float, width: float, height: float,
+            angle: float = 0.0,
+            fill: bool = True,
+            alpha: Optional[float] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            join_style: Optional[Union[str, JoinStyle]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a rectangle to the Axes.
+
+        :param x: The left rectangle coordinate.
+        :param y: The bottom rectangle coordinate.
+        :param width: Rectangle width.
+        :param height: Rectangle height.
+        :param alpha: Opacity.
+        :param angle: Rotation in degrees anti-clockwise about xy
+                      (default is 0.0)
+        :param fill: Whether to fill the rectangle.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        :param cap_style: Cap style.
+        :param join_style: Join style.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, color, edge_color, face_color,
+             line_style, line_width, cap_style, join_style],
+            ['alpha', 'color', 'edgecolor', 'facecolor',
+             'linestyle', 'linewidth', 'capstyle', 'joinstyle']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        rectangle = Rectangle(
+            xy=(x, y), width=width, height=height,
+            angle=angle, fill=fill,
+            **kwargs
+        )
+        self._axes.add_artist(rectangle)
+        return self
+
+    def add_regular_polygon(
+            self, x: float, y: float,
+            num_vertices: int,
+            radius: float,
+            angle: float = 0,
+            fill: bool = True,
+            alpha: Optional[float] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            join_style: Optional[Union[str, JoinStyle]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a rectangle to the Axes.
+
+        :param x: The left rectangle coordinate.
+        :param y: The bottom rectangle coordinate.
+        :param num_vertices: Number of vertices.
+        :param radius: The distance from the center to each of the vertices.
+        :param angle: Rotation in degrees anti-clockwise about xy
+                            (default is 0.0)
+        :param fill: Whether to fill the rectangle.
+        :param alpha: Opacity.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        :param cap_style: Cap style.
+        :param join_style: Join style.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, color, edge_color, face_color,
+             line_style, line_width, cap_style, join_style],
+            ['alpha', 'color', 'edgecolor', 'facecolor',
+             'linestyle', 'linewidth', 'capstyle', 'joinstyle']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        polygon = RegularPolygon(
+            xy=(x, y), numVertices=num_vertices, radius=radius,
+            fill=fill, orientation=pi * angle / 180,
+            **kwargs
+        )
+        self._axes.add_artist(polygon)
+        return self
+
+    def add_circle(
+            self, x: float, y: float,
+            radius: float,
+            fill: bool = True,
+            alpha: Optional[float] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            line_style: Optional[Union[str, LineStyle]] = None,
+            line_width: Optional[float] = None,
+            cap_style: Optional[Union[str, CapStyle]] = None,
+            join_style: Optional[Union[str, JoinStyle]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a rectangle to the Axes.
+
+        :param x: The left rectangle coordinate.
+        :param y: The bottom rectangle coordinate.
+        :param radius: The radius of the circle.
+        :param fill: Whether to fill the rectangle.
+        :param alpha: Opacity.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        :param cap_style: Cap style.
+        :param join_style: Join style.
+        """
+        if line_style and type(line_style) is LineStyle:
+            line_style = line_style.name
+        if cap_style and type(cap_style) is CapStyle:
+            cap_style = cap_style.name
+        if join_style and type(join_style) is JoinStyle:
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, color, edge_color, face_color,
+             line_style, line_width, cap_style, join_style],
+            ['alpha', 'color', 'edgecolor', 'facecolor',
+             'linestyle', 'linewidth', 'capstyle', 'joinstyle']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        polygon = Circle(
+            xy=(x, y), radius=radius, fill=fill,
+            **kwargs
+        )
+        self._axes.add_artist(polygon)
+        return self
+
     # endregion
 
     def set_title_font_family(self, font_name: str) -> 'AxesFormatter':
@@ -928,12 +1096,13 @@ class AxesFormatter(object):
 
     def save(self,
              file_path: Union[str, Path],
-             file_type: str = 'png') -> 'AxesFormatter':
+             file_type: Optional[str] = None) -> 'AxesFormatter':
         """
         Save the plot to disk.
 
         :param file_path: The file path to save the plot object to.
         :param file_type: The type of file to save.
+                          Defaults to png if can't be auto-detected from name.
         """
         save_plot(plot_object=self._axes,
                   file_path=file_path,

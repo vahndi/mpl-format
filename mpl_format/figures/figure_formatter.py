@@ -618,13 +618,16 @@ class FigureFormatter(object):
         return self
 
     def save(
-            self, file_path: Union[str, Path], file_type: str = 'png'
+            self,
+            file_path: Union[str, Path],
+            file_type: Optional[str] = None
     ) -> 'FigureFormatter':
         """
         Save the plot to disk.
 
         :param file_path: The file path to save the plot object to.
         :param file_type: The type of file to save.
+                          Defaults to png if can't be auto-detected from name.
         """
         save_plot(plot_object=self._figure,
                   file_path=file_path, file_type=file_type)
