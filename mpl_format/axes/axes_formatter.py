@@ -845,11 +845,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and type(line_style) is LineStyle:
+        if line_style and isinstance(line_style, LineStyle):
             line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
+        if cap_style and isinstance(cap_style, CapStyle):
             cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
+        if join_style and isinstance(join_style, JoinStyle):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -904,11 +904,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and type(line_style) is LineStyle:
+        if line_style and isinstance(line_style, LineStyle):
             line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
+        if cap_style and isinstance(cap_style, CapStyle):
             cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
+        if join_style and isinstance(join_style, JoinStyle):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -958,11 +958,11 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param cap_style: Cap style.
         """
-        if line_style and type(line_style) is LineStyle:
+        if line_style and isinstance(line_style, LineStyle):
             line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
+        if cap_style and isinstance(cap_style, CapStyle):
             cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
+        if join_style and isinstance(join_style, JoinStyle):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -1014,11 +1014,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and type(line_style) is LineStyle:
+        if line_style and isinstance(line_style, LineStyle):
             line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
+        if cap_style and isinstance(cap_style, CapStyle):
             cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
+        if join_style and isinstance(join_style, JoinStyle):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -1088,11 +1088,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and type(line_style) is LineStyle:
+        if line_style and isinstance(line_style, LineStyle):
             line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
+        if cap_style and isinstance(cap_style, CapStyle):
             cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
+        if join_style and isinstance(join_style, JoinStyle):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -1179,12 +1179,14 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and type(line_style) is LineStyle:
+        if line_style and isinstance(line_style, LineStyle):
             line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
+        if cap_style and isinstance(cap_style, CapStyle):
             cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
+        if join_style and isinstance(join_style, JoinStyle):
             join_style = join_style.name
+        if arrow_style and isinstance(arrow_style, ArrowStyle):
+            arrow_style = arrow_style.get_name()
         # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
@@ -1242,11 +1244,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and type(line_style) is LineStyle:
+        if line_style and isinstance(line_style, LineStyle):
             line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
+        if cap_style and isinstance(cap_style, CapStyle):
             cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
+        if join_style and isinstance(join_style, JoinStyle):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
@@ -1301,11 +1303,11 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
-        if line_style and type(line_style) is LineStyle:
+        if line_style and isinstance(line_style, LineStyle):
             line_style = line_style.name
-        if cap_style and type(cap_style) is CapStyle:
+        if cap_style and isinstance(cap_style, CapStyle):
             cap_style = cap_style.name
-        if join_style and type(join_style) is JoinStyle:
+        if join_style and isinstance(join_style, JoinStyle):
             join_style = join_style.name
         # convert args to matplotlib names
         kwargs = {}
