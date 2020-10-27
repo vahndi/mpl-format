@@ -975,7 +975,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         polygon = Circle(
-            xy=(x, y), radius=radius, fill=fill,
+            xy=(x, y), radius=radius,
             **kwargs
         )
         self._axes.add_artist(polygon)
@@ -1321,7 +1321,7 @@ class AxesFormatter(object):
                 kwargs[mpl_arg] = arg
         polygon = RegularPolygon(
             xy=(x, y), numVertices=num_vertices, radius=radius,
-            fill=fill, orientation=pi * angle / 180,
+            orientation=pi * angle / 180,
             **kwargs
         )
         self._axes.add_artist(polygon)
