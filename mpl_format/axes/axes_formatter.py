@@ -7,7 +7,7 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
-    Ellipse, FancyArrow, Patch, FancyArrowPatch
+    Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch
 from matplotlib.path import Path
 from pandas import DataFrame
 
@@ -22,7 +22,7 @@ from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.styles import LINE_STYLE, CAP_STYLE, JOIN_STYLE, ARROW_STYLE, \
-    CONNECTION_STYLE
+    CONNECTION_STYLE, BOX_STYLE
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
@@ -1208,6 +1208,74 @@ class AxesFormatter(object):
             **kwargs
         )
         self._axes.add_artist(arrow)
+        return self
+
+    def add_fancy_box_patch(
+            self, x: float, y: float,
+            width: float, height: float,
+            box_style: Union[str, BOX_STYLE] = 'round',
+            mutation_scale: Optional[float] = 1,
+            mutation_aspect: Optional[float] = None,
+            alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
+            line_width: Optional[float] = None
+    ):
+        """
+        Like Arrow, but lets you set head width and head height independently.
+
+        :param x: The left coord of the rectangle.
+        :param y: The bottom coord of the rectangle.
+        :param width: The rectangle width.
+        :param height: The rectangle height.
+        :param box_style: The box style.
+        :param mutation_scale: Value with which attributes of arrowstyle
+                               (e.g., head_length) will be scaled.
+        :param mutation_aspect: The height of the rectangle will be squeezed by
+                                this value before the mutation and the mutated
+                                box will be stretched by the inverse of it.
+        :param alpha: Opacity.
+        :param cap_style: Cap style.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        """
+        if line_style and isinstance(line_style, LINE_STYLE):
+            line_style = line_style.name
+        if cap_style and isinstance(cap_style, CAP_STYLE):
+            cap_style = cap_style.name
+        if join_style and isinstance(join_style, JOIN_STYLE):
+            join_style = join_style.name
+        if isinstance(box_style, BOX_STYLE):
+            box_style=box_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        fancy_box = FancyBboxPatch(
+            xy=(x, y), width=width, height=height,
+            boxstyle=box_style,
+            mutation_scale=mutation_scale, mutation_aspect=mutation_aspect,
+            **kwargs
+        )
+        self._axes.add_artist(fancy_box)
         return self
 
     def add_rectangle(
