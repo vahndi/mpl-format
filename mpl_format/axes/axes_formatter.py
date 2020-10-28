@@ -6,7 +6,7 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
-    Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch, Polygon
+    Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch, Polygon, Wedge
 from matplotlib.path import Path
 from numpy import ndarray
 from pandas import DataFrame
@@ -1447,6 +1447,69 @@ class AxesFormatter(object):
             **kwargs
         )
         self._axes.add_artist(polygon)
+        return self
+
+    def add_wedge(
+            self, x: float, y: float, radius: float,
+            theta_start: float, theta_end: float,
+            width: Optional[float] = None,
+            alpha: Optional[float] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
+            line_width: Optional[float] = None
+    ):
+        """
+        Add a wedge-shaped patch.
+
+        :param x: The x-coordinate of the center of the ellipse.
+        :param y: The y-coordinate of the center of the ellipse.
+        :param radius: (Outer) radius.
+        :param theta_start: Starting angle of the arc in degrees.
+                            Relative to angle, e.g. if angle = 45 and
+                            theta_start = 90 the absolute starting angle is 135.
+        :param theta_end: Ending angle of the arc in degrees.
+        :param width: If width is given, then a partial wedge is drawn from
+                      inner radius r - width to outer radius r.
+        :param alpha: Opacity.
+        :param cap_style: Cap style.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        """
+        if line_style and isinstance(line_style, LINE_STYLE):
+            line_style = line_style.name
+        if cap_style and isinstance(cap_style, CAP_STYLE):
+            cap_style = cap_style.name
+        if join_style and isinstance(join_style, JOIN_STYLE):
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        arc = Wedge(
+            center=(x, y), r=radius,
+            theta1=theta_start, theta2=theta_end,
+            width=width,
+            **kwargs
+        )
+        self._axes.add_artist(arc)
         return self
 
     # endregion
