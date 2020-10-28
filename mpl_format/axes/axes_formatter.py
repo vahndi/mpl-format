@@ -1,5 +1,4 @@
 from math import pi
-from pathlib import Path
 from typing import Optional, Union, List, Tuple, Iterable
 
 import matplotlib.pyplot as plt
@@ -7,8 +6,9 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
-    Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch
+    Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch, Polygon
 from matplotlib.path import Path
+from numpy import ndarray
 from pandas import DataFrame
 
 from compound_types.arrays import ArrayLike
@@ -1228,7 +1228,8 @@ class AxesFormatter(object):
             line_width: Optional[float] = None
     ):
         """
-        Like Arrow, but lets you set head width and head height independently.
+        A fancy box around a rectangle with lower left at xy = (x, y)
+        with specified width and height.
 
         :param x: The left coord of the rectangle.
         :param y: The bottom coord of the rectangle.
@@ -1276,6 +1277,66 @@ class AxesFormatter(object):
             **kwargs
         )
         self._axes.add_artist(fancy_box)
+        return self
+
+    def add_regular_polygon(
+            self, x: float, y: float,
+            num_vertices: int,
+            radius: float,
+            angle: float = 0,
+            alpha: Optional[float] = None,
+            color: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
+            face_color: Optional[Color] = None,
+            fill: bool = True,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
+            line_width: Optional[float] = None,
+            cap_style: Optional[Union[str, CAP_STYLE]] = None,
+            join_style: Optional[Union[str, JOIN_STYLE]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a rectangle to the Axes.
+
+        :param x: The left rectangle coordinate.
+        :param y: The bottom rectangle coordinate.
+        :param num_vertices: Number of vertices.
+        :param radius: The distance from the center to each of the vertices.
+        :param angle: Rotation in degrees anti-clockwise about xy
+                            (default is 0.0)
+        :param alpha: Opacity.
+        :param cap_style: Cap style.
+        :param color: Use to set both the edge-color and the face-color.
+        :param edge_color: Edge color.
+        :param face_color: Face color.
+        :param fill: Whether to fill the rectangle.
+        :param join_style: Join style.
+        :param label: Label for the object in the legend.
+        :param line_style: Line style for edge.
+        :param line_width: Line width for edge.
+        """
+        if line_style and isinstance(line_style, LINE_STYLE):
+            line_style = line_style.name
+        if cap_style and isinstance(cap_style, CAP_STYLE):
+            cap_style = cap_style.name
+        if join_style and isinstance(join_style, JOIN_STYLE):
+            join_style = join_style.name
+        # convert args to matplotlib names
+        kwargs = {}
+        for arg, mpl_arg in zip(
+            [alpha, cap_style, color, edge_color, face_color,
+             fill, join_style, label, line_style, line_width],
+            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+        ):
+            if arg is not None:
+                kwargs[mpl_arg] = arg
+        polygon = RegularPolygon(
+            xy=(x, y), numVertices=num_vertices, radius=radius,
+            orientation=pi * angle / 180,
+            **kwargs
+        )
+        self._axes.add_artist(polygon)
         return self
 
     def add_rectangle(
@@ -1335,11 +1396,8 @@ class AxesFormatter(object):
         self._axes.add_artist(rectangle)
         return self
 
-    def add_regular_polygon(
-            self, x: float, y: float,
-            num_vertices: int,
-            radius: float,
-            angle: float = 0,
+    def add_polygon(
+            self, xy: ndarray, closed: bool = True,
             alpha: Optional[float] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
@@ -1352,14 +1410,11 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None
     ) -> 'AxesFormatter':
         """
-        Add a rectangle to the Axes.
+        Add a general polygon patch.
 
-        :param x: The left rectangle coordinate.
-        :param y: The bottom rectangle coordinate.
-        :param num_vertices: Number of vertices.
-        :param radius: The distance from the center to each of the vertices.
-        :param angle: Rotation in degrees anti-clockwise about xy
-                            (default is 0.0)
+        :param xy: A numpy array with shape Nx2.
+        :param closed: If True, the polygon will be closed so the starting and
+                       ending points are the same.
         :param alpha: Opacity.
         :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
@@ -1387,9 +1442,8 @@ class AxesFormatter(object):
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
-        polygon = RegularPolygon(
-            xy=(x, y), numVertices=num_vertices, radius=radius,
-            orientation=pi * angle / 180,
+        polygon = Polygon(
+            xy=xy, closed=closed,
             **kwargs
         )
         self._axes.add_artist(polygon)
