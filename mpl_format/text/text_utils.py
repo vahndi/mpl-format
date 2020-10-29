@@ -1,11 +1,11 @@
+from textwrap import wrap
+from typing import Union, List, Iterable
+
 from matplotlib.text import Text
 from pandas import Series
 
 from mpl_format.compound_types import StringMapper
 from mpl_format.settings import MAX_LABEL_WIDTH
-from textwrap import wrap
-from typing import Union, Dict, Callable, List, Iterable
-
 
 HORIZONTAL_ALIGNMENTS = ('left', 'center', 'right')
 VERTICAL_ALIGNMENTS = ('top', 'center', 'bottom',

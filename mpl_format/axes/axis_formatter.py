@@ -160,9 +160,11 @@ class AxisFormatter(object):
 
         :param max_width: The maximum character width per line.
         """
+        tick_labels = self._axis.get_ticklabels()
+        if all(t.get_text() == '' for t in tick_labels):
+            return self  # non string tick-labels e.g. line plot
         self._axis.set_ticklabels([
-            wrap_text(text, max_width)
-            for text in self._axis.get_ticklabels()
+            wrap_text(text, max_width) for text in tick_labels
         ])
         return self
 
