@@ -8,6 +8,7 @@ from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
     Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch, Polygon, Wedge
 from matplotlib.path import Path
+from matplotlib.text import Text
 from numpy import ndarray
 from pandas import DataFrame
 
@@ -759,16 +760,6 @@ class AxesFormatter(object):
 
     # region shapes
 
-    @property
-    def rectangles(self) -> PatchListFormatter:
-        """
-        Return a list of the Rectangles on the axes.
-        """
-        return PatchListFormatter([
-            r for r in self._axes.get_children()
-            if isinstance(r, Rectangle)
-        ])
-
     def add_text(
             self, x: FloatOrFloatIterable,
             y: FloatOrFloatIterable,
@@ -1279,11 +1270,8 @@ class AxesFormatter(object):
         self._axes.add_artist(fancy_box)
         return self
 
-    def add_regular_polygon(
-            self, x: float, y: float,
-            num_vertices: int,
-            radius: float,
-            angle: float = 0,
+    def add_polygon(
+            self, xy: ndarray, closed: bool = True,
             alpha: Optional[float] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
@@ -1296,14 +1284,11 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None
     ) -> 'AxesFormatter':
         """
-        Add a rectangle to the Axes.
+        Add a general polygon patch.
 
-        :param x: The left rectangle coordinate.
-        :param y: The bottom rectangle coordinate.
-        :param num_vertices: Number of vertices.
-        :param radius: The distance from the center to each of the vertices.
-        :param angle: Rotation in degrees anti-clockwise about xy
-                            (default is 0.0)
+        :param xy: A numpy array with shape Nx2.
+        :param closed: If True, the polygon will be closed so the starting and
+                       ending points are the same.
         :param alpha: Opacity.
         :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
@@ -1331,9 +1316,8 @@ class AxesFormatter(object):
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
-        polygon = RegularPolygon(
-            xy=(x, y), numVertices=num_vertices, radius=radius,
-            orientation=pi * angle / 180,
+        polygon = Polygon(
+            xy=xy, closed=closed,
             **kwargs
         )
         self._axes.add_artist(polygon)
@@ -1396,8 +1380,11 @@ class AxesFormatter(object):
         self._axes.add_artist(rectangle)
         return self
 
-    def add_polygon(
-            self, xy: ndarray, closed: bool = True,
+    def add_regular_polygon(
+            self, x: float, y: float,
+            num_vertices: int,
+            radius: float,
+            angle: float = 0,
             alpha: Optional[float] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
@@ -1410,11 +1397,14 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None
     ) -> 'AxesFormatter':
         """
-        Add a general polygon patch.
+        Add a rectangle to the Axes.
 
-        :param xy: A numpy array with shape Nx2.
-        :param closed: If True, the polygon will be closed so the starting and
-                       ending points are the same.
+        :param x: The left rectangle coordinate.
+        :param y: The bottom rectangle coordinate.
+        :param num_vertices: Number of vertices.
+        :param radius: The distance from the center to each of the vertices.
+        :param angle: Rotation in degrees anti-clockwise about xy
+                            (default is 0.0)
         :param alpha: Opacity.
         :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
@@ -1442,8 +1432,9 @@ class AxesFormatter(object):
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
-        polygon = Polygon(
-            xy=xy, closed=closed,
+        polygon = RegularPolygon(
+            xy=(x, y), numVertices=num_vertices, radius=radius,
+            orientation=pi * angle / 180,
             **kwargs
         )
         self._axes.add_artist(polygon)
@@ -1511,6 +1502,116 @@ class AxesFormatter(object):
         )
         self._axes.add_artist(arc)
         return self
+
+    @property
+    def arcs(self) -> PatchListFormatter:
+        """
+        Return a list of the Arcs on the axes.
+        """
+        return PatchListFormatter([
+            a for a in self._axes.get_children()
+            if isinstance(a, Arc)
+        ])
+
+    @property
+    def arrows(self) -> PatchListFormatter:
+        """
+        Return a list of the Arrows on the axes.
+        """
+        return PatchListFormatter([
+            a for a in self._axes.get_children()
+            if isinstance(a, Arrow)
+        ])
+
+    @property
+    def circles(self) -> PatchListFormatter:
+        """
+        Return a list of the Circles on the axes.
+        """
+        return PatchListFormatter([
+            c for c in self._axes.get_children()
+            if isinstance(c, Circle)
+        ])
+
+    @property
+    def ellipses(self) -> PatchListFormatter:
+        """
+        Return a list of the Ellipses on the axes.
+        """
+        return PatchListFormatter([
+            e for e in self._axes.get_children()
+            if isinstance(e, Ellipse)
+        ])
+
+    @property
+    def fancy_arrows(self) -> PatchListFormatter:
+        """
+        Return a list of the FancyArrows on the axes.
+        """
+        return PatchListFormatter([
+            a for a in self._axes.get_children()
+            if isinstance(a, FancyArrow)
+        ])
+
+    @property
+    def fancy_arrow_patches(self) -> PatchListFormatter:
+        """
+        Return a list of the FancyArrowPatches on the axes.
+        """
+        return PatchListFormatter([
+            a for a in self._axes.get_children()
+            if isinstance(a, FancyArrowPatch)
+        ])
+
+    @property
+    def fancy_boxes(self) -> PatchListFormatter:
+        """
+        Return a list of the FancyBoxes on the axes.
+        """
+        return PatchListFormatter([
+            b for b in self._axes.get_children()
+            if isinstance(b, FancyBboxPatch)
+        ])
+
+    @property
+    def polygons(self) -> PatchListFormatter:
+        """
+        Return a list of the Polygons on the axes.
+        """
+        return PatchListFormatter([
+            p for p in self._axes.get_children()
+            if isinstance(p, Polygon)
+        ])
+
+    @property
+    def rectangles(self) -> PatchListFormatter:
+        """
+        Return a list of the Rectangles on the axes.
+        """
+        return PatchListFormatter([
+            r for r in self._axes.get_children()
+            if isinstance(r, Rectangle)
+        ])
+
+    @property
+    def regular_polygons(self) -> PatchListFormatter:
+        """
+        Return a list of the RegularPolygons on the axes.
+        """
+        return PatchListFormatter([
+            r for r in self._axes.get_children()
+            if isinstance(r, RegularPolygon)
+        ])
+
+    @property
+    def wedges(self) -> PatchListFormatter:
+        """
+        Return a list of the Wedges on the axes.
+        """
+        return PatchListFormatter([
+            w for w in self._axes.get_children()
+            if isinstance(w, Wedge)
+        ])
 
     # endregion
 
