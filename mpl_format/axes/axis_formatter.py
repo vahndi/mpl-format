@@ -166,19 +166,35 @@ class AxisFormatter(object):
         ])
         return self
 
-    def set_format_integer(self, separator: str = ',') -> 'AxisFormatter':
+    def set_format_integer(self, separator: str = ',',
+                           categorical: bool = False) -> 'AxisFormatter':
         """
         Format an axis with currency symbols and separators.
 
         :param separator: The symbol to separate each group of 3 digits.
+        :param categorical: Whether the axis is displaying categorical items
+                            e.g. for bar plots.
         """
-        fmt = '{x:%s.0f}' % separator
-        tick = StrMethodFormatter(fmt)
-        self._axis.set_major_formatter(tick)
+        if not categorical:
+            fmt = '{x:%s.0f}' % separator
+            tick = StrMethodFormatter(fmt)
+            self._axis.set_major_formatter(tick)
+        else:
+            def to_integer(text: Text):
+                t = text.get_text()
+                if t == '':
+                    return ''
+                number = int(float(text.get_text()))
+                return f'{number:,}'
+            self._axis.set_ticklabels([
+                to_integer(text) for text in self._axis.get_ticklabels()
+            ])
+
         return self
 
     def set_format_currency(
-            self, symbol: str = '$', num_decimals: int = 0
+            self, symbol: str = '$', num_decimals: int = 0,
+            categorical: bool = False
     ) -> 'AxisFormatter':
         """
         Format an axis with currency symbols and separators.
@@ -186,28 +202,58 @@ class AxisFormatter(object):
         :param symbol: The currency symbol to use.
         :param num_decimals: The number of decimal places to use
                              (typically 0 or 2).
+        :param categorical: Whether the axis is displaying categorical items
+                            e.g. for bar plots.
         """
-        fmt = '%s{x:,.%sf}' % (symbol, num_decimals)
-        tick = StrMethodFormatter(fmt)
-        self._axis.set_major_formatter(tick)
+        if not categorical:
+            fmt = '%s{x:,.%sf}' % (symbol, num_decimals)
+            tick = StrMethodFormatter(fmt)
+            self._axis.set_major_formatter(tick)
+        else:
+            def to_currency(text: Text):
+                t = text.get_text()
+                if t == '':
+                    return ''
+                number = int(float(text.get_text()))
+                return f'{symbol}{number:,.{num_decimals}f}'
+            self._axis.set_ticklabels([
+                to_currency(text) for text in self._axis.get_ticklabels()
+            ])
+
         return self
 
     def set_format_percent(self, num_decimals: int = 0,
-                           multiply_100: bool = True) -> 'AxisFormatter':
+                           multiply_100: bool = True,
+                           categorical: bool = False) -> 'AxisFormatter':
         """
         Format an axis as a percentage.
 
         :param num_decimals: Number of decimal places for the resulting label.
         :param multiply_100: Whether to multiply the existing value by 100
                              before formatting.
+        :param categorical: Whether the axis is displaying categorical items
+                            e.g. for bar plots.
         """
-        def percent_formatter(s, _):
-            s = float(s)
-            if multiply_100:
-                s *= 100
-            return f'{s:.{num_decimals}f}%'
+        if not categorical:
+            def percent_formatter(value, pos):
+                value = float(value)
+                if multiply_100:
+                    value *= 100
+                return f'{value:.{num_decimals}f}%'
+            self._axis.set_major_formatter(FuncFormatter(percent_formatter))
+        else:
+            def to_percent(text: Text):
+                t = text.get_text()
+                if t == '':
+                    return ''
+                number = float(t)
+                if multiply_100:
+                    number *= 100
+                return f'{number:.{num_decimals}f}%'
+            self._axis.set_ticklabels([
+                to_percent(text) for text in self._axis.get_ticklabels()
+            ])
 
-        self._axis.set_major_formatter(FuncFormatter(percent_formatter))
         return self
 
     def set_tick_label_size(self, font_size: FontSize) -> 'AxisFormatter':
