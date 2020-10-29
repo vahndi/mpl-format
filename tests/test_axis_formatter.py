@@ -5,7 +5,7 @@ from pandas import Series
 from mpl_format.axes import AxesFormatter
 
 
-class TestAxesFormatter(TestCase):
+class TestAxisFormatter(TestCase):
 
     def setUp(self) -> None:
 
