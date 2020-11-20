@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.axis import Axis
 from matplotlib.lines import Line2D
 from matplotlib.text import Text
-from matplotlib.ticker import StrMethodFormatter, FuncFormatter
+from matplotlib.ticker import FuncFormatter
 
 from mpl_format.compound_types import FontSize, Color, StringMapper
 from mpl_format.text.text_formatter import TextFormatter
@@ -168,26 +168,45 @@ class AxisFormatter(object):
         ])
         return self
 
-    def set_format_integer(self, separator: str = ',',
-                           categorical: bool = False) -> 'AxisFormatter':
+    def set_format_integer(self,
+                           categorical: bool = False,
+                           kmbt: bool = False) -> 'AxisFormatter':
         """
         Format an axis with currency symbols and separators.
 
-        :param separator: The symbol to separate each group of 3 digits.
         :param categorical: Whether the axis is displaying categorical items
                             e.g. for bar plots.
+        :param kmbt: Whether to abbreviate numbers using K, M, B and T for
+                     thousands, millions, billions and trillions.
         """
+        def to_integer(text: Text):
+            if isinstance(text, Text):
+                t = text.get_text()
+            else:
+                t = str(text)
+            if t == '':
+                return ''
+            number = float(t)
+            if not kmbt:
+                return f'{int(number):,}'
+            else:
+                for power, abbrev in zip(
+                        [12, 9, 6, 3],
+                        ['T', 'B', 'M', 'K']
+                ):
+                    if number >= 10 ** power:
+                        num = number / 10 ** power
+                        if num == int(num):
+                            num = int(num)
+                        return f'{num:,}{abbrev}'
+                if number == int(number):
+                    number = int(number)
+                return f'{number:,}'
+
         if not categorical:
-            fmt = '{x:%s.0f}' % separator
-            tick = StrMethodFormatter(fmt)
+            tick = FuncFormatter(lambda x, pos: to_integer(x))
             self._axis.set_major_formatter(tick)
         else:
-            def to_integer(text: Text):
-                t = text.get_text()
-                if t == '':
-                    return ''
-                number = int(float(text.get_text()))
-                return f'{number:,}'
             self._axis.set_ticklabels([
                 to_integer(text) for text in self._axis.get_ticklabels()
             ])
@@ -196,7 +215,8 @@ class AxisFormatter(object):
 
     def set_format_currency(
             self, symbol: str = '$', num_decimals: int = 0,
-            categorical: bool = False
+            categorical: bool = False,
+            kmbt: bool = False
     ) -> 'AxisFormatter':
         """
         Format an axis with currency symbols and separators.
@@ -206,18 +226,42 @@ class AxisFormatter(object):
                              (typically 0 or 2).
         :param categorical: Whether the axis is displaying categorical items
                             e.g. for bar plots.
+        :param kmbt: Whether to abbreviate numbers using K, M, B and T for
+                     thousands, millions, billions and trillions.
         """
+
+        def to_currency(text: Text):
+            if isinstance(text, Text):
+                t = text.get_text()
+            else:
+                t = str(text)
+            if t == '':
+                return ''
+            number = float(t)
+            if not kmbt:
+                return f'{symbol}{number:,.{num_decimals}f}'
+            else:
+                for power, abbrev in zip(
+                        [12, 9, 6, 3],
+                        ['T', 'B', 'M', 'K']
+                ):
+                    if number >= 10 ** power:
+                        num = number / 10 ** power
+                        if num == int(num):
+                            num = int(num)
+                        return (
+                            f'{symbol}'
+                            f'{num:,}'
+                            f'{abbrev}'
+                        )
+                if number == int(number):
+                    number = int(number)
+                return f'{symbol}{number:,.{num_decimals}f}'
+
         if not categorical:
-            fmt = '%s{x:,.%sf}' % (symbol, num_decimals)
-            tick = StrMethodFormatter(fmt)
+            tick = FuncFormatter(lambda x, pos: to_currency(x))
             self._axis.set_major_formatter(tick)
         else:
-            def to_currency(text: Text):
-                t = text.get_text()
-                if t == '':
-                    return ''
-                number = int(float(text.get_text()))
-                return f'{symbol}{number:,.{num_decimals}f}'
             self._axis.set_ticklabels([
                 to_currency(text) for text in self._axis.get_ticklabels()
             ])

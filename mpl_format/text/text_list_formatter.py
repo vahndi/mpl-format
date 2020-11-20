@@ -184,3 +184,8 @@ class TextListFormatter(object):
         return self.set_va('center_baseline')
 
     # endregion
+
+    @property
+    def texts(self) -> List[str]:
+
+        return[t.to_string() for t in self._text_list]
