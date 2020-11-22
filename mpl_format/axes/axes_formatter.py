@@ -6,15 +6,16 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
-    Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch, Polygon, Wedge
+    Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch, Polygon, Wedge, \
+    BoxStyle
 from matplotlib.path import Path
 from matplotlib.text import Text
 from numpy import ndarray
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 from compound_types.arrays import ArrayLike
 from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable
+    DictOrDictIterable, ColorOrColorIterable, BoolOrBoolIterable
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.compound_types import FontSize, Color, LegendLocation, \
@@ -23,7 +24,7 @@ from mpl_format.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.styles import LINE_STYLE, CAP_STYLE, JOIN_STYLE, ARROW_STYLE, \
-    CONNECTION_STYLE, BOX_STYLE
+    CONNECTION_STYLE
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 
@@ -1204,7 +1205,7 @@ class AxesFormatter(object):
     def add_fancy_box_patch(
             self, x: float, y: float,
             width: float, height: float,
-            box_style: Union[str, BOX_STYLE] = 'round',
+            box_style: Union[str, BoxStyle] = 'Round',
             mutation_scale: Optional[float] = 1,
             mutation_aspect: Optional[float] = None,
             alpha: Optional[float] = None,
@@ -1249,8 +1250,6 @@ class AxesFormatter(object):
             cap_style = cap_style.name
         if join_style and isinstance(join_style, JOIN_STYLE):
             join_style = join_style.name
-        if isinstance(box_style, BOX_STYLE):
-            box_style=box_style.name
         # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
@@ -1264,7 +1263,8 @@ class AxesFormatter(object):
         fancy_box = FancyBboxPatch(
             xy=(x, y), width=width, height=height,
             boxstyle=box_style,
-            mutation_scale=mutation_scale, mutation_aspect=mutation_aspect,
+            mutation_scale=mutation_scale,
+            mutation_aspect=mutation_aspect,
             **kwargs
         )
         self._axes.add_artist(fancy_box)
@@ -1615,6 +1615,130 @@ class AxesFormatter(object):
 
     # endregion
 
+    # region plots
+
+    def add_v_bars(
+            self,
+            x: Union[str, FloatOrFloatIterable],
+            y: Union[str, FloatOrFloatIterable],
+            width: Union[str, FloatOrFloatIterable],
+            box_style: Union[BoxStyle, Iterable[BoxStyle]],
+            data: Optional[DataFrame] = None,
+            y_0: Optional[Union[str, FloatOrFloatIterable]] = 0.0,
+            h_align: str = 'center',
+            mutation_scale: Union[str, FloatOrFloatIterable] = 1,
+            mutation_aspect: Optional[Union[str, FloatOrFloatIterable]] = None,
+            alpha: Optional[Union[str, FloatOrFloatIterable]] = None,
+            cap_style: Optional[Union[
+                StrOrStrIterable, CAP_STYLE, Iterable[CAP_STYLE]
+            ]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            line_style: Optional[Union[
+                StrOrStrIterable, LINE_STYLE, Iterable[LINE_STYLE]
+            ]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None
+    ) -> 'AxesFormatter':
+
+        if h_align not in ('left', 'center', 'right'):
+            raise ValueError("h_align not in ('left', 'center', 'right')")
+
+        def get_data(item) -> Series:
+            if data is None:
+                return item
+            if isinstance(item, str) and item in data.columns:
+                return data[item]
+            else:
+                return item
+
+        def make_iterable(item):
+            if not isinstance(item, Iterable) or isinstance(item, str):
+                item = [item] * len(x)
+            return item
+
+        x = get_data(x)
+        y = make_iterable(get_data(y))
+        y_0 = make_iterable(get_data(y_0))
+        width = make_iterable(get_data(width))
+        box_style = make_iterable(get_data(box_style))
+        mutation_scale = make_iterable(get_data(mutation_scale))
+        mutation_aspect = make_iterable(get_data(mutation_aspect))
+        alpha = make_iterable(get_data(alpha))
+        cap_style = make_iterable(get_data(cap_style))
+        color = make_iterable(get_data(color))
+        edge_color = make_iterable(get_data(edge_color))
+        face_color = make_iterable(get_data(face_color))
+        fill = make_iterable(get_data(fill))
+        line_style = make_iterable(get_data(line_style))
+        line_width = make_iterable(get_data(line_width))
+
+        for (
+                x_i, y_i, y_0_i, w_i, bs_i,
+                ms_i, ma_i, a_i, cs_i,
+                c_i, ec_i, fc_i,
+                f_i, ls_i, lw_i
+        ) in zip(
+            x, y, y_0, width, box_style,
+            mutation_scale, mutation_aspect, alpha, cap_style,
+            color, edge_color, face_color,
+            fill, line_style, line_width
+        ):
+            if h_align == 'left':
+                x_p = x_i
+            elif h_align == 'center':
+                x_p = x_i - w_i / 2
+            else:
+                x_p = x_i - width
+
+            self.add_fancy_box_patch(
+                x=x_p, y=y_0_i, width=w_i, height=y_i - y_0_i,
+                box_style=bs_i,
+                mutation_scale=ms_i, mutation_aspect=ma_i,
+                alpha=a_i, cap_style=cs_i,
+                color=c_i, edge_color=ec_i, face_color=fc_i,
+                fill=f_i, line_style=ls_i, line_width=lw_i
+            )
+
+        return self
+
+    def add_v_pills(
+            self,
+            x: Union[str, FloatOrFloatIterable],
+            y: Union[str, FloatOrFloatIterable],
+            width: float,
+            data: Optional[DataFrame] = None,
+            y_0: Optional[Union[str, FloatOrFloatIterable]] = 0.0,
+            h_align: str = 'center',
+            alpha: Optional[Union[str, FloatOrFloatIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            line_style: Optional[Union[
+                StrOrStrIterable, LINE_STYLE, Iterable[LINE_STYLE]
+            ]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None
+    ) -> 'AxesFormatter':
+
+        mutation_aspect = (
+                (self.width() / self.height()) *
+                (self.get_y_height() / self.get_x_width())
+        )
+        self.add_v_bars(
+            data=data, x=x, y=y, width=width,
+            box_style=BoxStyle.Round(pad=0.0, rounding_size=width / 2),
+            y_0=y_0, h_align=h_align,
+            mutation_aspect=mutation_aspect,
+            alpha=alpha,
+            color=color, edge_color=edge_color, face_color=face_color,
+            fill=fill, line_style=line_style, line_width=line_width
+        )
+        return self
+
+    # endregion
+
     def set_title_font_family(self, font_name: str) -> 'AxesFormatter':
         """
         Set the font family for the Axes title.
@@ -1672,6 +1796,14 @@ class AxesFormatter(object):
         """
         return self.get_x_lim()[1]
 
+    def get_x_width(self) -> float:
+
+        return abs(self.get_x_max() - self.get_x_min())
+
+    def get_y_height(self) -> float:
+
+        return abs(self.get_y_max() - self.get_y_min())
+
     def set_x_min(self, left: float = None) -> 'AxesFormatter':
         """
         Set the x-axis lower view limit.
@@ -1711,6 +1843,32 @@ class AxesFormatter(object):
         """
         self.set_y_lim(None, right)
         return self
+
+    def width(self, units: str = 'inches') -> float:
+
+        if units not in ('inches', 'pixels'):
+            raise ValueError("units not in ('inches', 'pixels')")
+        fig = self._axes.figure
+        bbox = self.axes.get_window_extent().transformed(
+            fig.dpi_scale_trans.inverted()
+        )
+        width = bbox.width
+        if units == 'pixels':
+            width *= fig.dpi
+        return width
+
+    def height(self, units: str = 'inches') -> float:
+
+        if units not in ('inches', 'pixels'):
+            raise ValueError("units not in ('inches', 'pixels')")
+        fig = self._axes.figure
+        bbox = self.axes.get_window_extent().transformed(
+            fig.dpi_scale_trans.inverted()
+        )
+        height = bbox.height
+        if units == 'pixels':
+            height *= fig.dpi
+        return height
 
     # endregion
 

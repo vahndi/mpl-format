@@ -249,11 +249,7 @@ class AxisFormatter(object):
                         num = number / 10 ** power
                         if num == int(num):
                             num = int(num)
-                        return (
-                            f'{symbol}'
-                            f'{num:,}'
-                            f'{abbrev}'
-                        )
+                        return f'{symbol}{num:,}{abbrev}'
                 if number == int(number):
                     number = int(number)
                 return f'{symbol}{number:,.{num_decimals}f}'

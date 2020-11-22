@@ -67,16 +67,3 @@ class CONNECTION_STYLE(Enum):
     arc = 3
     arc3 = 4
     bar = 5
-
-
-class BOX_STYLE(Enum):
-
-    circle = 1
-    darrow = 2
-    larrow = 3
-    rarrow = 4
-    round = 5
-    round4 = 6
-    roundtooth = 7
-    sawtooth = 8
-    square = 9
