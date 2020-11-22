@@ -9,7 +9,7 @@ from numpy import ndarray, reshape
 from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray
 from mpl_format.compound_types import StringMapper
-from mpl_format.io_utils import save_plot
+from mpl_format.utils.io_utils import save_plot
 
 
 TextSetter = TypeVar(

@@ -9,7 +9,6 @@ from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
     Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch, Polygon, Wedge, \
     BoxStyle
 from matplotlib.path import Path
-from matplotlib.text import Text
 from numpy import ndarray
 from pandas import DataFrame, Series
 
@@ -20,7 +19,9 @@ from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.compound_types import FontSize, Color, LegendLocation, \
     StringMapper
-from mpl_format.io_utils import save_plot
+from mpl_format.utils.arg_checks import check_h_align
+from mpl_format.utils.color_utils import cross_fade
+from mpl_format.utils.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.styles import LINE_STYLE, CAP_STYLE, JOIN_STYLE, ARROW_STYLE, \
@@ -1503,6 +1504,58 @@ class AxesFormatter(object):
         self._axes.add_artist(arc)
         return self
 
+    def add_v_density(
+            self, x: float,
+            y_to_z: Series,
+            color: Color,
+            color_min: Optional[Color] = None,
+            width: float = 0.8,
+            z_max: Optional[float] = None,
+            h_align: str = 'center'
+    ):
+        """
+
+        :param x:
+        :param y_to_z:
+        :param color:
+        :param color_min:
+        :param width:
+        :param z_max:
+        :param h_align:
+        :return:
+        """
+        check_h_align(h_align)
+
+        if z_max is None:
+            z_max = y_to_z.max()
+        y = y_to_z.index.to_list()
+        y_lowers = y[: -1]
+        y_uppers = y[1:]
+
+        if h_align == 'left':
+            x_p = x
+        elif h_align == 'center':
+            x_p = x - width / 2
+        else:
+            x_p = x - width
+
+        alphas = (y_to_z / z_max).rolling(2).mean().shift(-1).dropna()
+
+        if color_min is None:
+            color_min = color
+        colors = cross_fade(from_color=color_min, to_color=color, amount=alphas)
+
+        for y_lower, y_upper, alpha, color in zip(
+                y_lowers, y_uppers, alphas, colors
+        ):
+            self.add_rectangle(
+                x=x_p, y=y_lower,
+                width=width, height=y_upper - y_lower,
+                face_color=color, alpha=alpha
+            )
+
+        return self
+
     @property
     def arcs(self) -> PatchListFormatter:
         """
@@ -1642,8 +1695,7 @@ class AxesFormatter(object):
             line_width: Optional[FloatOrFloatIterable] = None
     ) -> 'AxesFormatter':
 
-        if h_align not in ('left', 'center', 'right'):
-            raise ValueError("h_align not in ('left', 'center', 'right')")
+        check_h_align(h_align)
 
         def get_data(item) -> Series:
             if data is None:
