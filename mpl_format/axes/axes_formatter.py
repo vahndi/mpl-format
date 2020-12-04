@@ -762,6 +762,8 @@ class AxesFormatter(object):
 
     # region shapes
 
+    # region patches
+
     def add_text(
             self, x: FloatOrFloatIterable,
             y: FloatOrFloatIterable,
@@ -1504,59 +1506,6 @@ class AxesFormatter(object):
         self._axes.add_artist(arc)
         return self
 
-    def add_v_density(
-            self, x: float,
-            y_to_z: Series,
-            color: Color,
-            color_min: Optional[Color] = None,
-            width: float = 0.8,
-            z_max: Optional[float] = None,
-            h_align: str = 'center'
-    ) -> 'AxesFormatter':
-        """
-        Add a vertical density bar to the plot.
-
-        :param x: The x-coordinate of the bar.
-        :param y_to_z: A mapping of the bar's y-coordinate to it density.
-        :param color: The color of the density bar.
-        :param color_min: Optional 2nd color to fade out to.
-        :param width: The bar width.
-        :param z_max: Value to scale down densities by to get to a range of
-                      0 to 1. Defaults to max value of y_to_z.
-        :param h_align: Horizontal alignment. One of {'left', 'center', 'right'}
-        """
-        check_h_align(h_align)
-
-        if z_max is None:
-            z_max = y_to_z.max()
-        y = y_to_z.index.to_list()
-        y_lowers = y[: -1]
-        y_uppers = y[1:]
-
-        if h_align == 'left':
-            x_p = x
-        elif h_align == 'center':
-            x_p = x - width / 2
-        else:
-            x_p = x - width
-
-        alphas = (y_to_z / z_max).rolling(2).mean().shift(-1).dropna()
-
-        if color_min is None:
-            color_min = color
-        colors = cross_fade(from_color=color_min, to_color=color, amount=alphas)
-
-        for y_lower, y_upper, alpha, color in zip(
-                y_lowers, y_uppers, alphas, colors
-        ):
-            self.add_rectangle(
-                x=x_p, y=y_lower,
-                width=width, height=y_upper - y_lower,
-                face_color=color, alpha=alpha
-            )
-
-        return self
-
     @property
     def arcs(self) -> PatchListFormatter:
         """
@@ -1666,6 +1615,63 @@ class AxesFormatter(object):
             w for w in self._axes.get_children()
             if isinstance(w, Wedge)
         ])
+
+    # endregion
+
+    # region custom shapes
+
+    def add_v_density(
+            self, x: float,
+            y_to_z: Series,
+            color: Color,
+            color_min: Optional[Color] = None,
+            width: float = 0.8,
+            z_max: Optional[float] = None,
+            h_align: str = 'center'
+    ) -> 'AxesFormatter':
+        """
+        Add a vertical density bar to the plot.
+
+        :param x: The x-coordinate of the bar.
+        :param y_to_z: A mapping of the bar's y-coordinate to it density.
+        :param color: The color of the density bar.
+        :param color_min: Optional 2nd color to fade out to.
+        :param width: The bar width.
+        :param z_max: Value to scale down densities by to get to a range of
+                      0 to 1. Defaults to max value of y_to_z.
+        :param h_align: Horizontal alignment. One of {'left', 'center', 'right'}
+        """
+        check_h_align(h_align)
+
+        if z_max is None:
+            z_max = y_to_z.max()
+        y = y_to_z.index.to_list()
+        y_lowers = y[: -1]
+        y_uppers = y[1:]
+
+        if h_align == 'left':
+            x_p = x
+        elif h_align == 'center':
+            x_p = x - width / 2
+        else:
+            x_p = x - width
+
+        alphas = (y_to_z / z_max).rolling(2).mean().shift(-1).dropna()
+
+        if color_min is None:
+            color_min = color
+        colors = cross_fade(from_color=color_min, to_color=color, amount=alphas)
+
+        for y_lower, y_upper, alpha, color in zip(
+                y_lowers, y_uppers, alphas, colors
+        ):
+            self.add_rectangle(
+                x=x_p, y=y_lower,
+                width=width, height=y_upper - y_lower,
+                face_color=color, alpha=alpha
+            )
+
+        return self
 
     # endregion
 
@@ -1830,6 +1836,8 @@ class AxesFormatter(object):
             fill=fill, line_style=line_style, line_width=line_width
         )
         return self
+
+    # endregion
 
     # endregion
 
