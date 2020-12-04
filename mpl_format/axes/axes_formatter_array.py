@@ -8,7 +8,11 @@ from mpl_format.axes.axes_formatter import AxesFormatter
 class AxesFormatterArray(object):
 
     def __init__(self, axes: ndarray):
+        """
+        Create a new AxesFormatterArray
 
+        :param axes: Array of Axes instances.
+        """
         self._axes = empty_like(axes, dtype=AxesFormatter)
         if axes.ndim == 1:
             for i in range(axes.shape[0]):

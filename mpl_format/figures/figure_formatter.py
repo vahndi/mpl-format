@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from numpy import ndarray, reshape
+from numpy.ma import empty_like
 
+from mpl_format.axes import AxisFormatter
 from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray
+from mpl_format.axes.axis_formatter_array import AxisFormatterArray
 from mpl_format.compound_types import StringMapper
 from mpl_format.utils.io_utils import save_plot
-
 
 TextSetter = TypeVar(
     'TextSetter',
@@ -74,6 +76,46 @@ class FigureFormatter(object):
             return AxesFormatter(self._axes)
         else:
             return AxesFormatterArray(self._axes)
+
+    @property
+    def x_axes(self) -> Union[AxisFormatter, AxisFormatterArray]:
+        """
+        Return an AxisFormatter or AxisFormatterArray for the X-Axis or X-Axes
+        of the wrapped Axes.
+        """
+        if not self._has_array:
+            return AxesFormatter(self._axes).x_axis
+        else:
+            axes = empty_like(self._axes, dtype=AxisFormatter)
+            if axes.ndim == 1:
+                for i in range(self._axes.shape[0]):
+                    axes[i] = AxisFormatter(self._axes[i].xaxis)
+            elif axes.ndim == 2:
+                for i in range(axes.shape[0]):
+                    for j in range(axes.shape[1]):
+                        axes[i, j] = AxisFormatter(self._axes[i, j].xaxis)
+
+        return AxisFormatterArray(axes)
+
+    @property
+    def y_axes(self) -> Union[AxisFormatter, AxisFormatterArray]:
+        """
+        Return an AxisFormatter or AxisFormatterArray for the Y-Axis or Y-Axes
+        of the wrapped Axes.
+        """
+        if not self._has_array:
+            return AxesFormatter(self._axes).y_axis
+        else:
+            axes = empty_like(self._axes, dtype=AxisFormatter)
+            if axes.ndim == 1:
+                for i in range(self._axes.shape[0]):
+                    axes[i] = AxisFormatter(self._axes[i].yaxis)
+            elif axes.ndim == 2:
+                for i in range(axes.shape[0]):
+                    for j in range(axes.shape[1]):
+                        axes[i, j] = AxisFormatter(self._axes[i, j].yaxis)
+
+        return AxisFormatterArray(axes)
 
     @property
     def figure(self) -> Figure:

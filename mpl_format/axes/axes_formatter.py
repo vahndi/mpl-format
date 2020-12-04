@@ -14,11 +14,11 @@ from pandas import DataFrame, Series
 
 from compound_types.arrays import ArrayLike
 from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable, ColorOrColorIterable, BoolOrBoolIterable
+    DictOrDictIterable, BoolOrBoolIterable
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.compound_types import FontSize, Color, LegendLocation, \
-    StringMapper
+    StringMapper, ColorOrColorIterable
 from mpl_format.utils.arg_checks import check_h_align
 from mpl_format.utils.color_utils import cross_fade
 from mpl_format.utils.io_utils import save_plot
@@ -1512,17 +1512,18 @@ class AxesFormatter(object):
             width: float = 0.8,
             z_max: Optional[float] = None,
             h_align: str = 'center'
-    ):
+    ) -> 'AxesFormatter':
         """
+        Add a vertical density bar to the plot.
 
-        :param x:
-        :param y_to_z:
-        :param color:
-        :param color_min:
-        :param width:
-        :param z_max:
-        :param h_align:
-        :return:
+        :param x: The x-coordinate of the bar.
+        :param y_to_z: A mapping of the bar's y-coordinate to it density.
+        :param color: The color of the density bar.
+        :param color_min: Optional 2nd color to fade out to.
+        :param width: The bar width.
+        :param z_max: Value to scale down densities by to get to a range of
+                      0 to 1. Defaults to max value of y_to_z.
+        :param h_align: Horizontal alignment. One of {'left', 'center', 'right'}
         """
         check_h_align(h_align)
 
@@ -1694,7 +1695,32 @@ class AxesFormatter(object):
             ]] = None,
             line_width: Optional[FloatOrFloatIterable] = None
     ) -> 'AxesFormatter':
+        """
+        Add vertical bars to the plot with the given BoxStyle.
 
+        :param x: X-coordinate for each bar, or name of column.
+        :param y: Y-coordinate of top of each bar, or name of column.
+        :param width: Width of each bar, or name of column.
+        :param box_style: The style of each box, or name of column.
+        :param data: Optional DataFrame to extract sequences of attributes.
+        :param y_0: Y-coordinate of bottom of each bar. Defaults to 0.
+        :param h_align: Horizontal alignment. One of {'left', 'center', 'right'}
+        :param mutation_scale: Scaling factor applied to the attributes of the
+                               box style (e.g. pad or rounding_size).
+        :param mutation_aspect: The height of the rectangle will be squeezed by
+                                this value before the mutation and the mutated
+                                box will be stretched by the inverse of it.
+                                For example, this allows different horizontal
+                                and vertical padding.
+        :param alpha: Opacity from 0 to 1.
+        :param cap_style: One of {'butt', 'round', 'projecting'}
+        :param color: Color for faces and edges.
+        :param edge_color: Color for edges.
+        :param face_color: Color for faces.
+        :param fill: Whether bars are filled.
+        :param line_style: Line style.
+        :param line_width: Line width.
+        """
         check_h_align(h_align)
 
         def get_data(item) -> Series:
@@ -1773,7 +1799,23 @@ class AxesFormatter(object):
             ]] = None,
             line_width: Optional[FloatOrFloatIterable] = None
     ) -> 'AxesFormatter':
+        """
+        Add vertical bars to the plot with the given BoxStyle.
 
+        :param x: X-coordinate for each bar, or name of column.
+        :param y: Y-coordinate of top of each bar, or name of column.
+        :param width: Width of each bar, or name of column.
+        :param data: Optional DataFrame to extract sequences of attributes.
+        :param y_0: Y-coordinate of bottom of each bar. Defaults to 0.
+        :param h_align: One of {'left', 'center', 'right'}.
+        :param alpha: Opacity from 0 to 1.
+        :param color: Color for faces and edges.
+        :param edge_color: Color for edges.
+        :param face_color: Color for faces.
+        :param fill: Whether bars are filled.
+        :param line_style: Line style.
+        :param line_width: Line width.
+        """
         mutation_aspect = (
                 (self.width() / self.height()) *
                 (self.get_y_height() / self.get_x_width())
