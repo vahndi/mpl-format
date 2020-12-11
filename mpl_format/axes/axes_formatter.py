@@ -9,25 +9,26 @@ from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
     Ellipse, FancyArrow, Patch, FancyArrowPatch, FancyBboxPatch, Polygon, Wedge, \
     BoxStyle
 from matplotlib.path import Path
-from numpy import ndarray
+from numpy import ndarray, linspace
 from pandas import DataFrame, Series
+from scipy.interpolate import interp1d
 
 from compound_types.arrays import ArrayLike
 from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable, BoolOrBoolIterable
+    DictOrDictIterable, BoolOrBoolIterable, FloatIterable
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.compound_types import FontSize, Color, LegendLocation, \
     StringMapper, ColorOrColorIterable
-from mpl_format.utils.arg_checks import check_h_align
-from mpl_format.utils.color_utils import cross_fade
-from mpl_format.utils.io_utils import save_plot
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.styles import LINE_STYLE, CAP_STYLE, JOIN_STYLE, ARROW_STYLE, \
-    CONNECTION_STYLE
+    CONNECTION_STYLE, DRAW_STYLE, MARKER_STYLE
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
+from mpl_format.utils.arg_checks import check_h_align
+from mpl_format.utils.color_utils import cross_fade
+from mpl_format.utils.io_utils import save_plot
 
 
 class AxesFormatter(object):
@@ -1834,6 +1835,78 @@ class AxesFormatter(object):
             alpha=alpha,
             color=color, edge_color=edge_color, face_color=face_color,
             fill=fill, line_style=line_style, line_width=line_width
+        )
+        return self
+
+    def add_line(
+            self,
+            x: FloatIterable, y: FloatIterable,
+            smooth: Union[bool, int] = False, smooth_order: int = 2,
+            alpha: Optional[float] = None,
+            color: Optional[Color] = None,
+            draw_style: Optional[Union[str, DRAW_STYLE]] = None,
+            label: Optional[str] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None,
+            line_width: Optional[float] = None,
+            marker: Optional[Union[str, MARKER_STYLE]] = None,
+            marker_edge_color: Optional[Color] = None,
+            marker_edge_width: Optional[float] = None,
+            marker_face_color: Optional[Color] = None,
+            marker_face_color_alt: Optional[Color] = None,
+            marker_size: Optional[float] = None,
+    ) -> 'AxesFormatter':
+        """
+        Add a line to the plot.
+
+        :param x: X-coordinates of the line.
+        :param y: Y-coordinates of the line.
+        :param smooth: True or False or number of points. True -> 1,000 points.
+        :param smooth_order: Order for smoothing e.g. 2 = quadratic, 3 = cubic
+        :param alpha: Opacity of the line.
+        :param color: Color of the line.
+        :param draw_style: Draw style. One of {'default', 'steps', 'steps-pre',
+                           'steps-mid', 'steps-post'}
+        :param label: Label.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
+        :param line_width: Line width.
+        :param marker: Marker style.
+        :param marker_edge_color: Marker edge color.
+        :param marker_edge_width: Marker edge width.
+        :param marker_face_color: Marker face color.
+        :param marker_face_color_alt: Alt marker face color.
+        :param marker_size: Marker size.
+        """
+        if smooth is not False:
+            if smooth is True:
+                smooth = 1000
+            f_smooth = interp1d(x, y, kind=smooth_order)
+            x_smooth = linspace(min(x), max(x), smooth)
+            y_smooth = f_smooth(x_smooth)
+            x = x_smooth
+            y = y_smooth
+
+        draw_style = (
+            draw_style if isinstance(draw_style, str)
+            else DRAW_STYLE.get_name(draw_style)
+        )
+        line_style = (
+            line_style if isinstance(line_style, str)
+            else LINE_STYLE.get_name(line_style)
+        )
+
+        self._axes.plot(
+            x, y, alpha=alpha, color=color,
+            drawstyle=draw_style,
+            label=label,
+            ls=line_style,
+            lw=line_width,
+            marker=marker,
+            markersize=marker_size,
+            mec=marker_edge_color,
+            mew=marker_edge_width,
+            mfc=marker_face_color,
+            mfcalt=marker_face_color_alt
         )
         return self
 
