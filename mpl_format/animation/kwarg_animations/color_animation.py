@@ -1,5 +1,7 @@
 from typing import List, Union, Optional
 
+from numpy import linspace
+
 from mpl_format.compound_types import Color
 from mpl_format.animation.rate import Rate
 from mpl_format.utils.color_utils import set_alpha, cross_fade
@@ -16,7 +18,7 @@ class ColorAnimation(object):
         if t is not None:
             self.t: List[float] = t
         else:
-            self.t = [0, 1]
+            self.t = list(linspace(0, 1, len(colors)))
         self.rate: Rate = (
             Rate.linear() if rate is None else
             rate if isinstance(rate, Rate) else
@@ -38,5 +40,6 @@ class ColorAnimation(object):
                 return cross_fade(
                     from_color=self.colors[i],
                     to_color=self.colors[i + 1],
-                    amount=(t - self.t[i]) / (self.t[i + 1] - self.t[i])
+                    amount=((t - self.t[i]) /
+                            (self.t[i + 1] - self.t[i]))
                 )

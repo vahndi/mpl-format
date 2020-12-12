@@ -24,6 +24,18 @@ class FloatAnimation(object):
             Rate(rate)
         )
 
+    def set_values(self, values: List[float]) -> 'FloatAnimation':
+
+        self.values = values
+        return self
+
+    def reverse_values(self) -> 'FloatAnimation':
+
+        return FloatAnimation(
+            values=self.values[:: -1],
+            t=self.t, rate=self.rate
+        )
+
     @classmethod
     def linear(cls) -> 'FloatAnimation':
         return FloatAnimation(rate='linear')
@@ -40,7 +52,12 @@ class FloatAnimation(object):
 
         for i in range(len(self.t)):
             if self.t[i + 1] >= t:
-                return self.rate(
+                dt = self.rate(
                     (t - self.t[i]) /
                     (self.t[i + 1] - self.t[i])
                 )
+                return (
+                    self.values[i] +
+                    (self.values[i + 1] - self.values[i]) * dt
+                )
+

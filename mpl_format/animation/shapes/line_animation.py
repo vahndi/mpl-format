@@ -7,7 +7,8 @@ from compound_types.built_ins import FloatIterable
 from mpl_format.animation.kwarg_animations.float_animation import FloatAnimation
 from mpl_format.animation.shapes.base import ShapeAnimation
 from mpl_format.animation.type_animations import \
-    FloatOrFloatAnimation, ColorOrColorAnimation, StrOrFloatAnimation
+    FloatOrFloatAnimation, ColorOrColorAnimation, StrOrFloatAnimation, \
+    StrOrFloatOrFloatAnimation
 from mpl_format.axes import AxesFormatter
 from mpl_format.styles import DRAW_STYLE, LINE_STYLE, MARKER_STYLE
 
@@ -19,7 +20,7 @@ class LineAnimation(ShapeAnimation, object):
             x: FloatIterable, y: FloatIterable,
             smooth: Union[bool, int] = False, smooth_order: int = 2,
             length: Optional[StrOrFloatAnimation] = None,
-            alpha: Optional[FloatOrFloatAnimation] = None,
+            alpha: Optional[StrOrFloatOrFloatAnimation] = None,
             color: Optional[ColorOrColorAnimation] = None,
             draw_style: Optional[Union[str, DRAW_STYLE]] = None,
             label: Optional[str] = None,
@@ -45,6 +46,8 @@ class LineAnimation(ShapeAnimation, object):
         if isinstance(length, str):
             length = FloatAnimation(rate=length)
         self.length: Optional[FloatAnimation] = length
+        if isinstance(alpha, str):
+            alpha = FloatAnimation(rate=alpha)
         self.alpha: FloatOrFloatAnimation = alpha
         self.color: Optional[ColorOrColorAnimation] = color
         self.draw_style: Optional[Union[str, DRAW_STYLE]] = draw_style
