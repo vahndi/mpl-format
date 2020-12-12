@@ -1,13 +1,14 @@
 from typing import Iterable, Union, List
 
-from matplotlib.colors import to_rgb
+from matplotlib.colors import to_rgb, to_rgba
 
 from compound_types.built_ins import FloatOrFloatIterable
 from mpl_format.compound_types import Color
 
 
 def cross_fade(
-        from_color: Color, to_color: Color, amount: FloatOrFloatIterable,
+        from_color: Color, to_color: Color,
+        amount: FloatOrFloatIterable,
 ) -> Union[Color, List[Color]]:
     """
     Return a new color which fades amount proportion of the way between the 2
@@ -34,12 +35,38 @@ def cross_fade(
 def blacken(
         color: Color, amount: FloatOrFloatIterable
 ) -> Union[Color, List[Color]]:
+    """
+    Return a color or colors amount fraction or fractions of the way from
+    `color` to `black`.
 
-    return cross_fade(from_color=color, to_color='black', amount=amount)
+    :param color: The existing color.
+    :param amount: The proportion to blacken by.
+    """
+    return cross_fade(from_color=color, to_color='black',
+                      amount=amount)
 
 
 def whiten(
         color: Color, amount: FloatOrFloatIterable
 ) -> Union[Color, List[Color]]:
+    """
+    Return a color or colors amount fraction or fractions of the way from
+    `color` to `white`.
 
-    return cross_fade(from_color=color, to_color='white', amount=amount)
+    :param color: The existing color.
+    :param amount: The proportion to blacken by.
+    """
+    return cross_fade(from_color=color, to_color='white',
+                      amount=amount)
+
+
+def set_alpha(color: Color, alpha: float) -> Color:
+    """
+    Set the alpha level of a color to a given value.
+
+    :param color: The existing color.
+    :param alpha: The new alpha level
+    """
+    color = to_rgba(color)
+    color[3] = alpha
+    return color

@@ -12,6 +12,7 @@ setup(
     url='https://github.com/vahndi/mpl-format',
     keywords=['matplotlib'],
     install_requires=[
+        'celluloid',
         'compound-types',
         'matplotlib',
         'numpy',

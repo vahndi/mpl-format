@@ -1853,7 +1853,7 @@ class AxesFormatter(object):
             marker_edge_width: Optional[float] = None,
             marker_face_color: Optional[Color] = None,
             marker_face_color_alt: Optional[Color] = None,
-            marker_size: Optional[float] = None,
+            marker_size: Optional[float] = None
     ) -> 'AxesFormatter':
         """
         Add a line to the plot.
@@ -1885,15 +1885,16 @@ class AxesFormatter(object):
             y_smooth = f_smooth(x_smooth)
             x = x_smooth
             y = y_smooth
-
-        draw_style = (
-            draw_style if isinstance(draw_style, str)
-            else DRAW_STYLE.get_name(draw_style)
-        )
-        line_style = (
-            line_style if isinstance(line_style, str)
-            else LINE_STYLE.get_name(line_style)
-        )
+        if draw_style is not None:
+            draw_style = (
+                draw_style if isinstance(draw_style, str)
+                else DRAW_STYLE.get_name(draw_style)
+            )
+        if line_style is not None:
+            line_style = (
+                line_style if isinstance(line_style, str)
+                else LINE_STYLE.get_name(line_style)
+            )
 
         self._axes.plot(
             x, y, alpha=alpha, color=color,
