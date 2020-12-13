@@ -51,7 +51,7 @@ class FloatAnimation(object):
 
     @classmethod
     def sine_wave(cls, min_val: float, max_val: float,
-                  cycles: float, phase: float) -> 'FloatAnimation':
+                  cycles: float, phase: float = 0.0) -> 'FloatAnimation':
         """
         Return a sine wave oscillating between min_val and max_val,
         starting at phase * 2π with cycles complete waves.
@@ -71,7 +71,7 @@ class FloatAnimation(object):
 
     @classmethod
     def square_wave(cls, min_val: float, max_val: float,
-                    cycles: float, phase: float) -> 'FloatAnimation':
+                    cycles: float, phase: float = 0.0) -> 'FloatAnimation':
         """
         Return a square wave oscillating between min_val and max_val,
         starting at phase * 2π with cycles complete waves.
@@ -93,7 +93,7 @@ class FloatAnimation(object):
 
     @classmethod
     def triangle_wave(cls, min_val: float, max_val: float,
-                      cycles: float, phase: float) -> 'FloatAnimation':
+                      cycles: float, phase: float = 0.0) -> 'FloatAnimation':
         """
         Return a triangle wave oscillating between min_val and max_val,
         starting at phase * 2π with cycles complete waves.
@@ -112,6 +112,22 @@ class FloatAnimation(object):
                 ) / pi
         ))
         return FloatAnimation(rate=rate)
+
+    @classmethod
+    def rotation(cls, cycles: float, clockwise: bool = True):
+        """
+        Return a rotation in degrees.
+
+        :param cycles: Number of complete rotations.
+        :param clockwise: Rotate clockwise if True.
+        """
+        if clockwise:
+            multiplier = 1
+        else:
+            multiplier = -1
+        return FloatAnimation(rate=Rate(
+            lambda t: multiplier * t * cycles * 360
+        ))
 
     def at(self, t: float) -> float:
 

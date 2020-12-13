@@ -1,4 +1,4 @@
-from math import pi
+from math import pi, atan2
 from typing import Optional, Union, List, Tuple, Iterable
 
 import matplotlib.pyplot as plt
@@ -10,12 +10,14 @@ from matplotlib.patches import Rectangle, RegularPolygon, Circle, Arc, Arrow, \
     BoxStyle
 from matplotlib.path import Path
 from numpy import ndarray, linspace
+from numpy.ma import cos, sin
 from pandas import DataFrame, Series
 from scipy.interpolate import interp1d
 
 from compound_types.arrays import ArrayLike
 from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
     DictOrDictIterable, BoolOrBoolIterable, FloatIterable
+from compound_types.type_checks import all_are_none, one_is_not_none
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.compound_types import FontSize, Color, LegendLocation, \
@@ -1328,8 +1330,11 @@ class AxesFormatter(object):
         return self
 
     def add_rectangle(
-            self, x: float, y: float, width: float, height: float,
+            self,
+            width: float, height: float,
             angle: float = 0.0,
+            x_left: Optional[float] = None, y_bottom: Optional[float] = None,
+            x_center: Optional[float] = None, y_center: Optional[float] = None,
             alpha: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
@@ -1344,12 +1349,15 @@ class AxesFormatter(object):
         """
         Add a rectangle to the Axes.
 
-        :param x: The left rectangle coordinate.
-        :param y: The bottom rectangle coordinate.
+        :param x_left: The left rectangle coordinate.
+        :param y_bottom: The bottom rectangle coordinate.
         :param width: Rectangle width.
         :param height: Rectangle height.
-        :param angle: Rotation in degrees anti-clockwise about xy
-                      (default is 0.0)
+        :param x_left: The left rectangle coordinate.
+        :param y_bottom: The bottom rectangle coordinate.
+        :param x_center: The center rectangle x-coordinate.
+        :param y_center: The center rectangle y-coordinate.
+        :param angle: Rotation in degrees anti-clockwise about xy (default=0.0)
         :param alpha: Opacity.
         :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
@@ -1361,6 +1369,30 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         """
+        if not one_is_not_none(x_left, x_center):
+            raise ValueError('Give one of {x_left, x_center}')
+        if not one_is_not_none(y_bottom, y_center):
+            raise ValueError('Give one of {y_bottom, y_center}')
+        if not (
+                all_are_none(x_left, y_bottom) or
+                all_are_none(x_center, y_center)
+        ):
+            raise ValueError(
+                'Give either {x_left, y_bottom} or {x_center, y_center}'
+            )
+        if all_are_none(x_left, y_bottom):
+            x_l = x_center - width / 2
+            y_b = y_center - height / 2
+            r = ((width / 2) ** 2 + (height / 2) ** 2) ** 0.5
+            theta = atan2(height, width)
+            xc_new = x_l + r * cos(theta + pi * angle / 180)
+            yc_new = y_b + r * sin(theta + pi * angle / 180)
+            x = x_l + x_center - xc_new
+            y = y_b + y_center - yc_new
+        else:
+            x = x_left
+            y = y_bottom
+
         if line_style and isinstance(line_style, LINE_STYLE):
             line_style = line_style.name
         if cap_style and isinstance(cap_style, CAP_STYLE):
