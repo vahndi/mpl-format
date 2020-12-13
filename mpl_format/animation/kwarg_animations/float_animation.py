@@ -1,3 +1,4 @@
+from numpy import pi, sin, sign, arcsin
 from typing import List, Union, Optional
 
 from mpl_format.animation.rate import Rate
@@ -48,6 +49,70 @@ class FloatAnimation(object):
     def cubic(cls) -> 'FloatAnimation':
         return FloatAnimation(rate='cubic')
 
+    @classmethod
+    def sine_wave(cls, min_val: float, max_val: float,
+                  cycles: float, phase: float) -> 'FloatAnimation':
+        """
+        Return a sine wave oscillating between min_val and max_val,
+        starting at phase * 2π with cycles complete waves.
+
+        :param min_val: Lowest value of the wave.
+        :param max_val: Highest value of the wave.
+        :param cycles: Number of complete oscillations.
+        :param phase: Value from 0 to 1 of where to start the wave.
+        """
+        middle_val = (min_val + max_val) / 2
+        amplitude = (max_val - min_val) / 2
+        rate = Rate(lambda t: (
+                middle_val +
+                amplitude * sin((2 * pi * t * cycles) - (2 * pi * phase))
+        ))
+        return FloatAnimation(rate=rate)
+
+    @classmethod
+    def square_wave(cls, min_val: float, max_val: float,
+                    cycles: float, phase: float) -> 'FloatAnimation':
+        """
+        Return a square wave oscillating between min_val and max_val,
+        starting at phase * 2π with cycles complete waves.
+
+        :param min_val: Lowest value of the wave.
+        :param max_val: Highest value of the wave.
+        :param cycles: Number of complete oscillations.
+        :param phase: Value from 0 to 1 of where to start the wave.
+        """
+        middle_val = (min_val + max_val) / 2
+        amplitude = (max_val - min_val) / 2
+        rate = Rate(lambda t: (
+                middle_val +
+                amplitude * sign(
+                    sin((2 * pi * t * cycles) - (2 * pi * phase))
+                )
+        ))
+        return FloatAnimation(rate=rate)
+
+    @classmethod
+    def triangle_wave(cls, min_val: float, max_val: float,
+                      cycles: float, phase: float) -> 'FloatAnimation':
+        """
+        Return a triangle wave oscillating between min_val and max_val,
+        starting at phase * 2π with cycles complete waves.
+
+        :param min_val: Lowest value of the wave.
+        :param max_val: Highest value of the wave.
+        :param cycles: Number of complete oscillations.
+        :param phase: Value from 0 to 1 of where to start the wave.
+        """
+        middle_val = (min_val + max_val) / 2
+        amplitude = (max_val - min_val) / 2
+        rate = Rate(lambda t: (
+                middle_val +
+                2 * amplitude * arcsin(
+                    sin((2 * pi * t * cycles) - (2 * pi * phase))
+                ) / pi
+        ))
+        return FloatAnimation(rate=rate)
+
     def at(self, t: float) -> float:
 
         for i in range(len(self.t)):
@@ -60,4 +125,3 @@ class FloatAnimation(object):
                     self.values[i] +
                     (self.values[i + 1] - self.values[i]) * dt
                 )
-
