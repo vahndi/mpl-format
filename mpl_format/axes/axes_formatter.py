@@ -814,7 +814,6 @@ class AxesFormatter(object):
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
             face_color: Optional[Color] = None,
-            fill: bool = True,
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
@@ -837,7 +836,6 @@ class AxesFormatter(object):
         :param color: Use to set both the edge-color and the face-color.
         :param edge_color: Edge color.
         :param face_color: Face color.
-        :param fill: Whether to fill the rectangle.
         :param join_style: Join style.
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
@@ -853,15 +851,15 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             join_style, label, line_style, line_width],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'joinstyle', 'label', 'linestyle', 'linewidth']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         arc = Arc(
             xy=(x, y), width=width, height=height,
-             angle=angle, theta1=theta_start, theta2=theta_end,
+            angle=angle, theta1=theta_start, theta2=theta_end,
             **kwargs
         )
         self._axes.add_artist(arc)
