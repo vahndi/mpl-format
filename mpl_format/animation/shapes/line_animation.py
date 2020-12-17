@@ -17,8 +17,10 @@ class LineAnimation(ShapeAnimation, object):
 
     def __init__(
             self,
-            x: FloatIterable, y: FloatIterable,
-            smooth: Union[bool, int] = False, smooth_order: int = 2,
+            x: FloatIterable,
+            y: FloatIterable,
+            smooth: Union[bool, int] = False,
+            smooth_order: int = 2,
             length: Optional[StrOrFloatAnimation] = None,
             alpha: Optional[StrOrFloatOrFloatAnimation] = None,
             color: Optional[ColorOrColorAnimation] = None,
@@ -43,12 +45,8 @@ class LineAnimation(ShapeAnimation, object):
             y = y_smooth
         self.x: FloatIterable = x
         self.y: FloatIterable = y
-        if isinstance(length, str):
-            length = FloatAnimation(rate=length)
-        self.length: Optional[FloatAnimation] = length
-        if isinstance(alpha, str):
-            alpha = FloatAnimation(rate=alpha)
-        self.alpha: FloatOrFloatAnimation = alpha
+        self.length: Optional[FloatAnimation] = self._float_anim(length)
+        self.alpha: FloatOrFloatAnimation = self._float_anim(alpha)
         self.color: Optional[ColorOrColorAnimation] = color
         self.draw_style: Optional[Union[str, DRAW_STYLE]] = draw_style
         self.label: Optional[str] = label
@@ -77,11 +75,11 @@ class LineAnimation(ShapeAnimation, object):
             kwargs['y'] = self.y
         for float_kwarg in ('alpha', 'line_width',
                             'marker_edge_width', 'marker_size'):
-            self.add_float_kwarg(float_kwarg, kwargs, t)
+            self._add_float_kwarg(float_kwarg, kwargs, t)
         for color_kwarg in ('color', 'marker_edge_color',
                             'marker_face_color', 'marker_face_color_alt'):
-            self.add_color_kwarg(color_kwarg, kwargs, t)
+            self._add_color_kwarg(color_kwarg, kwargs, t)
         for kwarg in ('draw_style', 'label', 'line_style', 'marker'):
-            self.add_non_animated_kwarg(kwarg, kwargs)
+            self._add_non_animated_kwarg(kwarg, kwargs)
 
         axes.add_line(**kwargs)

@@ -806,14 +806,14 @@ class AxesFormatter(object):
         return self
 
     def add_arc(
-            self, x: float, y: float, width: float, height: float,
+            self, x_center: float, y_center: float,
+            width: float, height: float,
             angle: float = 0.0,
             theta_start: float = 0.0, theta_end: float = 360.0,
             alpha: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
             edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
@@ -822,8 +822,8 @@ class AxesFormatter(object):
         """
         Add an elliptical arc, i.e. a segment of an ellipse.
 
-        :param x: The x-coordinate of the center of the ellipse.
-        :param y: The y-coordinate of the center of the ellipse.
+        :param x_center: The x-coordinate of the center of the ellipse.
+        :param y_center: The y-coordinate of the center of the ellipse.
         :param width: The length of the horizontal axis.
         :param height: The length of the vertical axis.
         :param angle: Rotation of the ellipse in degrees (counterclockwise).
@@ -835,7 +835,6 @@ class AxesFormatter(object):
         :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
         :param edge_color: Edge color.
-        :param face_color: Face color.
         :param join_style: Join style.
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
@@ -850,15 +849,15 @@ class AxesFormatter(object):
         # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
+            [alpha, cap_style, color, edge_color,
              join_style, label, line_style, line_width],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
+            ['alpha', 'capstyle', 'color', 'edgecolor',
              'joinstyle', 'label', 'linestyle', 'linewidth']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         arc = Arc(
-            xy=(x, y), width=width, height=height,
+            xy=(x_center, y_center), width=width, height=height,
             angle=angle, theta1=theta_start, theta2=theta_end,
             **kwargs
         )
@@ -866,7 +865,8 @@ class AxesFormatter(object):
         return self
 
     def add_arrow(
-            self, x: float, y: float, dx: float, dy: float,
+            self, x: float, y: float,
+            dx: float, dy: float,
             width: float = 1.0,
             alpha: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
