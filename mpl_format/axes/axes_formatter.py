@@ -1415,7 +1415,9 @@ class AxesFormatter(object):
         return self
 
     def add_regular_polygon(
-            self, x: float, y: float,
+            self,
+            x_center: float,
+            y_center: float,
             num_vertices: int,
             radius: float,
             angle: float = 0,
@@ -1433,8 +1435,8 @@ class AxesFormatter(object):
         """
         Add a rectangle to the Axes.
 
-        :param x: The left rectangle coordinate.
-        :param y: The bottom rectangle coordinate.
+        :param x_center: The x-coordinate of the center of the polygon.
+        :param y_center: The y-coordinate of the center of the polygon.
         :param num_vertices: Number of vertices.
         :param radius: The distance from the center to each of the vertices.
         :param angle: Rotation in degrees anti-clockwise about xy
@@ -1467,7 +1469,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         polygon = RegularPolygon(
-            xy=(x, y), numVertices=num_vertices, radius=radius,
+            xy=(x_center, y_center), numVertices=num_vertices, radius=radius,
             orientation=pi * angle / 180,
             **kwargs
         )

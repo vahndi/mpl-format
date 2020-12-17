@@ -71,7 +71,7 @@ class RectangleAnimation(ShapeAnimation, object):
             self._add_float_kwarg(float_kwarg, kwargs, t)
         for color_kwarg in ('color', 'edge_color', 'face_color'):
             self._add_color_kwarg(color_kwarg, kwargs, t)
-        for kwarg in ('cap_style', 'fill', 'join_style', 'line_style'):
+        for kwarg in ('cap_style', 'fill', 'join_style', 'label', 'line_style'):
             self._add_non_animated_kwarg(kwarg, kwargs)
 
         axes.add_rectangle(**kwargs)
