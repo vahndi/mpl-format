@@ -1481,8 +1481,12 @@ class AxesFormatter(object):
         return self
 
     def add_wedge(
-            self, x: float, y: float, radius: float,
-            theta_start: float, theta_end: float,
+            self,
+            x_center: float,
+            y_center: float,
+            radius: float,
+            theta_start: float,
+            theta_end: float,
             width: Optional[float] = None,
             alpha: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
@@ -1498,15 +1502,15 @@ class AxesFormatter(object):
         """
         Add a wedge-shaped patch.
 
-        :param x: The x-coordinate of the center of the ellipse.
-        :param y: The y-coordinate of the center of the ellipse.
+        :param x_center: The x-coordinate of the center of the ellipse.
+        :param y_center: The y-coordinate of the center of the ellipse.
         :param radius: (Outer) radius.
         :param theta_start: Starting angle of the arc in degrees.
                             Relative to angle, e.g. if angle = 45 and
                             theta_start = 90 the absolute starting angle is 135.
         :param theta_end: Ending angle of the arc in degrees.
         :param width: If width is given, then a partial wedge is drawn from
-                      inner radius r - width to outer radius r.
+                      inner radius - width to outer radius.
         :param alpha: Opacity.
         :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
@@ -1535,7 +1539,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         arc = Wedge(
-            center=(x, y), r=radius,
+            center=(x_center, y_center), r=radius,
             theta1=theta_start, theta2=theta_end,
             width=width,
             **kwargs

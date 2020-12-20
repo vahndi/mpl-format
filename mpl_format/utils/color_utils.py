@@ -68,5 +68,5 @@ def set_alpha(color: Color, alpha: float) -> Color:
     :param alpha: The new alpha level
     """
     color = to_rgba(color)
-    color[3] = alpha
+    color = (color[0], color[1], color[2], alpha)
     return color

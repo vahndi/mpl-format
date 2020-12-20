@@ -114,19 +114,22 @@ class FloatAnimation(object):
         return FloatAnimation(rate=rate)
 
     @classmethod
-    def rotation(cls, cycles: float, clockwise: bool = True):
+    def rotation(cls, cycles: float,
+                 clockwise: bool = True,
+                 phase: Optional[float] = 0.0):
         """
         Return a rotation in degrees.
 
         :param cycles: Number of complete rotations.
         :param clockwise: Rotate clockwise if True.
+        :param phase: Starting phase between 0.0 and 1.0.
         """
         if clockwise:
-            multiplier = 1
-        else:
             multiplier = -1
+        else:
+            multiplier = 1
         return FloatAnimation(rate=Rate(
-            lambda t: multiplier * t * cycles * 360
+            lambda t: (phase * 360) + multiplier * t * cycles * 360
         ))
 
     def at(self, t: float) -> float:

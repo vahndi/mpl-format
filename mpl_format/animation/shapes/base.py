@@ -3,6 +3,7 @@ from typing import Optional
 from mpl_format.animation.kwarg_animations.color_animation import ColorAnimation
 from mpl_format.animation.kwarg_animations.float_animation import FloatAnimation
 from mpl_format.animation.type_animations import StrOrFloatAnimation
+from mpl_format.animation.rate import Rate
 from mpl_format.axes import AxesFormatter
 
 
@@ -42,5 +43,6 @@ class ShapeAnimation(object):
         if value is not None:
             kwargs[arg_name] = (
                 value.at(t) if isinstance(value, FloatAnimation)
+                else Rate(value)(t) if isinstance(value, str)
                 else value
             )
