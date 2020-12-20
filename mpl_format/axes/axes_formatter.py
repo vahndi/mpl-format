@@ -980,7 +980,9 @@ class AxesFormatter(object):
         return self
 
     def add_ellipse(
-            self, x: float, y: float, width: float, height: float,
+            self,
+            x_center: float, y_center: float,
+            width: float, height: float,
             angle: float = 0.0,
             alpha: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
@@ -996,8 +998,8 @@ class AxesFormatter(object):
         """
         Add an elliptical arc, i.e. a segment of an ellipse.
 
-        :param x: The x-coordinate of the center of the ellipse.
-        :param y: The y-coordinate of the center of the ellipse.
+        :param x_center: The x-coordinate of the center of the ellipse.
+        :param y_center: The y-coordinate of the center of the ellipse.
         :param width: The length (diameter) of the horizontal axis.
         :param height: The length (diameter) of the vertical axis.
         :param angle: Rotation of the ellipse in degrees (counterclockwise).
@@ -1029,7 +1031,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         ellipse = Ellipse(
-            xy=(x, y), width=width, height=height, angle=angle,
+            xy=(x_center, y_center), width=width, height=height, angle=angle,
             **kwargs
         )
         self._axes.add_artist(ellipse)
