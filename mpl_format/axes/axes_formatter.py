@@ -924,7 +924,9 @@ class AxesFormatter(object):
         return self
 
     def add_circle(
-            self, x: float, y: float,
+            self,
+            x_center: float,
+            y_center: float,
             radius: float,
             alpha: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
@@ -940,8 +942,8 @@ class AxesFormatter(object):
         """
         Add a rectangle to the Axes.
 
-        :param x: The left rectangle coordinate.
-        :param y: The bottom rectangle coordinate.
+        :param x_center: The left rectangle coordinate.
+        :param y_center: The bottom rectangle coordinate.
         :param radius: The radius of the circle.
         :param alpha: Opacity.
         :param color: Use to set both the edge-color and the face-color.
@@ -971,7 +973,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         polygon = Circle(
-            xy=(x, y), radius=radius,
+            xy=(x_center, y_center), radius=radius,
             **kwargs
         )
         self._axes.add_artist(polygon)

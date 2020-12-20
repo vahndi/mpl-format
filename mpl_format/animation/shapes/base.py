@@ -17,7 +17,7 @@ class ShapeAnimation(object):
             variable = FloatAnimation(rate=variable)
         return variable
 
-    def draw(self, t: float, axes: AxesFormatter) -> dict:
+    def draw(self, t: float, axes: AxesFormatter):
 
         raise NotImplementedError
 
