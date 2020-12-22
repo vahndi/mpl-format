@@ -865,7 +865,7 @@ class AxesFormatter(object):
         return self
 
     def add_arrow(
-            self, x: float, y: float,
+            self, x_tail: float, y_tail: float,
             dx: float, dy: float,
             width: float = 1.0,
             alpha: Optional[float] = None,
@@ -882,8 +882,8 @@ class AxesFormatter(object):
         """
         Add an an arrow patch.
 
-        :param x: The x-coordinate of the arrow tail.
-        :param y: The y-coordinate of the arrow tail.
+        :param x_tail: The x-coordinate of the arrow tail.
+        :param y_tail: The y-coordinate of the arrow tail.
         :param dx: Arrow length in the x direction.
         :param dy: Arrow length in the y direction.
         :param width: Scale factor for the width of the arrow.
@@ -917,7 +917,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         arrow = Arrow(
-            x=x, y=y, dx=dx, dy=dy, width=width,
+            x=x_tail, y=y_tail, dx=dx, dy=dy, width=width,
             **kwargs
         )
         self._axes.add_artist(arrow)
