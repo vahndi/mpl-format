@@ -1,5 +1,5 @@
 from math import pi, atan2
-from typing import Optional, Union, List, Tuple, Iterable
+from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING
 
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
@@ -31,6 +31,10 @@ from mpl_format.text.text_utils import wrap_text
 from mpl_format.utils.arg_checks import check_h_align
 from mpl_format.utils.color_utils import cross_fade
 from mpl_format.utils.io_utils import save_plot
+
+
+if TYPE_CHECKING:
+    from mpl_format.figures.figure_formatter import FigureFormatter
 
 
 class AxesFormatter(object):
@@ -96,6 +100,12 @@ class AxesFormatter(object):
     @property
     def title(self) -> TextFormatter:
         return self._title
+
+    @property
+    def figure(self) -> FigureFormatter:
+
+        from mpl_format.figures.figure_formatter import FigureFormatter
+        return FigureFormatter(self._axes)
 
     # endregion
 
