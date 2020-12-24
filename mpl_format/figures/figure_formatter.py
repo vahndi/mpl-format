@@ -633,13 +633,13 @@ class FigureFormatter(object):
         Adjust the padding of the Figure.
 
         :param left: The position of the left edge of the subplots,
-                     as a fraction of the figure width.
+                     as a fraction of the figure width. Use 0 for no margin.
         :param right: The position of the right edge of the subplots,
-                      as a fraction of the figure width.
+                      as a fraction of the figure width. Use 1 for no margin.
         :param top: The position of the top edge of the subplots,
-                    as a fraction of the figure height.
+                    as a fraction of the figure height. Use 1 for no margin.
         :param bottom: The position of the bottom edge of the subplots,
-                       as a fraction of the figure height.
+                       as a fraction of the figure height. Use 0 for no margin.
         :param w_space: The width of the padding between subplots,
                         as a fraction of the average axes width.
         :param h_space: The height of the padding between subplots,
@@ -650,6 +650,90 @@ class FigureFormatter(object):
             bottom=bottom, top=top,
             wspace=w_space, hspace=h_space
         )
+        return self
+
+    def set_left_margin(self, margin_size: float) -> 'FigureFormatter':
+        """
+        Set the margin size at the left of the plot.
+
+        :param margin_size: Value between 0 and 1. 0 for no margin
+        """
+        self.subplots_adjust(left=margin_size)
+        return self
+
+    def set_right_margin(self, margin_size: float) -> 'FigureFormatter':
+        """
+        Set the margin size at the right of the plot.
+
+        :param margin_size: Value between 0 and 1. 0 for no margin
+        """
+        self.subplots_adjust(right=1 - margin_size)
+        return self
+
+    def set_top_margin(self, margin_size: float) -> 'FigureFormatter':
+        """
+        Set the margin size at the top of the plot.
+
+        :param margin_size: Value between 0 and 1. 0 for no margin
+        """
+        self.subplots_adjust(top=1 - margin_size)
+        return self
+
+    def set_bottom_margin(self, margin_size: float) -> 'FigureFormatter':
+        """
+        Set the margin size at the bottom of the plot.
+
+        :param margin_size: Value between 0 and 1. 0 for no margin
+        """
+        self.subplots_adjust(bottom=margin_size)
+        return self
+
+    def set_horizontal_margin(self, margin_size: float) -> 'FigureFormatter':
+        """
+        Set the margin size at the left and right of the plot.
+
+        :param margin_size: Value between 0 and 1. 0 for no margin
+        """
+        self.subplots_adjust(left=margin_size, right=1 - margin_size)
+        return self
+
+    def set_vertical_margin(self, margin_size: float) -> 'FigureFormatter':
+        """
+        Set the margin size at the top and bottom of the plot.
+
+        :param margin_size: Value between 0 and 1. 0 for no margin
+        """
+        self.subplots_adjust(bottom=margin_size, top=1 - margin_size)
+        return self
+
+    def set_margin(self, margin_size: float) -> 'FigureFormatter':
+        """
+        Set the margin size at the top of the plot.
+
+        :param margin_size: Value between 0 and 1. 0 for no margin
+        """
+        self.subplots_adjust(bottom=margin_size, top=1 - margin_size,
+                             left=margin_size, right=1 - margin_size)
+        return self
+
+    def set_horizontal_spacing(self, spacing: float) -> 'FigureFormatter':
+        """
+        Set the horizontal spacing between each subplot.
+
+        :param spacing: The width of the padding between subplots,
+                        as a fraction of the average axes width.
+        """
+        self.subplots_adjust(w_space=spacing)
+        return self
+
+    def set_vertical_spacing(self, spacing: float) -> 'FigureFormatter':
+        """
+        Set the vertical spacing between each subplot.
+
+        :param spacing: The height of the padding between subplots,
+                        as a fraction of the average axes height.
+        """
+        self.subplots_adjust(h_space=spacing)
         return self
 
     def tight_layout(self) -> 'FigureFormatter':
