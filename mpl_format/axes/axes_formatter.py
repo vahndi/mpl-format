@@ -102,7 +102,7 @@ class AxesFormatter(object):
         return self._title
 
     @property
-    def figure(self) -> FigureFormatter:
+    def figure(self) -> 'FigureFormatter':
 
         from mpl_format.figures.figure_formatter import FigureFormatter
         return FigureFormatter(self._axes)
