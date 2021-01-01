@@ -188,6 +188,15 @@ class FigureFormatter(object):
                 )
         return self
 
+    def set_title(self, text) -> 'FigureFormatter':
+        """
+        Set the title of the Figure.
+
+        :param text: The text for the title.
+        """
+        self._figure.suptitle(t=text)
+        return self
+
     def set_axes_title_text(
             self,
             text: TextSetter
