@@ -736,6 +736,30 @@ class FigureFormatter(object):
         self.subplots_adjust(h_space=spacing)
         return self
 
+    def grids(self, value: bool = True,
+              which: str = 'major',
+              axis: str = 'both') -> 'FigureFormatter':
+        """
+        Turn the grid on or off.
+
+        :param value: True or False. Defaults to True.
+        :param which: 'major', 'minor' or 'both'
+        :param axis: 'x', 'y' or 'both
+        """
+        for axes in self.axes.flat:
+            axes.grid(value=value, which=which, axis=axis)
+        return self
+
+    def set_axes_below(self, value: bool = True) -> 'FigureFormatter':
+        """
+        Set whether axis ticks and gridlines are above or below most artists.
+
+        :param value: True or False
+        """
+        for axes in self.axes.flat:
+            axes.set_axis_below(value=value)
+        return self
+
     def tight_layout(self) -> 'FigureFormatter':
         """
         Call the tight_layout method on the wrapped Figure.

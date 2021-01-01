@@ -384,25 +384,39 @@ class AxisFormatter(object):
 
     # endregion
 
-    def keep_tick_labels(self, spacing: int,
-                         start: int = 0,
-                         end: Optional[int] = None) -> 'AxisFormatter':
+    def keep_ticks(
+            self,
+            label_spacing: Optional[int] = None,
+            tick_spacing: Optional[int] = None,
+            start: int = 0, end: Optional[int] = None
+    ) -> 'AxisFormatter':
         """
-        Keep only some tick labels of a categorical axis.
+        Keep only some tick labels and locations of a categorical axis.
 
-        :param spacing: Spacing of labels to keep.
+        :param label_spacing: Spacing of labels to keep.
+        :param tick_spacing: Spacing of ticks to keep.
         :param start: Index of the first label to keep.
         :param end: Index of the last label to keep,
                     if it is n * spacing from start.
         """
-        labels = self._axis.get_ticklabels()
-        num_labels = len(labels)
-        if end is None or end > num_labels - 1:
-            end = num_labels - 1
-        self._axis.set_ticklabels([
-            label.get_text() if (
-                    start <= i <= end and (i - start) % spacing == 0
-            ) else Text()
-            for i, label in enumerate(labels)
-        ])
+        if label_spacing is not None:
+            labels = self._axis.get_ticklabels()
+            num_labels = len(labels)
+            if end is None or end > num_labels - 1:
+                end = num_labels - 1
+            self._axis.set_ticklabels([
+                label.get_text() if (
+                        start <= i <= end and (i - start) % label_spacing == 0
+                ) else Text()
+                for i, label in enumerate(labels)
+            ])
+        if tick_spacing is not None:
+            locations = self._axis.get_ticklocs()
+            num_locations = len(locations)
+            if end is None or end > num_locations - 1:
+                end = num_locations - 1
+            self._axis.set_ticks([
+                location for i, location in enumerate(locations)
+                if start <= i <= end and (i - start) % tick_spacing == 0
+            ])
         return self
