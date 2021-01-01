@@ -428,12 +428,9 @@ class AxisFormatter(object):
             ])
         if tick_spacing is not None:
             locations = self._axis.get_ticklocs()
-            num_locations = len(locations)
-            if end is None or end > num_locations - 1:
-                end = num_locations - 1
             self._axis.set_ticks([
                 location for i, location in enumerate(locations)
-                if start <= i <= end and (i - start) % tick_spacing == 0
+                if (i - start) % tick_spacing == 0
             ])
         return self
 
