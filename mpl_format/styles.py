@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional, Union
 
 
 class LINE_STYLE(Enum):
@@ -163,3 +164,31 @@ class MARKER_STYLE(Enum):
             'caret_up_base': 'caretupbase',
             'caret_down_base': 'caretdownbase'
         }[self.name]
+
+
+def get_line_style(line_style: Optional[Union[str, LINE_STYLE]] = None) -> str:
+
+    if line_style and isinstance(line_style, LINE_STYLE):
+        line_style = line_style.name
+    return line_style
+
+
+def get_cap_style(cap_style: Optional[Union[str, CAP_STYLE]] = None) -> str:
+
+    if cap_style and isinstance(cap_style, CAP_STYLE):
+        cap_style = cap_style.name
+    return cap_style
+
+
+def get_join_style(join_style: Optional[Union[str, JOIN_STYLE]] = None) -> str:
+
+    if join_style and isinstance(join_style, JOIN_STYLE):
+        join_style = join_style.name
+    return join_style
+
+
+def get_arrow_style(arrow_style: Union[str, ARROW_STYLE]) -> str:
+
+    if arrow_style and isinstance(arrow_style, ARROW_STYLE):
+        arrow_style = arrow_style.get_name()
+    return arrow_style
