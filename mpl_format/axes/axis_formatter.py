@@ -1,3 +1,5 @@
+from typing import Optional
+
 import matplotlib.pyplot as plt
 from matplotlib.axis import Axis
 from matplotlib.lines import Line2D
@@ -381,3 +383,26 @@ class AxisFormatter(object):
         return self
 
     # endregion
+
+    def keep_tick_labels(self, spacing: int,
+                         start: int = 0,
+                         end: Optional[int] = None) -> 'AxisFormatter':
+        """
+        Keep only some tick labels of a categorical axis.
+
+        :param spacing: Spacing of labels to keep.
+        :param start: Index of the first label to keep.
+        :param end: Index of the last label to keep,
+                    if it is n * spacing from start.
+        """
+        labels = self._axis.get_ticklabels()
+        num_labels = len(labels)
+        if end is None or end > num_labels - 1:
+            end = num_labels - 1
+        self._axis.set_ticklabels([
+            label.get_text() if (
+                    start <= i <= end and (i - start) % spacing == 0
+            ) else Text()
+            for i, label in enumerate(labels)
+        ])
+        return self

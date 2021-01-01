@@ -1690,7 +1690,8 @@ class AxesFormatter(object):
         :param width: The bar width.
         :param z_max: Value to scale down densities by to get to a range of
                       0 to 1. Defaults to max value of y_to_z.
-        :param h_align: Horizontal alignment. One of {'left', 'center', 'right'}
+        :param h_align: Horizontal alignment.
+                        One of {'left', 'center', 'right'}.
         """
         check_h_align(h_align)
 
@@ -1711,7 +1712,8 @@ class AxesFormatter(object):
 
         if color_min is None:
             color_min = color
-        colors = cross_fade(from_color=color_min, to_color=color, amount=alphas)
+        colors = cross_fade(from_color=color_min, to_color=color,
+                            amount=alphas)
 
         for y_lower, y_upper, alpha, color in zip(
                 y_lowers, y_uppers, alphas, colors
