@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.axis import Axis
 from matplotlib.lines import Line2D
 from matplotlib.text import Text
-from matplotlib.ticker import FuncFormatter
+from matplotlib.ticker import FuncFormatter, MultipleLocator
 
 from mpl_format.compound_types import FontSize, Color, StringMapper
 from mpl_format.text.text_formatter import TextFormatter
@@ -384,6 +384,22 @@ class AxisFormatter(object):
 
     # endregion
 
+    # region tick spacing
+
+    def set_tick_spacing(
+            self, major: float, minor: Optional[float] = None
+    ) -> 'AxisFormatter':
+        """
+        Set the spacing of ticks on the Axis.
+
+        :param major: Spacing for major ticks.
+        :param minor: Optional spacing for minor ticks.
+        """
+        self._axis.set_major_locator(MultipleLocator(major))
+        if minor is not None:
+            self._axis.set_minor_locator(MultipleLocator(minor))
+        return self
+
     def keep_ticks(
             self,
             label_spacing: Optional[int] = None,
@@ -420,3 +436,5 @@ class AxisFormatter(object):
                 if start <= i <= end and (i - start) % tick_spacing == 0
             ])
         return self
+
+    # endregion
