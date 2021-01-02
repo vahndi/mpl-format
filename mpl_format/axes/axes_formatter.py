@@ -341,7 +341,7 @@ class AxesFormatter(object):
         if x_tick_labels is not None:
             self.set_x_tick_label_size(x_tick_labels)
         if y_tick_labels is not None:
-            self.set_y_label_size(y_tick_labels)
+            self.set_y_tick_label_size(y_tick_labels)
         if legend is not None:
             ax.legend(fontsize=legend)
         if figure_title is not None:

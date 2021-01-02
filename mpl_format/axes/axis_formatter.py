@@ -390,6 +390,7 @@ class AxisFormatter(object):
             self, major: float,
             minor: Optional[float] = None,
             major_offset: float = 0,
+            categorical: bool = False
     ) -> 'AxisFormatter':
         """
         Set the spacing of ticks on the Axis.
@@ -397,13 +398,24 @@ class AxisFormatter(object):
         :param major: Spacing for major ticks.
         :param minor: Optional spacing for minor ticks.
         :param major_offset: Optional offset index to start major ticks.
+                             Only applies if categorical is True.
+        :param categorical: Whether the axis is displaying categorical items
+                    e.g. for bar plots.
         """
-        self._axis.set_major_locator(
-            FixedLocator([t for t in self._axis.get_ticklocs()
-                          if (t - major_offset) % major == 0])
-        )
-        if minor is not None:
-            self._axis.set_minor_locator(MultipleLocator(minor))
+        if categorical:
+            self._axis.set_major_locator(
+                FixedLocator([
+                    t for t in self._axis.get_ticklocs()
+                    if (t - major_offset) % major == 0
+                ])
+            )
+            if minor is not None:
+                self._axis.set_minor_locator(MultipleLocator(minor))
+        else:
+            self._axis.set_major_locator(MultipleLocator(base=major))
+            if minor is not None:
+                self._axis.set_minor_locator(MultipleLocator(base=minor))
+
         return self
 
     def keep_ticks(
