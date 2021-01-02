@@ -11,7 +11,8 @@ from mpl_format.axes import AxisFormatter
 from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray
 from mpl_format.axes.axis_formatter_array import AxisFormatterArray
-from mpl_format.compound_types import StringMapper
+from mpl_format.compound_types import StringMapper, Color
+from mpl_format.styles import LINE_STYLE, get_line_style
 from mpl_format.utils.io_utils import save_plot
 
 TextSetter = TypeVar(
@@ -745,18 +746,29 @@ class FigureFormatter(object):
         self.subplots_adjust(h_space=spacing)
         return self
 
-    def grids(self, value: bool = True,
-              which: str = 'major',
-              axis: str = 'both') -> 'FigureFormatter':
+    def grids(
+            self, value: bool = True,
+            which: str = 'major',
+            axis: str = 'both',
+            color: Optional[Color] = None,
+            line_width: Optional[float] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None
+    ) -> 'FigureFormatter':
         """
         Turn the grid on or off.
 
         :param value: True or False. Defaults to True.
         :param which: 'major', 'minor' or 'both'
-        :param axis: 'x', 'y' or 'both
+        :param axis: 'x', 'y' or 'both.
+        :param color: Color of the lines.
+        :param line_width: Line width.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
         """
         for axes in self.axes.flat:
-            axes.grid(value=value, which=which, axis=axis)
+            axes.grid(value=value, which=which, axis=axis,
+                      color=color, line_width=line_width,
+                      line_style=line_style)
         return self
 
     def set_axes_below(self, value: bool = True) -> 'FigureFormatter':

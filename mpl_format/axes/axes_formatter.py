@@ -2070,17 +2070,35 @@ class AxesFormatter(object):
 
     # endregion
 
-    def grid(self, value: bool = True,
-             which: str = 'major',
-             axis: str = 'both') -> 'AxesFormatter':
+    def grid(
+            self, value: bool = True,
+            which: str = 'major',
+            axis: str = 'both',
+            color: Optional[Color] = None,
+            line_width: Optional[float] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None
+    ) -> 'AxesFormatter':
         """
         Turn the grid on or off.
 
         :param value: True or False. Defaults to True.
         :param which: 'major', 'minor' or 'both'
         :param axis: 'x', 'y' or 'both
+        :param color: Color of the lines.
+        :param line_width: Line width.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
         """
-        self._axes.grid(b=value, which=which, axis=axis)
+        kwargs = {}
+        if color is not None:
+            kwargs['color'] = color
+        if line_width is not None:
+            kwargs['lw'] = line_width
+        if line_style is not None:
+            kwargs['ls'] = get_line_style(line_style)
+
+        self._axes.grid(b=value, which=which, axis=axis,
+                        **kwargs)
         return self
 
     def set_axis_below(self,
