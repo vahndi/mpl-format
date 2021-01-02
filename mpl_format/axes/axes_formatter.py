@@ -2070,6 +2070,8 @@ class AxesFormatter(object):
 
     # endregion
 
+    # region grids
+
     def grid(
             self, value: bool = True,
             which: str = 'major',
@@ -2100,6 +2102,128 @@ class AxesFormatter(object):
         self._axes.grid(b=value, which=which, axis=axis,
                         **kwargs)
         return self
+
+    def add_major_xy_grid(
+            self,
+            color: Optional[Color] = '#888888',
+            line_width: Optional[float] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a major grid to both axes.
+
+        :param color: Color of the lines.
+        :param line_width: Line width.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
+        """
+        self.grid(
+            value=True, which='major', axis='both',
+            color=color, line_width=line_width, line_style=line_style
+        )
+        return self
+
+    def add_minor_xy_grid(
+            self,
+            color: Optional[Color] = '#bbbbbb',
+            line_width: Optional[float] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a minor grid to both axes.
+
+        :param color: Color of the lines.
+        :param line_width: Line width.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
+        """
+        self.grid(
+            value=True, which='minor', axis='both',
+            color=color, line_width=line_width, line_style=line_style
+        )
+        return self
+
+    def add_major_x_grid(
+            self,
+            color: Optional[Color] = '#888888',
+            line_width: Optional[float] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a major grid to the x-axis.
+
+        :param color: Color of the lines.
+        :param line_width: Line width.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
+        """
+        self.grid(
+            value=True, which='major', axis='x',
+            color=color, line_width=line_width, line_style=line_style
+        )
+        return self
+
+    def add_minor_x_grid(
+            self,
+            color: Optional[Color] = '#bbbbbb',
+            line_width: Optional[float] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a minor grid to the x-axis.
+
+        :param color: Color of the lines.
+        :param line_width: Line width.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
+        """
+        self.grid(
+            value=True, which='minor', axis='x',
+            color=color, line_width=line_width, line_style=line_style
+        )
+        return self
+
+    def add_major_y_grid(
+            self,
+            color: Optional[Color] = '#888888',
+            line_width: Optional[float] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a major grid to the y-axis.
+
+        :param color: Color of the lines.
+        :param line_width: Line width.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
+        """
+        self.grid(
+            value=True, which='major', axis='y',
+            color=color, line_width=line_width, line_style=line_style
+        )
+        return self
+
+    def add_minor_y_grid(
+            self,
+            color: Optional[Color] = '#bbbbbb',
+            line_width: Optional[float] = None,
+            line_style: Optional[Union[str, LINE_STYLE]] = None
+    ) -> 'AxesFormatter':
+        """
+        Add a minor grid to the y-axis.
+
+        :param color: Color of the lines.
+        :param line_width: Line width.
+        :param line_style: Line Style. One of {'-', '--', '-.', ':', '',
+                           (offset, on-off-seq), ...}
+        """
+        self.grid(
+            value=True, which='minor', axis='y',
+            color=color, line_width=line_width, line_style=line_style
+        )
+        return self
+
+    # endregion
 
     def set_axis_below(self,
                        value: bool = True) -> 'AxesFormatter':
