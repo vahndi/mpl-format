@@ -20,6 +20,7 @@ from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
 from compound_types.type_checks import all_are_none, one_is_not_none
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
+from mpl_format.axes.ticks_formatter import TicksFormatter
 from mpl_format.compound_types import FontSize, Color, LegendLocation, \
     StringMapper, ColorOrColorIterable
 from mpl_format.legend.legend_formatter import LegendFormatter
@@ -58,14 +59,36 @@ class AxesFormatter(object):
             )
         else:
             self._axes: Axes = axes
-        self._x_axis: AxisFormatter = AxisFormatter(self._axes.xaxis)
-        self._y_axis: AxisFormatter = AxisFormatter(self._axes.yaxis)
+        self._x_axis: AxisFormatter = AxisFormatter(
+            axis=self._axes.xaxis, direction='x', axes=self._axes
+        )
+        self._y_axis: AxisFormatter = AxisFormatter(
+            axis=self._axes.yaxis, direction='y', axes=self._axes
+        )
         self._title: TextFormatter = TextFormatter(self._axes.title)
         legend = self._axes.get_legend()
         if legend is None:
             self._legend = None
         else:
             self._legend = LegendFormatter(legend)
+        self._ticks: TicksFormatter = TicksFormatter(
+            axis='both', which='both', axes=self._axes)
+        self._major_ticks: TicksFormatter = TicksFormatter(
+            axis='both', which='major', axes=self._axes)
+        self._minor_ticks: TicksFormatter = TicksFormatter(
+            axis='both', which='minor', axes=self._axes)
+        self._x_ticks: TicksFormatter = TicksFormatter(
+            axis='x', which='both', axes=self._axes)
+        self._x_major_ticks: TicksFormatter = TicksFormatter(
+            axis='x', which='major', axes=self._axes)
+        self._x_minor_ticks: TicksFormatter = TicksFormatter(
+            axis='x', which='minor', axes=self._axes)
+        self._y_ticks: TicksFormatter = TicksFormatter(
+            axis='y', which='both', axes=self._axes)
+        self._y_major_ticks: TicksFormatter = TicksFormatter(
+            axis='y', which='major', axes=self._axes)
+        self._y_minor_ticks = TicksFormatter(
+            axis='y', which='minor', axes=self._axes)
 
     # region properties
 
@@ -108,6 +131,69 @@ class AxesFormatter(object):
         from mpl_format.figures.figure_formatter import FigureFormatter
         return FigureFormatter(self._axes)
 
+    @property
+    def ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the ticks on both axes.
+        """
+        return self._ticks
+    
+    @property
+    def x_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the ticks on the x-axis.
+        """
+        return self._x_ticks
+
+    @property
+    def y_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the ticks on the y-axis.
+        """
+        return self._y_ticks
+
+    @property
+    def major_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the major ticks on both axes.
+        """
+        return self._major_ticks
+
+    @property
+    def x_major_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the major ticks on the x-axis.
+        """
+        return self._x_major_ticks
+
+    @property
+    def y_major_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the major ticks on the y-axis.
+        """
+        return self._y_major_ticks
+
+    @property
+    def minor_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the minor ticks on both axes.
+        """
+        return self._minor_ticks
+
+    @property
+    def x_minor_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the minor ticks on the x-axis.
+        """
+        return self._x_minor_ticks
+
+    @property
+    def y_minor_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the minor ticks on the y-axis.
+        """
+        return self._y_minor_ticks
+    
     # endregion
 
     # region set text

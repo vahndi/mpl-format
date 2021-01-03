@@ -1,11 +1,13 @@
 from typing import Optional
 
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 from matplotlib.lines import Line2D
 from matplotlib.text import Text
 from matplotlib.ticker import FuncFormatter, MultipleLocator, FixedLocator
 
+from mpl_format.axes.ticks_formatter import TicksFormatter
 from mpl_format.compound_types import FontSize, Color, StringMapper
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_list_formatter import TextListFormatter
@@ -14,14 +16,26 @@ from mpl_format.text.text_utils import wrap_text, map_text
 
 class AxisFormatter(object):
 
-    def __init__(self, axis: Axis):
+    def __init__(self, axis: Axis, direction: str, axes: Axes):
         """
         Create a new AxisFormatter
 
         :param axis: The matplotlib Axis instance to wrap.
+        :param direction: 'x' or 'y'
+        :param axes: Parent AxesFormatter instance.
         """
         self._axis: Axis = axis
+        self._direction: str = direction
+        self._axes: Axes = axes
         self._label: TextFormatter = TextFormatter(self._axis.label)
+        self._ticks: TicksFormatter = TicksFormatter(
+            axis=direction, which='both', axes=self._axes)
+        self._major_ticks: TicksFormatter = TicksFormatter(
+            axis=direction, which='major', axes=self._axes)
+        self._minor_ticks: TicksFormatter = TicksFormatter(
+            axis=direction, which='minor', axes=self._axes)
+
+    # region properties
 
     @property
     def axis(self) -> Axis:
@@ -43,6 +57,29 @@ class AxisFormatter(object):
         return TextListFormatter([
             TextFormatter(text) for text in self._axis.get_ticklabels()
         ])
+
+    @property
+    def ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the ticks on the axis.
+        """
+        return self._ticks
+
+    @property
+    def major_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the major ticks on the axis.
+        """
+        return self._major_ticks
+
+    @property
+    def minor_ticks(self) -> TicksFormatter:
+        """
+        Return a TicksFormatter for the minor ticks on the axis.
+        """
+        return self._minor_ticks
+
+    # endregion
 
     def set_tick_color(self, color: Color) -> 'AxisFormatter':
 
