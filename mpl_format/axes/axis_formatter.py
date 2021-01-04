@@ -81,14 +81,6 @@ class AxisFormatter(object):
 
     # endregion
 
-    def set_tick_color(self, color: Color) -> 'AxisFormatter':
-
-        tick: Line2D
-        for tick in self._axis.get_ticklines():
-            tick.set_color(color=color)
-
-        return self
-
     # region labels
 
     def set_label_text(self, text: str) -> 'AxisFormatter':
@@ -170,42 +162,6 @@ class AxisFormatter(object):
     # endregion
 
     # region tick labels
-
-    def rotate_tick_labels(
-            self, rotation: int, how: str = 'absolute'
-    ) -> 'AxisFormatter':
-        """
-        Set the rotation of axis tick labels.
-
-        :param rotation: The rotation value to set in degrees.
-        :param how: 'absolute' or 'relative'
-        """
-        label: Text
-        if self._axis.get_majorticklabels():
-            for label in self._axis.get_majorticklabels():
-                if how == 'relative':
-                    label.set_rotation(label.get_rotation() + rotation)
-                else:
-                    label.set_rotation(label.get_rotation())
-            plt.setp(self._axis.get_majorticklabels(), rotation=rotation)
-        if self._axis.get_minorticklabels():
-            plt.setp(self._axis.get_minorticklabels(), rotation=rotation)
-        return self
-
-    def wrap_tick_labels(self, max_width: int) -> 'AxisFormatter':
-        """
-        Wrap the text for each tick label with new lines if it exceeds
-        a given width of characters.
-
-        :param max_width: The maximum character width per line.
-        """
-        tick_labels = self._axis.get_ticklabels()
-        if all(t.get_text() == '' for t in tick_labels):
-            return self  # non string tick-labels e.g. line plot
-        self._axis.set_ticklabels([
-            wrap_text(text, max_width) for text in tick_labels
-        ])
-        return self
 
     def set_format_integer(self,
                            categorical: bool = False,
@@ -337,27 +293,6 @@ class AxisFormatter(object):
 
         return self
 
-    def set_tick_label_size(self, font_size: FontSize) -> 'AxisFormatter':
-        """
-        Set the font size for the axis tick labels.
-
-        :param font_size: The font size in points or size name.
-        """
-        self._axis.set_tick_params(labelsize=font_size)
-        return self
-
-    def map_tick_label_text(
-            self, mapping: StringMapper
-    ) -> 'AxisFormatter':
-        """
-        Map the tick label text using a dictionary or function.
-
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        labels = [label.get_text() for label in self._axis.get_ticklabels()]
-        self._axis.set_ticklabels(map_text(labels, mapping))
-        return self
-
     # endregion
 
     # region set scale
@@ -437,7 +372,7 @@ class AxisFormatter(object):
         :param major_offset: Optional offset index to start major ticks.
                              Only applies if categorical is True.
         :param categorical: Whether the axis is displaying categorical items
-                    e.g. for bar plots.
+                            e.g. for bar plots.
         """
         if categorical:
             self._axis.set_major_locator(

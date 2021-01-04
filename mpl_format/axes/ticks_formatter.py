@@ -1,9 +1,12 @@
-from typing import Union
+from itertools import product
+from typing import Union, List, Tuple, Iterator
 
 from matplotlib.axes import Axes
+from matplotlib.axis import Axis
 
-from mpl_format.compound_types import Color, FontSize
+from mpl_format.compound_types import Color, FontSize, StringMapper
 from mpl_format.styles import LINE_STYLE, get_line_style
+from mpl_format.text.text_utils import wrap_text, map_text
 
 
 class TicksFormatter(object):
@@ -28,6 +31,8 @@ class TicksFormatter(object):
                                reset=True)
         return self
 
+    # region direction
+
     def set_direction(self, direction: str) -> 'TicksFormatter':
         """
         Puts ticks inside the axes, outside the axes, or both.
@@ -43,8 +48,6 @@ class TicksFormatter(object):
         self._axes.tick_params(axis=self._axis, which=self._which,
                                direction=direction)
         return self
-
-    # region direction
 
     def set_direction_in(self) -> 'TicksFormatter':
         """
@@ -101,22 +104,6 @@ class TicksFormatter(object):
                                pad=padding)
         return self
 
-    def set_label_size(self, label_size: FontSize) -> 'TicksFormatter':
-        """
-        Set the tick label font size in points or as a string (e.g., 'large').
-        """
-        self._axes.tick_params(axis=self._axis, which=self._which,
-                               labelsize=label_size)
-        return self
-
-    def set_label_color(self, color: Color) -> 'TicksFormatter':
-        """
-        Set the tick label color.
-        """
-        self._axes.tick_params(axis=self._axis, which=self._which,
-                               labelcolor=color)
-        return self
-
     def set_colors(self, color: Color) -> 'TicksFormatter':
         """
         Set tick color and the label color to the same value.
@@ -132,6 +119,8 @@ class TicksFormatter(object):
         self._axes.tick_params(axis=self._axis, which=self._which,
                                zorder=z_order)
         return self
+
+    # region show ticks
 
     def show_top(self, show: bool = True) -> 'TicksFormatter':
         """
@@ -165,6 +154,82 @@ class TicksFormatter(object):
                                right=show)
         return self
 
+    # endregion
+
+    # region labels
+
+    def set_label_size(self, label_size: FontSize) -> 'TicksFormatter':
+        """
+        Set the tick label font size in points or as a string (e.g., 'large').
+        """
+        self._axes.tick_params(axis=self._axis, which=self._which,
+                               labelsize=label_size)
+        return self
+
+    def set_label_color(self, color: Color) -> 'TicksFormatter':
+        """
+        Set the tick label color.
+        """
+        self._axes.tick_params(axis=self._axis, which=self._which,
+                               labelcolor=color)
+        return self
+
+    def set_label_rotation(self, rotation: float) -> 'TicksFormatter':
+        """
+        Set the tick label rotation.
+        """
+        self._axes.tick_params(axis=self._axis, which=self._which,
+                               rotation=rotation)
+        return self
+
+    def _iter_axis_minor(self) -> Iterator[Tuple[Axis, bool]]:
+
+        axes: List[Axis] = []
+        axis: Axis
+        if self._axis in ('x', 'both'):
+            axes.append(self._axes.xaxis)
+        if self._axis in ('y', 'both'):
+            axes.append(self._axes.yaxis)
+        minors: List[bool] = []
+        if self._which in ('minor', 'both'):
+            minors.append(True)
+        if self._which in ('major', 'both'):
+            minors.append(False)
+        for axis, minor in product(axes, minors):
+            yield axis, minor
+
+    def wrap_label_text(self, max_width: int) -> 'TicksFormatter':
+        """
+        Wrap the text for each tick label with new lines if it exceeds
+        a given width of characters.
+
+        :param max_width: The maximum character width per line.
+        """
+        for axis, minor in self._iter_axis_minor():
+            tick_labels = axis.get_ticklabels(minor=minor)
+            if all(t.get_text() == '' for t in tick_labels):
+                continue  # non categorical tick-labels e.g. line plot
+            axis.set_ticklabels(
+                ticklabels=[wrap_text(text, max_width)
+                            for text in tick_labels],
+                minor=minor
+            )
+        return self
+
+    def map_label_text(self, mapping: StringMapper) -> 'TicksFormatter':
+        """
+        Map the tick label text using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        for axis, minor in self._iter_axis_minor():
+            labels = [label.get_text()
+                      for label in axis.get_ticklabels(minor=minor)]
+            axis.set_ticklabels(map_text(labels, mapping))
+        return self
+
+    # region show labels
+
     def show_top_labels(self, show: bool = True) -> 'TicksFormatter':
         """
         Whether to draw tick labels at the top of the plot.
@@ -197,13 +262,11 @@ class TicksFormatter(object):
                                labelright=show)
         return self
 
-    def set_label_rotation(self, rotation: float) -> 'TicksFormatter':
-        """
-        Set the tick label rotation.
-        """
-        self._axes.tick_params(axis=self._axis, which=self._which,
-                               rotation=rotation)
-        return self
+    # endregion
+
+    # endregion
+
+    # region grid
 
     def set_grid_color(self, color: Color) -> 'TicksFormatter':
         """
@@ -236,3 +299,5 @@ class TicksFormatter(object):
         self._axes.tick_params(axis=self._axis, which=self._which,
                                grid_linestyle=get_line_style(line_style))
         return self
+
+    # endregion
