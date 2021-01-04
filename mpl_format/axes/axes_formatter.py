@@ -298,37 +298,6 @@ class AxesFormatter(object):
         self.wrap_y_label(max_width=max_width)
         return self
 
-    def wrap_x_tick_labels(self, max_width: int) -> 'AxesFormatter':
-        """
-        Wrap the text for each tick label on the x-axis with new lines if it
-        exceeds a given width of characters.
-
-        :param max_width: The maximum character width per line.
-        """
-        self.x_axis.wrap_tick_labels(max_width=max_width)
-        return self
-
-    def wrap_y_tick_labels(self, max_width: int) -> 'AxesFormatter':
-        """
-        Wrap the text for each tick label on the y-axes with new lines if it
-        exceeds a given width of characters.
-
-        :param max_width: The maximum character width per line.
-        """
-        self.y_axis.wrap_tick_labels(max_width=max_width)
-        return self
-
-    def wrap_tick_labels(self, max_width: int) -> 'AxesFormatter':
-        """
-        Wrap the text for each tick label on each axis with new lines if it
-        exceeds a given width of characters.
-
-        :param max_width: The maximum character width per line.
-        """
-        self.wrap_x_tick_labels(max_width=max_width)
-        self.wrap_y_tick_labels(max_width=max_width)
-        return self
-
     # endregion
 
     # region set font sizes
@@ -370,64 +339,57 @@ class AxesFormatter(object):
         self.set_y_label_size(font_size)
         return self
 
-    def set_x_tick_label_size(self, font_size: FontSize) -> 'AxesFormatter':
-        """
-        Set the font size for the x-axis tick labels.
-
-        :param font_size: Size of the font in points, or size name.
-        """
-        self.x_axis.set_tick_label_size(font_size)
-        return self
-
-    def set_y_tick_label_size(self, font_size: FontSize) -> 'AxesFormatter':
-        """
-        Set the font size for the y-axis tick labels.
-
-        :param font_size: Size of the font in points, or size name.
-        """
-        self.y_axis.set_tick_label_size(font_size)
-        return self
-
-    def set_tick_label_sizes(self, font_size: FontSize) -> 'AxesFormatter':
-        """
-        Set the font size for the tick labels of the wrapped Axes.
-
-        :param font_size: Size of the font in points, or size name.
-        """
-        self.set_x_tick_label_size(font_size)
-        self.set_y_tick_label_size(font_size)
-        return self
-
     def set_font_sizes(
             self,
-            title: Optional[int] = None,
-            axis_labels: Optional[int] = None,
-            x_axis_label: Optional[int] = None,
-            y_axis_label: Optional[int] = None,
-            tick_labels: Optional[int] = None,
-            x_tick_labels: Optional[int] = None,
-            y_tick_labels: Optional[int] = None,
-            legend: Optional[int] = None,
-            figure_title: Optional[int] = None
+            title: Optional[FontSize] = None,
+            axis_labels: Optional[FontSize] = None,
+            x_axis_label: Optional[FontSize] = None,
+            y_axis_label: Optional[FontSize] = None,
+            tick_labels: Optional[FontSize] = None,
+            major_tick_labels: Optional[FontSize] = None,
+            minor_tick_labels: Optional[FontSize] = None,
+            x_tick_labels: Optional[FontSize] = None,
+            x_major_tick_labels: Optional[FontSize] = None,
+            x_minor_tick_labels: Optional[FontSize] = None,
+            y_tick_labels: Optional[FontSize] = None,
+            y_major_tick_labels: Optional[FontSize] = None,
+            y_minor_tick_labels: Optional[FontSize] = None,
+            legend: Optional[FontSize] = None,
+            figure_title: Optional[FontSize] = None
     ) -> 'AxesFormatter':
         """
         Set font sizes for different axes elements.
         """
         ax = self._axes
+        # title
         if title is not None:
             self.set_title_size(title)
+        # axis labels
         if axis_labels is not None:
             self.set_axis_label_sizes(axis_labels)
         if x_axis_label is not None:
             self.set_x_label_size(x_axis_label)
         if y_axis_label is not None:
             self.set_y_label_size(y_axis_label)
+        # tick labels
         if tick_labels is not None:
-            self.set_tick_label_sizes(tick_labels)
+            self.ticks.set_label_size(tick_labels)
+        if major_tick_labels is not None:
+            self.major_ticks.set_label_size(major_tick_labels)
+        if minor_tick_labels is not None:
+            self.minor_ticks.set_label_size(minor_tick_labels)
         if x_tick_labels is not None:
-            self.set_x_tick_label_size(x_tick_labels)
+            self.x_ticks.set_label_size(tick_labels)
+        if x_major_tick_labels is not None:
+            self.x_major_ticks.set_label_size(x_major_tick_labels)
+        if x_minor_tick_labels is not None:
+            self.x_minor_ticks.set_label_size(x_minor_tick_labels)
         if y_tick_labels is not None:
-            self.set_y_tick_label_size(y_tick_labels)
+            self.y_ticks.set_label_size(tick_labels)
+        if y_major_tick_labels is not None:
+            self.y_major_ticks.set_label_size(y_major_tick_labels)
+        if y_minor_tick_labels is not None:
+            self.y_minor_ticks.set_label_size(y_major_tick_labels)
         if legend is not None:
             ax.legend(fontsize=legend)
         if figure_title is not None:
@@ -471,40 +433,6 @@ class AxesFormatter(object):
         """
         self.map_x_axis_label(mapping)
         self.map_y_axis_label(mapping)
-        return self
-
-    def map_x_tick_labels(
-            self, mapping: StringMapper
-    ) -> 'AxesFormatter':
-        """
-        Map the tick label text for the x-axis using a dictionary or function.
-
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        self.x_axis.map_tick_label_text(mapping)
-        return self
-
-    def map_y_tick_labels(
-            self, mapping: StringMapper
-    ) -> 'AxesFormatter':
-        """
-        Map the tick label text for the y-axis using a dictionary or function.
-
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        self.y_axis.map_tick_label_text(mapping)
-        return self
-
-    def map_tick_labels(
-            self, mapping: StringMapper
-    ) -> 'AxesFormatter':
-        """
-        Map the tick label text using a dictionary or function.
-
-        :param mapping: Dictionary or a function mapping old text to new text.
-        """
-        self.map_x_tick_labels(mapping)
-        self.map_y_tick_labels(mapping)
         return self
 
     # endregion
@@ -598,30 +526,6 @@ class AxesFormatter(object):
         :param how: 'absolute' or 'relative'
         """
         self.y_axis.rotate_label(rotation, how)
-        return self
-
-    def rotate_x_tick_labels(self,
-                             rotation: int,
-                             how: str = 'absolute') -> 'AxesFormatter':
-        """
-        Set the rotation of the x-axis tick labels.
-
-        :param rotation: The rotation value to set in degrees.
-        :param how: 'absolute' or 'relative'
-        """
-        self.x_axis.rotate_tick_labels(rotation=rotation, how=how)
-        return self
-
-    def rotate_y_tick_labels(self,
-                             rotation: int,
-                             how: str = 'absolute') -> 'AxesFormatter':
-        """
-        Set the rotation of the y-axis tick labels.
-
-        :param rotation: The rotation value to set in degrees.
-        :param how: 'absolute' or 'relative'
-        """
-        self.y_axis.rotate_tick_labels(rotation=rotation, how=how)
         return self
 
     # endregion
@@ -854,12 +758,6 @@ class AxesFormatter(object):
             self._axes.spines[pos].get_edgecolor()
             for pos in ['top', 'bottom', 'left', 'right']
         ]
-
-    def set_tick_color(self, color: Color) -> 'AxesFormatter':
-
-        self.x_axis.set_tick_color(color=color)
-        self.y_axis.set_tick_color(color=color)
-        return self
 
     # endregion
 
