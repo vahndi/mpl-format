@@ -1,17 +1,14 @@
-from typing import Optional
+from typing import Optional, Tuple
 
-import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
-from matplotlib.lines import Line2D
 from matplotlib.text import Text
 from matplotlib.ticker import FuncFormatter, MultipleLocator, FixedLocator
 
 from mpl_format.axes.ticks_formatter import TicksFormatter
-from mpl_format.compound_types import FontSize, Color, StringMapper
+from mpl_format.compound_types import FontSize, StringMapper
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_list_formatter import TextListFormatter
-from mpl_format.text.text_utils import wrap_text, map_text
 
 
 class AxisFormatter(object):
@@ -422,6 +419,57 @@ class AxisFormatter(object):
                 location for i, location in enumerate(locations)
                 if (i - start) % tick_spacing == 0
             ])
+        return self
+
+    # endregion
+
+    # region limits
+
+    def get_lim(self) -> Tuple[float, float]:
+        """
+        Return the axis view limits.
+        """
+        if self._direction == 'x':
+            return self._axes.get_xlim()
+        else:
+            return self._axes.get_ylim()
+
+    def get_min(self) -> float:
+        """
+        Return the axis lower view limit.
+        """
+        if self._direction == 'x':
+            return self._axes.get_xlim()[0]
+        else:
+            return self._axes.get_ylim()[0]
+
+    def get_max(self) -> float:
+        """
+        Return the axis upper view limit.
+        """
+        if self._direction == 'x':
+            return self._axes.get_xlim()[1]
+        else:
+            return self._axes.get_ylim()[1]
+
+    def set_min(self, value: float = None) -> 'AxisFormatter':
+        """
+        Set the axis lower view limit.
+        """
+        if self._direction == 'x':
+            self._axes.set_xlim(value, None)
+        else:
+            self._axes.set_ylim(value, None)
+        return self
+
+    def set_max(self, value: float = None) -> 'AxisFormatter':
+        """
+        Set the axis upper view limit.
+        """
+        if self._direction == 'x':
+            self._axes.set_xlim(None, value)
+        else:
+            self._axes.set_ylim(None, value)
         return self
 
     # endregion

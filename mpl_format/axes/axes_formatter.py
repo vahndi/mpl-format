@@ -2012,18 +2012,18 @@ class AxesFormatter(object):
         """
         return self.get_y_lim()[1]
 
-    def set_y_min(self, left: float = None) -> 'AxesFormatter':
+    def set_y_min(self, bottom: float = None) -> 'AxesFormatter':
         """
         Set the y-axis lower view limit.
         """
-        self.set_y_lim(left, None)
+        self.set_y_lim(bottom, None)
         return self
 
-    def set_y_max(self, right: float = None) -> 'AxesFormatter':
+    def set_y_max(self, top: float = None) -> 'AxesFormatter':
         """
         Set the y-axis upper view limit.
         """
-        self.set_y_lim(None, right)
+        self.set_y_lim(None, top)
         return self
 
     def width(self, units: str = 'inches') -> float:
