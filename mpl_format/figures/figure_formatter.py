@@ -633,6 +633,8 @@ class FigureFormatter(object):
 
     # endregion
 
+    # region margins
+
     def subplots_adjust(
             self,
             left: Optional[float] = None, right: Optional[float] = None,
@@ -746,6 +748,8 @@ class FigureFormatter(object):
         self.subplots_adjust(h_space=spacing)
         return self
 
+    # endregion
+
     def grids(
             self, value: bool = True,
             which: str = 'major',
@@ -787,6 +791,62 @@ class FigureFormatter(object):
         """
         self.figure.tight_layout()
         return self
+
+    # region limits
+
+    def set_x_lims(self, left: Optional[float] = None,
+                   right: Optional[float] = None) -> 'FigureFormatter':
+        """
+        Set the limits of the x-axes.
+
+        :param left: Lower limit.
+        :param right: Upper limit.
+        """
+        for axf in self.multi.flat:
+            axf.set_x_lim(left=left, right=right)
+        return self
+
+    def set_y_lims(self, bottom: Optional[float] = None,
+                   top: Optional[float] = None) -> 'FigureFormatter':
+        """
+        Set the limits of the y-axes.
+
+        :param bottom: Lower limit.
+        :param top: Upper limit.
+        """
+        for axf in self.multi.flat:
+            axf.set_y_lim(bottom=bottom, top=top)
+        return self
+
+    def set_x_mins(self, left: float = None) -> 'FigureFormatter':
+        """
+        Set the x-axes lower view limit.
+        """
+        self.set_x_lims(left, None)
+        return self
+
+    def set_x_maxes(self, right: float = None) -> 'FigureFormatter':
+        """
+        Set the x-axes upper view limit.
+        """
+        self.set_x_lims(None, right)
+        return self
+
+    def set_y_mins(self, bottom: float = None) -> 'FigureFormatter':
+        """
+        Set the y-axes lower view limit.
+        """
+        self.set_y_lims(bottom, None)
+        return self
+
+    def set_y_maxes(self, top: float = None) -> 'FigureFormatter':
+        """
+        Set the y-axes upper view limit.
+        """
+        self.set_y_lims(None, top)
+        return self
+
+    # endregion
 
     def save(
             self,
