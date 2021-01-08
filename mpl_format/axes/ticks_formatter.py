@@ -5,7 +5,7 @@ from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 
 from mpl_format.compound_types import Color, FontSize, StringMapper
-from mpl_format.styles import LINE_STYLE, get_line_style
+from mpl_format.enums.line_style import LINE_STYLE
 from mpl_format.text.text_utils import wrap_text, map_text
 
 
@@ -296,8 +296,10 @@ class TicksFormatter(object):
         """
         Set the line style of the grid lines.
         """
-        self._axes.tick_params(axis=self._axis, which=self._which,
-                               grid_linestyle=get_line_style(line_style))
+        self._axes.tick_params(
+            axis=self._axis, which=self._which,
+            grid_linestyle=LINE_STYLE.get_line_style(line_style)
+        )
         return self
 
     # endregion

@@ -10,7 +10,9 @@ from mpl_format.animation.type_animations import \
     FloatOrFloatAnimation, ColorOrColorAnimation, StrOrFloatAnimation, \
     StrOrFloatOrFloatAnimation
 from mpl_format.axes import AxesFormatter
-from mpl_format.styles import DRAW_STYLE, LINE_STYLE, MARKER_STYLE
+from mpl_format.enums.marker_style import MARKER_STYLE
+from mpl_format.enums.draw_style import DRAW_STYLE
+from mpl_format.enums.line_style import LINE_STYLE
 
 
 class LineAnimation(ShapeAnimation, object):

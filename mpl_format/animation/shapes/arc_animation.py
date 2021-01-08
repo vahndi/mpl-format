@@ -4,7 +4,9 @@ from mpl_format.animation.shapes.base import ShapeAnimation
 from mpl_format.animation.type_animations import FloatOrFloatAnimation, \
     StrOrFloatAnimation, StrOrFloatOrFloatAnimation, ColorOrColorAnimation
 from mpl_format.axes import AxesFormatter
-from mpl_format.styles import CAP_STYLE, JOIN_STYLE, LINE_STYLE
+from mpl_format.enums.join_style import JOIN_STYLE
+from mpl_format.enums.cap_style import CAP_STYLE
+from mpl_format.enums.line_style import LINE_STYLE
 
 
 class ArcAnimation(ShapeAnimation, object):

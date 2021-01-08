@@ -12,7 +12,7 @@ from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray
 from mpl_format.axes.axis_formatter_array import AxisFormatterArray
 from mpl_format.compound_types import StringMapper, Color
-from mpl_format.styles import LINE_STYLE, get_line_style
+from mpl_format.enums.line_style import LINE_STYLE
 from mpl_format.utils.io_utils import save_plot
 
 TextSetter = TypeVar(
