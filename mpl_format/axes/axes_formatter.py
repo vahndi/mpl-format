@@ -878,10 +878,9 @@ class AxesFormatter(object):
              font_variant, font_weight,
              wrap],
             ['alpha', 'color',
-             'ha', 'va', 'ma', 'linespacing'
+             'ha', 'va', 'ma', 'linespacing',
              'fontfamily', 'fontsize', 'fontstretch', 'fontstyle',
              'fontvariant', 'fontweight',
-             'line_width', 'edge_color', 'face_color',
              'wrap']
         ):
             if arg is not None:
