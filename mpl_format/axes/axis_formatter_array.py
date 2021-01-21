@@ -48,7 +48,7 @@ class AxisFormatterArray(object):
 
         :param text: Text for the Axis label.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_label_text(text=text)
         return self
 
@@ -58,7 +58,7 @@ class AxisFormatterArray(object):
 
         :param font_name: Name of the font to use.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_label_font_family(font_name=font_name)
         return self
 
@@ -69,7 +69,7 @@ class AxisFormatterArray(object):
         :param old: The old label text to replace.
         :param new: The new label text to replace.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.replace_label_text(old=old, new=new)
         return self
 
@@ -81,7 +81,7 @@ class AxisFormatterArray(object):
 
         :param mapping: Dictionary or a function mapping old text to new text.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.map_label_text(mapping=mapping)
         return self
 
@@ -94,7 +94,7 @@ class AxisFormatterArray(object):
         :param rotation: The rotation value to set in degrees.
         :param how: 'absolute' or 'relative'
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.rotate_label(
                 rotation=rotation,
                 how=how
@@ -105,7 +105,7 @@ class AxisFormatterArray(object):
         """
         Remove the Axis label.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.remove_label()
         return self
 
@@ -115,7 +115,7 @@ class AxisFormatterArray(object):
 
         :param max_width: The maximum character width per line.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.wrap_label(max_width=max_width)
         return self
 
@@ -125,7 +125,7 @@ class AxisFormatterArray(object):
 
         :param font_size: The font size in points or size name.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_label_size(font_size=font_size)
         return self
 
@@ -142,7 +142,7 @@ class AxisFormatterArray(object):
         :param rotation: The rotation value to set in degrees.
         :param how: 'absolute' or 'relative'
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.rotate_tick_labels(
                 rotation=rotation, how=how
             )
@@ -155,7 +155,7 @@ class AxisFormatterArray(object):
 
         :param max_width: The maximum character width per line.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.wrap_tick_labels(max_width=max_width)
         return self
 
@@ -170,7 +170,7 @@ class AxisFormatterArray(object):
         :param kmbt: Whether to abbreviate numbers using K, M, B and T for
                      thousands, millions, billions and trillions.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_format_integer(
                 categorical=categorical, kmbt=kmbt
             )
@@ -192,7 +192,7 @@ class AxisFormatterArray(object):
         :param kmbt: Whether to abbreviate numbers using K, M, B and T for
                      thousands, millions, billions and trillions.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_format_currency(
                 symbol=symbol,
                 num_decimals=num_decimals,
@@ -213,7 +213,7 @@ class AxisFormatterArray(object):
         :param categorical: Whether the axis is displaying categorical items
                             e.g. for bar plots.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_format_percent(
                 num_decimals=num_decimals,
                 multiply_100=multiply_100,
@@ -227,7 +227,7 @@ class AxisFormatterArray(object):
 
         :param font_size: The font size in points or size name.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_tick_label_size(font_size=font_size)
         return self
 
@@ -239,7 +239,7 @@ class AxisFormatterArray(object):
 
         :param mapping: Dictionary or a function mapping old text to new text.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.map_tick_label_text(mapping=mapping)
         return self
 
@@ -253,7 +253,7 @@ class AxisFormatterArray(object):
 
         :param scale: One of ['log', 'linear', 'symlog', 'logit']
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_scale(scale=scale)
         return self
 
@@ -261,7 +261,7 @@ class AxisFormatterArray(object):
         """
         Set the scale of the axis to logarithmic.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_scale_log()
         return self
 
@@ -269,7 +269,7 @@ class AxisFormatterArray(object):
         """
         Set the scale of the axis to logarithmic.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_scale_linear()
         return self
 
@@ -277,7 +277,7 @@ class AxisFormatterArray(object):
         """
         Set the scale of the axis to symmetrical logarithmic.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_scale_symmetrical_log()
         return self
 
@@ -285,7 +285,7 @@ class AxisFormatterArray(object):
         """
         Set the scale of the axis to logit.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_scale_logit()
         return self
 
@@ -299,7 +299,7 @@ class AxisFormatterArray(object):
 
         :param inverted: True or False.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.set_inverted(inverted=inverted)
         return self
 
@@ -307,7 +307,7 @@ class AxisFormatterArray(object):
         """
         Flip the Axis inversion property.
         """
-        for axis in self._axes:
+        for axis in self._axes.flat:
             axis.invert()
         return self
 

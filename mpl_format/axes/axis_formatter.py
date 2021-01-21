@@ -19,7 +19,7 @@ class AxisFormatter(object):
 
         :param axis: The matplotlib Axis instance to wrap.
         :param direction: 'x' or 'y'
-        :param axes: Parent AxesFormatter instance.
+        :param axes: Parent Axes instance.
         """
         self._axis: Axis = axis
         self._direction: str = direction

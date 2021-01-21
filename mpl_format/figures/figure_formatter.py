@@ -90,11 +90,19 @@ class FigureFormatter(object):
             axes = empty_like(self._axes, dtype=AxisFormatter)
             if axes.ndim == 1:
                 for i in range(self._axes.shape[0]):
-                    axes[i] = AxisFormatter(self._axes[i].xaxis)
+                    axes[i] = AxisFormatter(
+                        axis=self._axes[i].xaxis,
+                        direction='x',
+                        axes=self._axes[i]
+                    )
             elif axes.ndim == 2:
                 for i in range(axes.shape[0]):
                     for j in range(axes.shape[1]):
-                        axes[i, j] = AxisFormatter(self._axes[i, j].xaxis)
+                        axes[i, j] = AxisFormatter(
+                            axis=self._axes[i, j].xaxis,
+                            direction='x',
+                            axes=self._axes[i, j]
+                        )
 
         return AxisFormatterArray(axes)
 
@@ -110,11 +118,19 @@ class FigureFormatter(object):
             axes = empty_like(self._axes, dtype=AxisFormatter)
             if axes.ndim == 1:
                 for i in range(self._axes.shape[0]):
-                    axes[i] = AxisFormatter(self._axes[i].yaxis)
+                    axes[i] = AxisFormatter(
+                        axis=self._axes[i].yaxis,
+                        direction='y',
+                        axes=self._axes[i]
+                    )
             elif axes.ndim == 2:
                 for i in range(axes.shape[0]):
                     for j in range(axes.shape[1]):
-                        axes[i, j] = AxisFormatter(self._axes[i, j].yaxis)
+                        axes[i, j] = AxisFormatter(
+                            axis=self._axes[i, j].yaxis,
+                            direction='y',
+                            axes=self._axes[i, j]
+                        )
 
         return AxisFormatterArray(axes)
 
