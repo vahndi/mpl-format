@@ -2229,6 +2229,24 @@ class AxesFormatter(object):
 
     # endregion
 
+    # region frame
+
+    def show_frame(self) -> 'AxesFormatter':
+        """
+        Show the frame.
+        """
+        self._axes.set_frame_on(True)
+        return self
+
+    def hide_frame(self) -> 'AxesFormatter':
+        """
+        Hide the frame.
+        """
+        self._axes.set_frame_on(False)
+        return self
+
+    # endregion
+
     # region grids
 
     def grid(
