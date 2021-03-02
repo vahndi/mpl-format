@@ -1,9 +1,10 @@
 from itertools import product
-from typing import Union, List, Tuple, Iterator
+from typing import Union, List, Tuple, Iterator, Iterable
 
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 
+from compound_types.built_ins import FloatIterable
 from mpl_format.compound_types import Color, FontSize, StringMapper
 from mpl_format.enums.line_style import LINE_STYLE
 from mpl_format.text.text_utils import wrap_text, map_text
@@ -27,9 +28,52 @@ class TicksFormatter(object):
         """
         Set all parameters to defaults.
         """
-        self._axes.tick_params(axis=self._axis, which=self._which,
-                               reset=True)
+        self._axes.tick_params(
+            axis=self._axis,
+            which=self._which,
+            reset=True
+        )
         return self
+
+    @property
+    def _is_minor(self) -> bool:
+        return self._which == 'minor'
+
+    # region values and labels
+
+    def set_values(self, values: FloatIterable) -> 'TicksFormatter':
+        """
+        Set the values of the ticks.
+
+        :param values: List of values where the ticks should be located.
+        """
+        x_axis = self._axes.xaxis
+        y_axis = self._axes.yaxis
+        if self._axis in ('x', 'both'):
+            x_axis.set_ticks(ticks=values, minor=self._is_minor)
+        if self._axis in ('y', 'both'):
+            y_axis.set_ticks(ticks=values, minor=self._is_minor)
+        return self
+
+    def set_labels(self, labels: Iterable[str]) -> 'TicksFormatter':
+        """
+        Set the labels for the ticks.
+
+        :param labels: List of labels to annotate each tick value.
+        """
+        x_axis = self._axes.xaxis
+        y_axis = self._axes.yaxis
+        if self._axis in ('x', 'both'):
+            x_axis.set_ticklabels(ticklabels=labels, minor=self._is_minor)
+        if self._axis in ('y', 'both'):
+            y_axis.set_ticklabels(ticklabels=labels, minor=self._is_minor)
+        return self
+
+    def get_labels(self):
+
+        raise NotImplementedError
+
+    # endregion
 
     # region direction
 
@@ -88,20 +132,20 @@ class TicksFormatter(object):
                                width=width)
         return self
 
-    def set_color(self, color: Color) -> 'TicksFormatter':
-        """
-        Set the tick color.
-        """
-        self._axes.tick_params(axis=self._axis, which=self._which,
-                               color=color)
-        return self
-
     def set_padding(self, padding: float) -> 'TicksFormatter':
         """
         Set the distance in points between tick and label.
         """
         self._axes.tick_params(axis=self._axis, which=self._which,
                                pad=padding)
+        return self
+
+    def set_color(self, color: Color) -> 'TicksFormatter':
+        """
+        Set the tick color.
+        """
+        self._axes.tick_params(axis=self._axis, which=self._which,
+                               color=color)
         return self
 
     def set_colors(self, color: Color) -> 'TicksFormatter':
