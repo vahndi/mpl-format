@@ -41,7 +41,7 @@ from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
-from mpl_format.utils.arg_checks import check_h_align
+from mpl_format.utils.arg_checks import check_h_align, check_v_align
 from mpl_format.utils.color_utils import cross_fade
 from mpl_format.utils.io_utils import save_plot
 
@@ -1740,7 +1740,7 @@ class AxesFormatter(object):
     def add_v_density(
             self, x: float,
             y_to_z: Series,
-            color: Color,
+            color: Optional[Color] = 'k',
             color_min: Optional[Color] = None,
             width: float = 0.8,
             z_max: Optional[float] = None,
@@ -1771,7 +1771,7 @@ class AxesFormatter(object):
             x_left = x
         elif h_align == 'center':
             x_left = x - width / 2
-        else:  # 'right
+        else:
             x_left = x - width
 
         alphas = (y_to_z / z_max).rolling(2).mean().shift(-1).dropna()
@@ -1787,6 +1787,61 @@ class AxesFormatter(object):
             self.add_rectangle(
                 x_left=x_left, y_bottom=y_lower,
                 width=width, height=y_upper - y_lower,
+                face_color=color, alpha=alpha
+            )
+
+        return self
+
+    def add_h_density(
+            self, y: float,
+            x_to_z: Series,
+            color: Optional[Color] = 'k',
+            color_min: Optional[Color] = None,
+            height: float = 0.8,
+            z_max: Optional[float] = None,
+            v_align: str = 'center'
+    ) -> 'AxesFormatter':
+        """
+        Add a horizontal density bar to the plot.
+
+        :param y: The y-coordinate of the bar.
+        :param x_to_z: A mapping of the bar's x-coordinate to it density.
+        :param color: The color of the density bar.
+        :param color_min: Optional 2nd color to fade out to.
+        :param height: The bar width.
+        :param z_max: Value to scale down densities by to get to a range of
+                      0 to 1. Defaults to max value of x_to_z.
+        :param v_align: Vertical alignment.
+                        One of {'top', 'center', 'bottom'}.
+        """
+        check_v_align(v_align)
+
+        if z_max is None:
+            z_max = x_to_z.max()
+        x = x_to_z.index.to_list()
+        x_lefts = x[: -1]
+        x_rights = x[1:]
+
+        if v_align == 'bottom':
+            y_bottom = y
+        elif v_align == 'center':
+            y_bottom = y - height / 2
+        else:
+            y_bottom = y - height
+
+        alphas = (x_to_z / z_max).rolling(2).mean().shift(-1).dropna()
+
+        if color_min is None:
+            color_min = color
+        colors = cross_fade(from_color=color_min, to_color=color,
+                            amount=alphas)
+
+        for x_left, x_right, alpha, color in zip(
+                x_lefts, x_rights, alphas, colors
+        ):
+            self.add_rectangle(
+                x_left=x_left, y_bottom=y_bottom,
+                width=x_right-x_left, height=height,
                 face_color=color, alpha=alpha
             )
 
