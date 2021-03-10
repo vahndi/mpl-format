@@ -15,7 +15,8 @@ class PatchListFormatter(object):
         """
         Return the edge-colors of each patch.
         """
-        return [patch.get_edgecolor() for patch in self._patches]
+        return [patch.get_edgecolor()
+                for patch in self._patches]
 
     @edge_colors.setter
     def edge_colors(self, values: Iterable[Color]):
@@ -32,7 +33,8 @@ class PatchListFormatter(object):
         """
         Return the face-colors of each patch.
         """
-        return [patch.get_facecolor() for patch in self._patches]
+        return [patch.get_facecolor()
+                for patch in self._patches]
 
     @face_colors.setter
     def face_colors(self, values: Iterable[Color]):
@@ -49,7 +51,8 @@ class PatchListFormatter(object):
         """
         Return the alphas of each patch.
         """
-        return [patch.get_alpha() for patch in self._patches]
+        return [patch.get_alpha()
+                for patch in self._patches]
 
     @alphas.setter
     def alphas(self, values: Iterable[float]):
@@ -66,7 +69,8 @@ class PatchListFormatter(object):
         """
         Return the line-styles of each patch.
         """
-        return [patch.get_linestyle() for patch in self._patches]
+        return [patch.get_linestyle()
+                for patch in self._patches]
 
     @line_styles.setter
     def line_styles(self, values: Iterable[str]):
@@ -83,7 +87,8 @@ class PatchListFormatter(object):
         """
         Return the line-widths of each patch.
         """
-        return [patch.get_linewidth() for patch in self._patches]
+        return [patch.get_linewidth()
+                for patch in self._patches]
 
     @line_widths.setter
     def line_widths(self, values: Iterable[float]):

@@ -39,6 +39,7 @@ from mpl_format.enums.line_style import LINE_STYLE
 from mpl_format.enums.marker_style import MARKER_STYLE
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
+from mpl_format.patches.rectangle_list_formatter import RectangleListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 from mpl_format.utils.arg_checks import check_h_align, check_v_align
@@ -1704,11 +1705,11 @@ class AxesFormatter(object):
         ])
 
     @property
-    def rectangles(self) -> PatchListFormatter:
+    def rectangles(self) -> RectangleListFormatter:
         """
         Return a list of the Rectangles on the axes.
         """
-        return PatchListFormatter([
+        return RectangleListFormatter([
             r for r in self._axes.get_children()
             if isinstance(r, Rectangle)
         ])
