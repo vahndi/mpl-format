@@ -9,6 +9,7 @@ from mpl_format.axes.ticks_formatter import TicksFormatter
 from mpl_format.compound_types import FontSize, StringMapper
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_list_formatter import TextListFormatter
+from mpl_format.utils.number_utils import format_as_integer
 
 
 class AxisFormatter(object):
@@ -179,21 +180,7 @@ class AxisFormatter(object):
             if t == '':
                 return ''
             number = float(t)
-            if not kmbt:
-                return f'{int(number):,}'
-            else:
-                for power, abbrev in zip(
-                        [12, 9, 6, 3],
-                        ['T', 'B', 'M', 'K']
-                ):
-                    if number >= 10 ** power:
-                        num = number / 10 ** power
-                        if num == int(num):
-                            num = int(num)
-                        return f'{num:,}{abbrev}'
-                if number == int(number):
-                    number = int(number)
-                return f'{number:,}'
+            return format_as_integer(number=number, kmbt=kmbt)
 
         if not categorical:
             tick = FuncFormatter(lambda x, pos: to_integer(x))
