@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 from numpy import ndarray, reshape
 from numpy.ma import empty_like
 
+from compound_types.built_ins import Scalar
 from mpl_format.axes import AxisFormatter
 from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray
@@ -27,7 +28,7 @@ class FigureFormatter(object):
 
     def __init__(self, fig_or_axes: Union[Figure, Axes] = None,
                  n_rows: int = 1, n_cols: int = 1,
-                 fig_size: Tuple[int, int] = (16, 9),
+                 fig_size: Tuple[Scalar, Scalar] = (16, 9),
                  share_x: str = 'none',
                  share_y: str = 'none',
                  constrained_layout: bool = True):

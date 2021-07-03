@@ -1,6 +1,8 @@
 from enum import Enum
 from typing import Union
 
+from matplotlib.patches import BoxStyle
+
 
 class BOX_STYLE(Enum):
 
@@ -35,3 +37,11 @@ class BOX_STYLE(Enum):
         if box_style and isinstance(box_style, BOX_STYLE):
             box_style = box_style.get_name()
         return box_style
+
+
+BoxStyleType = Union[
+    str, BOX_STYLE,
+    BoxStyle.Circle, BoxStyle.Round, BoxStyle.Round4,
+    BoxStyle.DArrow, BoxStyle.LArrow, BoxStyle.RArrow,
+    BoxStyle.Roundtooth, BoxStyle.Sawtooth, BoxStyle.Square
+]

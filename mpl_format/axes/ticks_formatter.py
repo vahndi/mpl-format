@@ -269,7 +269,10 @@ class TicksFormatter(object):
         for axis, minor in self._iter_axis_minor():
             labels = [label.get_text()
                       for label in axis.get_ticklabels(minor=minor)]
-            axis.set_ticklabels(map_text(labels, mapping))
+            axis.set_ticklabels(
+                ticklabels=map_text(labels, mapping),
+                minor=minor
+            )
         return self
 
     # region show labels

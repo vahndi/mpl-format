@@ -2,6 +2,10 @@ from math import pi, atan2
 from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING
 
 import matplotlib.pyplot as plt
+from compound_types.arrays import ArrayLike
+from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
+    DictOrDictIterable, BoolOrBoolIterable, FloatIterable, Scalar
+from compound_types.type_checks import all_are_none, one_is_not_none
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
@@ -15,10 +19,6 @@ from numpy.ma import cos, sin
 from pandas import DataFrame, Series
 from scipy.interpolate import interp1d
 
-from compound_types.arrays import ArrayLike
-from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable, BoolOrBoolIterable, FloatIterable
-from compound_types.type_checks import all_are_none, one_is_not_none
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.axes.ticks_formatter import TicksFormatter
@@ -26,7 +26,7 @@ from mpl_format.compound_types import FontSize, Color, LegendLocation, \
     StringMapper, ColorOrColorIterable
 from mpl_format.enums import FONT_VARIANT
 from mpl_format.enums.arrow_style import ARROW_STYLE
-from mpl_format.enums.box_style import BOX_STYLE
+from mpl_format.enums.box_style import BOX_STYLE, BoxStyleType
 from mpl_format.enums.cap_style import CAP_STYLE
 from mpl_format.enums.connection_style import CONNECTION_STYLE
 from mpl_format.enums.draw_style import DRAW_STYLE
@@ -53,7 +53,7 @@ if TYPE_CHECKING:
 class AxesFormatter(object):
 
     def __init__(self, axes: Optional[Axes] = None,
-                 width: Optional[int] = None, height: Optional[int] = None,
+                 width: Optional[Scalar] = None, height: Optional[Scalar] = None,
                  constrained_layout: bool = False):
         """
         Create a new AxesFormatter
@@ -787,6 +787,7 @@ class AxesFormatter(object):
             self, x: FloatOrFloatIterable,
             y: FloatOrFloatIterable,
             text: StrOrStrIterable,
+            max_width: Optional[int] = None,
             font_dict: Optional[DictOrDictIterable] = None,
             alpha: Optional[float] = None,
             color: Optional[Color] = None,
@@ -818,6 +819,7 @@ class AxesFormatter(object):
         :param x: x-coordinate(s) of the text.
         :param y: y-coordinate(s) of the text.
         :param text: String or iterable of text strings to add.
+        :param max_width: Max number of characters to wrap lines at.
         :param font_dict: A dictionary to override the default text properties.
                           If font_dict is None, the defaults are determined by
                           your rc parameters.
@@ -907,6 +909,8 @@ class AxesFormatter(object):
             kwargs['bbox'] = bbox_kwargs
 
         for x_i, y_i, text_i, font_dict_i in zip(x, y, text, font_dict):
+            if max_width is not None:
+                text_i = wrap_text(text=text_i, max_width=max_width)
             self._axes.text(
                 x=x_i, y=y_i, s=text_i,
                 fontdict=font_dict_i,
@@ -972,7 +976,8 @@ class AxesFormatter(object):
 
     def add_arrow(
             self, x_tail: float, y_tail: float,
-            dx: float, dy: float,
+            dx: Optional[float] = None, dy: Optional[float] = None,
+            x_head: Optional[float] = None, y_head: Optional[float] = None,
             width: float = 1.0,
             alpha: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
@@ -1009,6 +1014,14 @@ class AxesFormatter(object):
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
         join_style = JOIN_STYLE.get_join_style(join_style)
+        if not one_is_not_none(dx, x_head):
+            raise ValueError('Must give dx or x_head')
+        if not one_is_not_none(dy, y_head):
+            raise ValueError('Must give dy or y_head')
+        if x_head is not None:
+            dx = x_head - x_tail
+        if y_head is not None:
+            dy = y_head - y_tail
         # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
@@ -1020,7 +1033,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         arrow = Arrow(
-            x=x_tail, y=y_tail, dx=dx, dy=dy, width=width,
+            x=x_tail, y=y_tail, dx=dx, dy=dy,
             **kwargs
         )
         self._axes.add_artist(arrow)
@@ -1135,8 +1148,10 @@ class AxesFormatter(object):
         return self
 
     def add_fancy_arrow(
-            self, x: float, y: float, dx: float, dy: float,
-            width: float = 0.001,
+            self, x_tail: float, y_tail: float,
+            dx: Optional[float] = None, dy: Optional[float] = None,
+            x_head: Optional[float] = None, y_head: Optional[float] = None,
+            tail_width: float = 0.001,
             length_includes_head: bool = False,
             head_width: Optional[float] = None,
             head_length: Optional[float] = None,
@@ -1157,11 +1172,11 @@ class AxesFormatter(object):
         """
         Like Arrow, but lets you set head width and head height independently.
 
-        :param x: The x-coordinate of the arrow tail.
-        :param y: The y-coordinate of the arrow tail.
+        :param x_tail: The x-coordinate of the arrow tail.
+        :param y_tail: The y-coordinate of the arrow tail.
         :param dx: Arrow length in the x direction.
         :param dy: Arrow length in the y direction.
-        :param width: Width of full arrow tail.
+        :param tail_width: Width of full arrow tail.
         :param length_includes_head: True if head is to be counted in
                                      calculating the length.
         :param head_width: Total width of the full arrow head
@@ -1188,6 +1203,14 @@ class AxesFormatter(object):
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
         join_style = JOIN_STYLE.get_join_style(join_style)
+        if not one_is_not_none(dx, x_head):
+            raise ValueError('Must give dx or x_head')
+        if not one_is_not_none(dy, y_head):
+            raise ValueError('Must give dy or y_head')
+        if x_head is not None:
+            dx = x_head - x_tail
+        if y_head is not None:
+            dy = y_head - y_tail
         # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
@@ -1199,7 +1222,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         arrow = FancyArrow(
-            x=x, y=y, dx=dx, dy=dy, width=width,
+            x=x_tail, y=y_tail, dx=dx, dy=dy, width=tail_width,
             length_includes_head=length_includes_head,
             head_width=head_width,
             head_length=head_length,
@@ -1305,7 +1328,7 @@ class AxesFormatter(object):
     def add_fancy_box_patch(
             self, x: float, y: float,
             width: float, height: float,
-            box_style: Union[str, BOX_STYLE] = BOX_STYLE.round,
+            box_style: BoxStyleType = BOX_STYLE.round,
             mutation_scale: Optional[float] = 1,
             mutation_aspect: Optional[float] = None,
             alpha: Optional[float] = None,
@@ -1347,6 +1370,7 @@ class AxesFormatter(object):
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
         join_style = JOIN_STYLE.get_join_style(join_style)
+        box_style = BOX_STYLE.get_box_style(box_style)
         # convert args to matplotlib names
         kwargs = {}
         for arg, mpl_arg in zip(
