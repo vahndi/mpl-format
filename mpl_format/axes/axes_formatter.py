@@ -1799,7 +1799,9 @@ class AxesFormatter(object):
         else:
             x_left = x - width
 
-        alphas = (y_to_z / z_max).rolling(2).mean().shift(-1).dropna()
+        alphas = (
+                y_to_z / z_max
+        ).rolling(2).mean().shift(-1).dropna().clip(0.0, 1.0)
 
         if color_min is None:
             color_min = color
@@ -1854,7 +1856,9 @@ class AxesFormatter(object):
         else:
             y_bottom = y - height
 
-        alphas = (x_to_z / z_max).rolling(2).mean().shift(-1).dropna()
+        alphas = (
+                x_to_z / z_max
+        ).rolling(2).mean().shift(-1).dropna().clip(0.0, 1.0)
 
         if color_min is None:
             color_min = color
