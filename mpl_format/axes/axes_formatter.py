@@ -811,7 +811,8 @@ class AxesFormatter(object):
             bbox_fill: Optional[bool] = None,
             bbox_join_style: Optional[Union[str, JOIN_STYLE]] = None,
             bbox_line_style: Optional[Union[str, LINE_STYLE]] = None,
-            bbox_line_width: Optional[float] = None
+            bbox_line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ) -> 'AxesFormatter':
         """
         Add a single or multiple text blocks to the plot.
@@ -879,12 +880,12 @@ class AxesFormatter(object):
              h_align, v_align, m_align, line_spacing,
              font_family, font_size, font_stretch, font_style,
              font_variant, font_weight,
-             wrap],
+             wrap, z_order],
             ['alpha', 'color',
              'ha', 'va', 'ma', 'linespacing',
              'fontfamily', 'fontsize', 'fontstretch', 'fontstyle',
              'fontvariant', 'fontweight',
-             'wrap']
+             'wrap', 'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -930,7 +931,8 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None
+            line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ):
         """
         Add an elliptical arc, i.e. a segment of an ellipse.
@@ -960,9 +962,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color,
-             join_style, label, line_style, line_width],
+             join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor',
-             'joinstyle', 'label', 'linestyle', 'linewidth']
+             'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -988,7 +992,8 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None
+            line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ):
         """
         Add an an arrow patch.
@@ -1026,9 +1031,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1053,7 +1060,8 @@ class AxesFormatter(object):
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
+            z_order: Optional[int] = None
     ) -> 'AxesFormatter':
         """
         Add a rectangle to the Axes.
@@ -1079,9 +1087,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1106,7 +1116,8 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None
+            line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ):
         """
         Add an elliptical arc, i.e. a segment of an ellipse.
@@ -1134,9 +1145,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1167,7 +1180,8 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None
+            line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ):
         """
         Like Arrow, but lets you set head width and head height independently.
@@ -1215,9 +1229,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1257,7 +1273,8 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None
+            line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ):
         """
         Like Arrow, but lets you set head width and head height independently.
@@ -1306,9 +1323,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1340,7 +1359,8 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None
+            line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ):
         """
         A fancy box around a rectangle with lower left at xy = (x, y)
@@ -1375,9 +1395,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1402,7 +1424,8 @@ class AxesFormatter(object):
             line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
+            z_order: Optional[int] = None
     ) -> 'AxesFormatter':
         """
         Add a general polygon patch.
@@ -1428,9 +1451,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1456,7 +1481,8 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None
+            line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ) -> 'AxesFormatter':
         """
         Add a rectangle to the Axes.
@@ -1512,9 +1538,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1541,7 +1569,8 @@ class AxesFormatter(object):
             line_style: Optional[Union[str, LINE_STYLE]] = None,
             line_width: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None
+            join_style: Optional[Union[str, JOIN_STYLE]] = None,
+            z_order: Optional[int] = None
     ) -> 'AxesFormatter':
         """
         Add a rectangle to the Axes.
@@ -1570,9 +1599,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
@@ -1601,7 +1632,8 @@ class AxesFormatter(object):
             join_style: Optional[Union[str, JOIN_STYLE]] = None,
             label: Optional[str] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None
+            line_width: Optional[float] = None,
+            z_order: Optional[int] = None
     ):
         """
         Add a wedge-shaped patch.
@@ -1633,9 +1665,11 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width],
+             fill, join_style, label, line_style, line_width,
+             z_order],
             ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth']
+             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
+             'zorder']
         ):
             if arg is not None:
                 kwargs[mpl_arg] = arg
