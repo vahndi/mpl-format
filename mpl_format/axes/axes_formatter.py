@@ -794,6 +794,8 @@ class AxesFormatter(object):
             h_align: Optional[str] = None,
             v_align: Optional[str] = None,
             m_align: Optional[str] = None,
+            rotation: Optional[Union[int, str]] = None,
+            rotation_mode: Optional[str] = None,
             line_spacing: Optional[float] = None,
             font_family: Optional[str] = None,
             font_size: Optional[Union[int, float, str, FONT_SIZE]] = None,
@@ -829,6 +831,8 @@ class AxesFormatter(object):
         :param h_align: Horizontal alignment.
         :param v_align: Vertical alignment.
         :param m_align: Multi-line alignment.
+        :param rotation: float or {'vertical', 'horizontal'}
+        :param rotation_mode: {None, 'default', 'anchor'}
         :param line_spacing:
         :param font_family:
         :param font_size: float or {'xx-small', 'x-small', 'small', 'medium',
@@ -854,12 +858,17 @@ class AxesFormatter(object):
         :param bbox_join_style: Join style.
         :param bbox_line_style: Line style for edge.
         :param bbox_line_width: Line width for edge.
+        :param z_order: z-order for the text.
         """
         if isinstance(x, Iterable) or isinstance(y, Iterable):
             if not isinstance(x, Iterable):
                 x = [x] * len(y)
+                font_dict = [font_dict] * len(y)
             elif not isinstance(y, Iterable):
                 y = [y] * len(x)
+                font_dict = [font_dict] * len(x)
+            else:
+                font_dict = [font_dict] * len(x)
         else:
             x = [x]
             y = [y]
@@ -877,12 +886,16 @@ class AxesFormatter(object):
         kwargs = {}
         for arg, mpl_arg in zip(
             [alpha, color,
-             h_align, v_align, m_align, line_spacing,
+             h_align, v_align, m_align,
+             rotation, rotation_mode,
+             line_spacing,
              font_family, font_size, font_stretch, font_style,
              font_variant, font_weight,
              wrap, z_order],
             ['alpha', 'color',
-             'ha', 'va', 'ma', 'linespacing',
+             'ha', 'va', 'ma',
+             'rotation', 'rotation_mode',
+             'linespacing',
              'fontfamily', 'fontsize', 'fontstretch', 'fontstyle',
              'fontvariant', 'fontweight',
              'wrap', 'zorder']
@@ -954,6 +967,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the arc.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -979,10 +993,13 @@ class AxesFormatter(object):
         return self
 
     def add_arrow(
-            self, x_tail: float, y_tail: float,
-            dx: Optional[float] = None, dy: Optional[float] = None,
-            x_head: Optional[float] = None, y_head: Optional[float] = None,
-            width: float = 1.0,
+            self, x_tail: float,
+            y_tail: float,
+            x_head: Optional[float] = None,
+            y_head: Optional[float] = None,
+            dx: Optional[float] = None,
+            dy: Optional[float] = None,
+            width: Optional[float] = None,
             alpha: Optional[float] = None,
             cap_style: Optional[Union[str, CAP_STYLE]] = None,
             color: Optional[Color] = None,
@@ -1000,11 +1017,11 @@ class AxesFormatter(object):
 
         :param x_tail: The x-coordinate of the arrow tail.
         :param y_tail: The y-coordinate of the arrow tail.
-        :param dx: Arrow length in the x direction.
-        :param dy: Arrow length in the y direction.
-        :param width: Scale factor for the width of the arrow.
-                      With a default value of 1, the tail width is 0.2 and
-                      head width is 0.6.
+        :param x_head: The x-coordinate of the arrow head.
+        :param y_head: The y-coordinate of the arrow head.
+        :param dx: Arrow length in the x direction. Only used if x_head is None.
+        :param dy: Arrow length in the y direction. Only used if y_head is None.
+        :param width: Width of full arrow tail. default: 0.001
         :param alpha: Opacity.
         :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
@@ -1015,6 +1032,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the arrow.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -1040,7 +1058,7 @@ class AxesFormatter(object):
             if arg is not None:
                 kwargs[mpl_arg] = arg
         arrow = Arrow(
-            x=x_tail, y=y_tail, dx=dx, dy=dy,
+            x=x_tail, y=y_tail, dx=dx, dy=dy, width=width,
             **kwargs
         )
         self._axes.add_artist(arrow)
@@ -1079,6 +1097,7 @@ class AxesFormatter(object):
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
         :param cap_style: Cap style.
+        :param z_order: z-order for the circle.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -1137,6 +1156,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the ellipse.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -1162,8 +1182,10 @@ class AxesFormatter(object):
 
     def add_fancy_arrow(
             self, x_tail: float, y_tail: float,
-            dx: Optional[float] = None, dy: Optional[float] = None,
-            x_head: Optional[float] = None, y_head: Optional[float] = None,
+            x_head: Optional[float] = None,
+            y_head: Optional[float] = None,
+            dx: Optional[float] = None,
+            dy: Optional[float] = None,
             tail_width: float = 0.001,
             length_includes_head: bool = False,
             head_width: Optional[float] = None,
@@ -1188,8 +1210,10 @@ class AxesFormatter(object):
 
         :param x_tail: The x-coordinate of the arrow tail.
         :param y_tail: The y-coordinate of the arrow tail.
-        :param dx: Arrow length in the x direction.
-        :param dy: Arrow length in the y direction.
+        :param x_head: The x-coordinate of the arrow head.
+        :param y_head: The y-coordinate of the arrow head.
+        :param dx: Arrow length in the x direction. Only used if x_head is None.
+        :param dy: Arrow length in the y direction. Only used if y_head is None.
         :param tail_width: Width of full arrow tail.
         :param length_includes_head: True if head is to be counted in
                                      calculating the length.
@@ -1213,6 +1237,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the arrow.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -1314,6 +1339,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the arrow.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -1386,6 +1412,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the box.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -1443,6 +1470,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the polygon.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -1506,6 +1534,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the rectangle.
         """
         if not one_is_not_none(x_left, x_center):
             raise ValueError('Give one of {x_left, x_center}')
@@ -1591,6 +1620,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the polygon.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -1657,6 +1687,7 @@ class AxesFormatter(object):
         :param label: Label for the object in the legend.
         :param line_style: Line style for edge.
         :param line_width: Line width for edge.
+        :param z_order: z-order for the wedge.
         """
         line_style = LINE_STYLE.get_line_style(line_style)
         cap_style = CAP_STYLE.get_cap_style(cap_style)
@@ -2560,15 +2591,12 @@ class AxesFormatter(object):
                             Default is None, which means using
                             rcParams["legend.numpoints"] (default: 1).
         :param scatter_points: The number of marker points in the legend when
-                               creating a legend entry for a PathCollection
-                               (scatter plot). Default is None, which means using
-                               rcParams["legend.scatterpoints"] (default: 1).
-        :param scatter_y_offsets: The vertical offset (relative to the font size)
-                                  for the markers created for a scatter plot
-                                  legend entry. 0.0 is at the base the legend
-                                  text, and 1.0 is at the top. To draw all
-                                  markers at the same height, set to [0.5].
-                                  Default is [0.375, 0.5, 0.3125].
+        creating a legend entry for a PathCollection (scatter plot). Default is
+        None, which means using rcParams["legend.scatterpoints"] (default: 1).
+        :param scatter_y_offsets: The vertical offset (relative to the font
+        size) for the markers created for a scatter plot legend entry. 0.0 is at
+        the base the legend text, and 1.0 is at the top. To draw all markers at
+        the same height, set to [0.5]. Default is [0.375, 0.5, 0.3125].
         :param marker_scale: The relative size of legend markers compared with
                              the originally drawn ones. Default is None, which
                              means using rcParams["legend.markerscale"]
@@ -2598,23 +2626,21 @@ class AxesFormatter(object):
         :param title: The legend's title. Default is no title (None).
         :param title_font_size: The fontsize of the legend's title. Default is
                                 the default fontsize.
-        :param label_spacing: The fractional whitespace inside the legend border,
-                              in font-size units. Default is None, which means
-                              using rcParams["legend.borderpad"] (default: 0.4).
+        :param label_spacing: The fractional whitespace inside the legend
+        border, in font-size units. Default is None, which means using
+        rcParams["legend.borderpad"] (default: 0.4).
         :param handle_length: The length of the legend handles, in font-size
-                              units. Default is None, which means using
-                              rcParams["legend.handlelength"] (default: 2.0).
+        units. Default is None, which means using
+        rcParams["legend.handlelength"] (default: 2.0).
         :param handle_text_pad: The pad between the legend handle and text, in
-                                font-size units. Default is None, which means
-                                using rcParams["legend.handletextpad"]
-                                (default: 0.8).
+        font-size units. Default is None, which means using
+        rcParams["legend.handletextpad"] (default: 0.8).
         :param border_axes_pad: The pad between the axes and legend border, in
-                                font-size units. Default is None,
-                                which means using
-                                rcParams["legend.borderaxespad"] (default: 0.5).
+        font-size units. Default is None, which means using
+        rcParams["legend.borderaxespad"] (default: 0.5).
         :param column_spacing: The spacing between columns, in font-size units.
-                               Default is None, which means using
-                               rcParams["legend.columnspacing"] (default: 2.0).
+        Default is None, which means using rcParams["legend.columnspacing"]
+        (default: 2.0).
         """
         kwargs = {}
         for kwarg, mpl_arg in zip(
