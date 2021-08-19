@@ -53,7 +53,8 @@ if TYPE_CHECKING:
 class AxesFormatter(object):
 
     def __init__(self, axes: Optional[Axes] = None,
-                 width: Optional[Scalar] = None, height: Optional[Scalar] = None,
+                 width: Optional[Scalar] = None,
+                 height: Optional[Scalar] = None,
                  constrained_layout: bool = False):
         """
         Create a new AxesFormatter

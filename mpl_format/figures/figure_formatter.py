@@ -373,9 +373,9 @@ class FigureFormatter(object):
         """
         if self._has_array:
             for axf in self.multi.flat:
-                axf.wrap_x_tick_labels(max_width=max_width)
+                axf.x_ticks.wrap_label_text(max_width=max_width)
         else:
-            self.single.wrap_x_tick_labels(max_width=max_width)
+            self.single.x_ticks.wrap_label_text(max_width=max_width)
         return self
 
     def wrap_y_tick_labels(self, max_width: int) -> 'FigureFormatter':
@@ -387,9 +387,9 @@ class FigureFormatter(object):
         """
         if self._has_array:
             for axf in self.multi.flat:
-                axf.wrap_y_tick_labels(max_width=max_width)
+                axf.y_ticks.wrap_label_text(max_width=max_width)
         else:
-            self.single.wrap_y_tick_labels(max_width=max_width)
+            self.single.y_ticks.wrap_label_text(max_width=max_width)
         return self
 
     def wrap_tick_labels(self, max_width: int) -> 'FigureFormatter':
@@ -462,9 +462,9 @@ class FigureFormatter(object):
         """
         if self._has_array:
             for axf in self.multi.flat:
-                axf.map_x_tick_labels(mapping=mapping)
+                axf.x_ticks.map_label_text(mapping=mapping)
         else:
-            self.single.map_x_tick_labels(mapping=mapping)
+            self.single.x_ticks.map_label_text(mapping=mapping)
         return self
 
     def map_y_tick_labels(
@@ -477,9 +477,9 @@ class FigureFormatter(object):
         """
         if self._has_array:
             for axf in self.multi.flat:
-                axf.map_y_tick_labels(mapping=mapping)
+                axf.y_ticks.map_label_text(mapping=mapping)
         else:
-            self.single.map_y_tick_labels(mapping=mapping)
+            self.single.y_ticks.map_label_text(mapping=mapping)
         return self
 
     def map_tick_labels(
@@ -617,35 +617,31 @@ class FigureFormatter(object):
         return self
 
     def rotate_x_tick_labels(self,
-                             rotation: int,
-                             how: str = 'absolute') -> 'FigureFormatter':
+                             rotation: int) -> 'FigureFormatter':
         """
         Set the rotation of each x-axis' tick-labels.
 
         :param rotation: The rotation value to set in degrees.
-        :param how: 'absolute' or 'relative'
         """
         if self._has_array:
             for axf in self.multi.flat:
-                axf.rotate_x_tick_labels(rotation=rotation, how=how)
+                axf.x_ticks.set_label_rotation(rotation=rotation)
         else:
-            self.single.rotate_x_tick_labels(rotation=rotation, how=how)
+            self.single.x_ticks.set_label_rotation(rotation=rotation)
         return self
 
     def rotate_y_tick_labels(self,
-                             rotation: int,
-                             how: str = 'absolute') -> 'FigureFormatter':
+                             rotation: int) -> 'FigureFormatter':
         """
         Set the rotation of each y-axis' tick-labels.
 
         :param rotation: The rotation value to set in degrees.
-        :param how: 'absolute' or 'relative'
         """
         if self._has_array:
             for axf in self.multi.flat:
-                axf.rotate_y_tick_labels(rotation=rotation, how=how)
+                axf.y_ticks.set_label_rotation(rotation=rotation)
         else:
-            self.single.rotate_y_tick_labels(rotation=rotation, how=how)
+            self.single.y_ticks.set_label_rotation(rotation=rotation)
         return self
 
     # endregion

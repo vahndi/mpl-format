@@ -1,4 +1,4 @@
-from typing import Union, List, Optional, Dict, Callable
+from typing import Union, List, Optional
 
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties

@@ -2,7 +2,8 @@ from typing import List
 
 from mpl_format.compound_types import FontSize
 from mpl_format.text.text_formatter import TextFormatter
-from mpl_format.text.text_utils import HORIZONTAL_ALIGNMENTS, VERTICAL_ALIGNMENTS
+from mpl_format.text.text_utils import \
+    HORIZONTAL_ALIGNMENTS, VERTICAL_ALIGNMENTS
 
 
 class TextListFormatter(object):

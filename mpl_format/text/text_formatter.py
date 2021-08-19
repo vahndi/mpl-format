@@ -2,7 +2,8 @@ from matplotlib.text import Text
 from typing import Dict, Union, Callable
 
 from mpl_format.compound_types import FontSize
-from mpl_format.text.text_utils import wrap_text, remove_parenthesized_text, HORIZONTAL_ALIGNMENTS, VERTICAL_ALIGNMENTS
+from mpl_format.text.text_utils import wrap_text, remove_parenthesized_text, \
+    HORIZONTAL_ALIGNMENTS, VERTICAL_ALIGNMENTS
 
 
 class TextFormatter(object):

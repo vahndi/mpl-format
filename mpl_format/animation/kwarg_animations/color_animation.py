@@ -56,7 +56,7 @@ class ColorAnimation(object):
 
     @classmethod
     def square_wave(cls, color_1: Color, color_2: Color,
-                    cycles: float, phase: float = 0.0) -> 'FloatAnimation':
+                    cycles: float, phase: float = 0.0) -> 'ColorAnimation':
         """
         Return a square wave oscillating between min_val and max_val,
         starting at phase * 2π with cycles complete waves.
@@ -79,7 +79,7 @@ class ColorAnimation(object):
 
     @classmethod
     def triangle_wave(cls, color_1: Color, color_2: Color,
-                      cycles: float, phase: float = 0.0) -> 'FloatAnimation':
+                      cycles: float, phase: float = 0.0) -> 'ColorAnimation':
         """
         Return a triangle wave oscillating between min_val and max_val,
         starting at phase * 2π with cycles complete waves.

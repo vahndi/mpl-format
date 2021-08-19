@@ -287,7 +287,10 @@ class AxisFormatter(object):
 
         :param scale: One of ['log', 'linear', 'symlog', 'logit']
         """
-        self._axis._set_scale(scale)
+        if self._direction == 'x':
+            self._axes.set_xscale(value=scale)
+        else:
+            self._axes.set_yscale(value=scale)
         return self
 
     def set_scale_log(self) -> 'AxisFormatter':
