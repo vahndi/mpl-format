@@ -1,14 +1,14 @@
-from typing import Union
+from compound_types.built_ins import Scalar
 
 
-def format_as_integer(number: Union[int, float], kmbt: bool = False) -> str:
+def format_as_integer(number: Scalar, kmbt: bool = False) -> str:
     """
     Format a number as an integer, with comma separators and an optional suffix
     of K, M, B or T for large numbers.
 
     :param number: The number to format.
     :param kmbt: Whether to abbreviate numbers using K, M, B and T for
-                     thousands, millions, billions and trillions.
+                 thousands, millions, billions and trillions.
     :return:
     """
     if not kmbt:

@@ -2,10 +2,6 @@ from math import pi, atan2
 from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING
 
 import matplotlib.pyplot as plt
-from compound_types.arrays import ArrayLike
-from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable, BoolOrBoolIterable, FloatIterable, Scalar
-from compound_types.type_checks import all_are_none, one_is_not_none
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
@@ -19,6 +15,10 @@ from numpy.ma import cos, sin
 from pandas import DataFrame, Series
 from scipy.interpolate import interp1d
 
+from compound_types.arrays import ArrayLike
+from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
+    DictOrDictIterable, BoolOrBoolIterable, FloatIterable, Scalar
+from compound_types.type_checks import all_are_none, one_is_not_none
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.axes.ticks_formatter import TicksFormatter
@@ -43,6 +43,8 @@ from mpl_format.patches.rectangle_list_formatter import RectangleListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 from mpl_format.utils.arg_checks import check_h_align, check_v_align
+from mpl_format.utils.arg_transforms import smart_zip_kwargs, \
+    drop_none_values, apply_mappings
 from mpl_format.utils.color_utils import cross_fade
 from mpl_format.utils.io_utils import save_plot
 
@@ -785,7 +787,8 @@ class AxesFormatter(object):
     # region patches
 
     def add_text(
-            self, x: FloatOrFloatIterable,
+            self,
+            x: FloatOrFloatIterable,
             y: FloatOrFloatIterable,
             text: StrOrStrIterable,
             max_width: Optional[int] = None,
@@ -861,76 +864,53 @@ class AxesFormatter(object):
         :param bbox_line_width: Line width for edge.
         :param z_order: z-order for the text.
         """
-        if isinstance(x, Iterable) or isinstance(y, Iterable):
-            if not isinstance(x, Iterable):
-                x = [x] * len(y)
-                font_dict = [font_dict] * len(y)
-            elif not isinstance(y, Iterable):
-                y = [y] * len(x)
-                font_dict = [font_dict] * len(x)
-            else:
-                font_dict = [font_dict] * len(x)
-        else:
-            x = [x]
-            y = [y]
-            if isinstance(text, str):
-                text = [text] * len(x)
-            if type(font_dict) in (type(None), dict):
-                font_dict = [font_dict] * len(x)
-
-        font_size = FONT_SIZE.get_font_size(font_size)
-        font_stretch = FONT_STRETCH.get_font_stretch(font_stretch)
-        font_style = FONT_STYLE.get_font_style(font_style)
-        font_variant = FONT_VARIANT.get_font_variant(font_variant)
-        font_weight = FONT_WEIGHT.get_font_weight(font_weight)
-
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, color,
-             h_align, v_align, m_align,
-             rotation, rotation_mode,
-             line_spacing,
-             font_family, font_size, font_stretch, font_style,
-             font_variant, font_weight,
-             wrap, z_order],
-            ['alpha', 'color',
-             'ha', 'va', 'ma',
-             'rotation', 'rotation_mode',
-             'linespacing',
-             'fontfamily', 'fontsize', 'fontstretch', 'fontstyle',
-             'fontvariant', 'fontweight',
-             'wrap', 'zorder']
+        mappings = {
+            'fontsize': FONT_SIZE.get_font_size,
+            'fontstretch': FONT_STRETCH.get_font_stretch,
+            'fontstyle': FONT_STYLE.get_font_style,
+            'fontvariant': FONT_VARIANT.get_font_variant,
+            'fontweight': FONT_WEIGHT.get_font_weight,
+            'bbox__boxstyle': BOX_STYLE.get_box_style,
+            'bbox__capstyle': CAP_STYLE.get_cap_style,
+            'bbox__joinstyle': JOIN_STYLE.get_join_style,
+            'bbox__linestyle': LINE_STYLE.get_line_style
+        }
+        for kwargs in smart_zip_kwargs(
+                x=x, y=y, s=text, fontdict=font_dict, max_width=max_width,
+                alpha=alpha, color=color,
+                ha=h_align, va=v_align, ma=m_align,
+                rotation=rotation, rotation_mode=rotation_mode,
+                linespacing=line_spacing,
+                fontfamily=font_family, fontsize=font_size,
+                fontstretch=font_stretch, fontstyle=font_style,
+                fontvariant=font_variant, fontweight=font_weight,
+                wrap=wrap, zorder=z_order,
+                bbox__boxstyle=bbox_style, bbox__alpha=bbox_alpha,
+                bbox__capstyle=bbox_cap_style, bbox__color=bbox_color,
+                bbox__edgecolor=bbox_edge_color,
+                bbox__facecolor=bbox_face_color,
+                bbox__fill=bbox_fill, bbox__joinstyle=bbox_join_style,
+                bbox__linestyle=bbox_line_style, bbox__linewidth=bbox_line_width
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
+            # main kwargs
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, mappings)
+            # bbox kwargs
+            bbox_kwargs = {}
+            for kw, arg in kwargs.items():
+                if kw.startswith('bbox__'):
+                    bbox_kwargs[kw[6:]] = arg
+            kwargs = {kw: arg for kw, arg in kwargs.items()
+                      if not kw.startswith('bbox__')}
+            if bbox_kwargs:
+                kwargs['bbox'] = bbox_kwargs
+            # max width
+            mw = kwargs.pop('max_width', None)
+            if mw is not None:
+                kwargs['s'] = wrap_text(text=kwargs['s'], max_width=mw)
+            # add text
+            self._axes.text(**drop_none_values(kwargs))
 
-        bbox_kwargs = {}
-        bbox_style = BOX_STYLE.get_box_style(bbox_style)
-        bbox_cap_style = CAP_STYLE.get_cap_style(bbox_cap_style)
-        bbox_join_style = JOIN_STYLE.get_join_style(bbox_join_style)
-        bbox_line_style = LINE_STYLE.get_line_style(bbox_line_style)
-        for arg, mpl_arg in zip(
-            [bbox_style, bbox_alpha, bbox_cap_style, bbox_color,
-             bbox_edge_color, bbox_face_color, bbox_fill, bbox_join_style,
-             bbox_line_style, bbox_line_width],
-            ['boxstyle', 'alpha', 'capstyle', 'color',
-             'edgecolor', 'facecolor', 'fill', 'joinstyle',
-             'linestyle', 'linewidth']
-        ):
-            if arg is not None:
-                bbox_kwargs[mpl_arg] = arg
-
-        if bbox_kwargs:
-            kwargs['bbox'] = bbox_kwargs
-
-        for x_i, y_i, text_i, font_dict_i in zip(x, y, text, font_dict):
-            if max_width is not None:
-                text_i = wrap_text(text=text_i, max_width=max_width)
-            self._axes.text(
-                x=x_i, y=y_i, s=text_i,
-                fontdict=font_dict_i,
-                **kwargs
-            )
         return self
 
     def add_arc(
