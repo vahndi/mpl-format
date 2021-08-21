@@ -1,4 +1,5 @@
 from mpl_format.enums.arrow_style import ARROW_STYLE
+from mpl_format.enums.box_style import BOX_STYLE
 from mpl_format.enums.cap_style import CAP_STYLE
 from mpl_format.enums.connection_style import CONNECTION_STYLE
 from mpl_format.enums.draw_style import DRAW_STYLE

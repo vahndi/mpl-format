@@ -17,25 +17,27 @@ from scipy.interpolate import interp1d
 
 from compound_types.arrays import ArrayLike
 from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable, BoolOrBoolIterable, FloatIterable, Scalar
+    DictOrDictIterable, BoolOrBoolIterable, FloatIterable, Scalar, \
+    IntOrIntIterable, NdArrayIterable
 from compound_types.type_checks import all_are_none, one_is_not_none
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.axes.ticks_formatter import TicksFormatter
 from mpl_format.compound_types import FontSize, Color, LegendLocation, \
-    StringMapper, ColorOrColorIterable
-from mpl_format.enums import FONT_VARIANT
-from mpl_format.enums.arrow_style import ARROW_STYLE
+    StringMapper, ColorOrColorIterable, FontStretch, FontWeight, \
+    FontSizeIterable, FontStretchIterable, FontStyle, FontStyleIterable, \
+    FontVariant, FontVariantIterable, CapStyle, CapStyleIterable, \
+    JoinStyleIterable, JoinStyle, LineStyleIterable, LineStyle, \
+    ArrowStyleIterable, ArrowStyle, ConnectionStyleIterable, ConnectionStyle, \
+    PathIterable, PatchIterable, BoxStyleTypeIterable
 from mpl_format.enums.box_style import BOX_STYLE, BoxStyleType
 from mpl_format.enums.cap_style import CAP_STYLE
 from mpl_format.enums.connection_style import CONNECTION_STYLE
 from mpl_format.enums.draw_style import DRAW_STYLE
-from mpl_format.enums.font_size import FONT_SIZE
-from mpl_format.enums.font_stretch import FONT_STRETCH
-from mpl_format.enums.font_style import FONT_STYLE
 from mpl_format.enums.font_weight import FONT_WEIGHT
 from mpl_format.enums.join_style import JOIN_STYLE
 from mpl_format.enums.line_style import LINE_STYLE
+from mpl_format.enums.mappings import kwarg_mappings
 from mpl_format.enums.marker_style import MARKER_STYLE
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
@@ -551,7 +553,7 @@ class AxesFormatter(object):
                    x_max: Union[float, str] = 1,
                    color: Optional[Color] = None,
                    alpha: Optional[float] = None,
-                   line_style: Optional[Union[str, LINE_STYLE]] = None,
+                   line_style: Optional[LineStyle] = None,
                    line_width: Optional[float] = None,
                    label: Optional[str] = None,
                    marker_edge_color: Optional[Color] = None,
@@ -598,7 +600,7 @@ class AxesFormatter(object):
                    y_min: Union[float, str] = 0,
                    y_max: Union[float, str] = 1,
                    color: Optional[Color] = None, alpha: Optional[float] = None,
-                   line_style: Optional[Union[str, LINE_STYLE]] = None,
+                   line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
                    line_width: Optional[float] = None,
                    label: Optional[str] = None,
                    marker_edge_color: Optional[Color] = None,
@@ -691,7 +693,7 @@ class AxesFormatter(object):
                      step: Optional[str] = None,
                      color: Optional[Color] = None,
                      alpha: Optional[float] = None,
-                     line_style: Optional[Union[str, LINE_STYLE]] = None,
+                     line_style: Optional[LineStyle] = None,
                      line_width: Optional[float] = None,
                      edge_color: Optional[Color] = None,
                      face_color: Optional[Color] = None) -> 'AxesFormatter':
@@ -791,34 +793,39 @@ class AxesFormatter(object):
             x: FloatOrFloatIterable,
             y: FloatOrFloatIterable,
             text: StrOrStrIterable,
-            max_width: Optional[int] = None,
+            max_width: Optional[IntOrIntIterable] = None,
             font_dict: Optional[DictOrDictIterable] = None,
-            alpha: Optional[float] = None,
-            color: Optional[Color] = None,
-            h_align: Optional[str] = None,
-            v_align: Optional[str] = None,
-            m_align: Optional[str] = None,
-            rotation: Optional[Union[int, str]] = None,
-            rotation_mode: Optional[str] = None,
-            line_spacing: Optional[float] = None,
-            font_family: Optional[str] = None,
-            font_size: Optional[Union[int, float, str, FONT_SIZE]] = None,
-            font_stretch: Optional[Union[int, float, FONT_STRETCH]] = None,
-            font_style: Optional[Union[str, FONT_STYLE]] = None,
-            font_variant: Optional[Union[str, FONT_VARIANT]] = None,
-            font_weight: Optional[Union[int, float, str, FONT_WEIGHT]] = None,
-            wrap: Optional[bool] = None,
-            bbox_style: Optional[str] = None,
-            bbox_alpha: Optional[float] = None,
-            bbox_cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            bbox_color: Optional[Color] = None,
-            bbox_edge_color: Optional[Color] = None,
-            bbox_face_color: Optional[Color] = None,
-            bbox_fill: Optional[bool] = None,
-            bbox_join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            bbox_line_style: Optional[Union[str, LINE_STYLE]] = None,
-            bbox_line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            alpha: Optional[FloatOrFloatIterable] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            h_align: Optional[StrOrStrIterable] = None,
+            v_align: Optional[StrOrStrIterable] = None,
+            m_align: Optional[StrOrStrIterable] = None,
+            rotation: Optional[
+                Union[IntOrIntIterable, StrOrStrIterable]] = None,
+            rotation_mode: Optional[StrOrStrIterable] = None,
+            line_spacing: Optional[FloatOrFloatIterable] = None,
+            font_family: Optional[StrOrStrIterable] = None,
+            font_size: Optional[Union[FontSize, FontSizeIterable]] = None,
+            font_stretch: Optional[
+                Union[FontStretch, FontStretchIterable]] = None,
+            font_style: Optional[Union[FontStyle, FontStyleIterable]] = None,
+            font_variant: Optional[
+                Union[FontVariant, FontVariantIterable]] = None,
+            font_weight: Optional[Union[FontWeight, FONT_WEIGHT]] = None,
+            wrap: Optional[BoolOrBoolIterable] = None,
+            bbox_style: Optional[StrOrStrIterable] = None,
+            bbox_alpha: Optional[FloatOrFloatIterable] = None,
+            bbox_cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            bbox_color: Optional[ColorOrColorIterable] = None,
+            bbox_edge_color: Optional[ColorOrColorIterable] = None,
+            bbox_face_color: Optional[ColorOrColorIterable] = None,
+            bbox_fill: Optional[BoolOrBoolIterable] = None,
+            bbox_join_style: Optional[
+                Union[JoinStyle, JoinStyleIterable]] = None,
+            bbox_line_style: Optional[
+                Union[LineStyle, LineStyleIterable]] = None,
+            bbox_line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ) -> 'AxesFormatter':
         """
         Add a single or multiple text blocks to the plot.
@@ -864,19 +871,9 @@ class AxesFormatter(object):
         :param bbox_line_width: Line width for edge.
         :param z_order: z-order for the text.
         """
-        mappings = {
-            'fontsize': FONT_SIZE.get_font_size,
-            'fontstretch': FONT_STRETCH.get_font_stretch,
-            'fontstyle': FONT_STYLE.get_font_style,
-            'fontvariant': FONT_VARIANT.get_font_variant,
-            'fontweight': FONT_WEIGHT.get_font_weight,
-            'bbox__boxstyle': BOX_STYLE.get_box_style,
-            'bbox__capstyle': CAP_STYLE.get_cap_style,
-            'bbox__joinstyle': JOIN_STYLE.get_join_style,
-            'bbox__linestyle': LINE_STYLE.get_line_style
-        }
         for kwargs in smart_zip_kwargs(
-                x=x, y=y, s=text, fontdict=font_dict, max_width=max_width,
+                x=x, y=y, s=text,
+                fontdict=font_dict, max_width=max_width,
                 alpha=alpha, color=color,
                 ha=h_align, va=v_align, ma=m_align,
                 rotation=rotation, rotation_mode=rotation_mode,
@@ -894,7 +891,7 @@ class AxesFormatter(object):
         ):
             # main kwargs
             kwargs = drop_none_values(kwargs)
-            kwargs = apply_mappings(kwargs, mappings)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
             # bbox kwargs
             bbox_kwargs = {}
             for kw, arg in kwargs.items():
@@ -903,6 +900,7 @@ class AxesFormatter(object):
             kwargs = {kw: arg for kw, arg in kwargs.items()
                       if not kw.startswith('bbox__')}
             if bbox_kwargs:
+                bbox_kwargs = apply_mappings(bbox_kwargs, kwarg_mappings)
                 kwargs['bbox'] = bbox_kwargs
             # max width
             mw = kwargs.pop('max_width', None)
@@ -914,19 +912,23 @@ class AxesFormatter(object):
         return self
 
     def add_arc(
-            self, x_center: float, y_center: float,
-            width: float, height: float,
-            angle: float = 0.0,
-            theta_start: float = 0.0, theta_end: float = 360.0,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            self,
+            x_center: FloatOrFloatIterable,
+            y_center: FloatOrFloatIterable,
+            width: FloatOrFloatIterable,
+            height: FloatOrFloatIterable,
+            angle: FloatOrFloatIterable = 0.0,
+            theta_start: FloatOrFloatIterable = 0.0,
+            theta_end: FloatOrFloatIterable = 360.0,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ):
         """
         Add an elliptical arc, i.e. a segment of an ellipse.
@@ -950,48 +952,41 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the arc.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color,
-             join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor',
-             'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+            x_center=x_center, y_center=y_center,
+            width=width, height=height, angle=angle,
+            theta1=theta_start, theta2=theta_end,
+            alpha=alpha, capstyle=cap_style, color=color, edgecolor=edge_color,
+            joinstyle=join_style, label=label,
+            linestyle=line_style, linewidth=line_width, zorder=z_order
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        arc = Arc(
-            xy=(x_center, y_center), width=width, height=height,
-            angle=angle, theta1=theta_start, theta2=theta_end,
-            **kwargs
-        )
-        self._axes.add_artist(arc)
+            kwargs = drop_none_values(kwargs)
+            kwargs['xy'] = kwargs.pop('x_center'), kwargs.pop('y_center')
+            arc = Arc(**kwargs)
+            self._axes.add_artist(arc)
+
         return self
 
     def add_arrow(
-            self, x_tail: float,
-            y_tail: float,
-            x_head: Optional[float] = None,
-            y_head: Optional[float] = None,
-            dx: Optional[float] = None,
-            dy: Optional[float] = None,
-            width: Optional[float] = None,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            self,
+            x_tail: FloatOrFloatIterable,
+            y_tail: FloatOrFloatIterable,
+            x_head: Optional[FloatOrFloatIterable] = None,
+            y_head: Optional[FloatOrFloatIterable] = None,
+            dx: Optional[FloatOrFloatIterable] = None,
+            dy: Optional[FloatOrFloatIterable] = None,
+            width: Optional[FloatOrFloatIterable] = None,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            label: StrOrStrIterable = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ):
         """
         Add an an arrow patch.
@@ -1015,52 +1010,48 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the arrow.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
         if not one_is_not_none(dx, x_head):
             raise ValueError('Must give dx or x_head')
         if not one_is_not_none(dy, y_head):
             raise ValueError('Must give dy or y_head')
-        if x_head is not None:
-            dx = x_head - x_tail
-        if y_head is not None:
-            dy = y_head - y_tail
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+                x=x_tail, y=y_tail, x_head=x_head, y_head=y_head,
+                dx=dx, dy=dy, width=width,
+                alpha=alpha, capstyle=cap_style,
+                color=color, edgecolor=edge_color, facecolor=face_color,
+                fill=fill, joinstyle=join_style, label=label,
+                linestyle=line_style, linewidth=line_width,
+                zorder=z_order
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        arrow = Arrow(
-            x=x_tail, y=y_tail, dx=dx, dy=dy, width=width,
-            **kwargs
-        )
-        self._axes.add_artist(arrow)
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            if kwargs['x_head'] is not None:
+                kwargs['dx'] = kwargs['x_head'] - kwargs['x']
+                kwargs.pop('x_head')
+            if kwargs['y_head'] is not None:
+                kwargs['dy'] = kwargs['y_head'] - kwargs['y']
+                kwargs.pop('y_head')
+            arrow = Arrow(**kwargs)
+            self._axes.add_artist(arrow)
+
         return self
 
     def add_circle(
             self,
-            x_center: float,
-            y_center: float,
-            radius: float,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            z_order: Optional[int] = None
+            x_center: FloatOrFloatIterable,
+            y_center: FloatOrFloatIterable,
+            radius: FloatOrFloatIterable,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ) -> 'AxesFormatter':
         """
         Add a rectangle to the Axes.
@@ -1080,44 +1071,40 @@ class AxesFormatter(object):
         :param cap_style: Cap style.
         :param z_order: z-order for the circle.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+                x_center=x_center, y_center=y_center, radius=radius,
+                alpha=alpha, capstyle=cap_style,
+                color=color, edgecolor=edge_color, facecolor=face_color,
+                fill=fill, joinstyle=join_style, label=label,
+                linestyle=line_style, linewidth=line_width,
+                zorder=z_order
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        polygon = Circle(
-            xy=(x_center, y_center), radius=radius,
-            **kwargs
-        )
-        self._axes.add_artist(polygon)
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            kwargs['xy'] = kwargs.pop('x_center'), kwargs.pop('y_center')
+            circle = Circle(**kwargs)
+            self._axes.add_artist(circle)
+
         return self
 
     def add_ellipse(
             self,
-            x_center: float, y_center: float,
-            width: float, height: float,
-            angle: float = 0.0,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            x_center: FloatOrFloatIterable,
+            y_center: FloatOrFloatIterable,
+            width: FloatOrFloatIterable,
+            height: FloatOrFloatIterable,
+            angle: FloatOrFloatIterable = 0.0,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ):
         """
         Add an elliptical arc, i.e. a segment of an ellipse.
@@ -1126,7 +1113,7 @@ class AxesFormatter(object):
         :param y_center: The y-coordinate of the center of the ellipse.
         :param width: The length (diameter) of the horizontal axis.
         :param height: The length (diameter) of the vertical axis.
-        :param angle: Rotation of the ellipse in degrees (counterclockwise).
+        :param angle: Rotation of the ellipse in degrees (counter-clockwise).
         :param alpha: Opacity.
         :param cap_style: Cap style.
         :param color: Use to set both the edge-color and the face-color.
@@ -1139,52 +1126,48 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the ellipse.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+            x_center=x_center, y_center=y_center,
+            width=width, height=height, angle=angle,
+            alpha=alpha, capstyle=cap_style,
+            color=color, edgecolor=edge_color, facecolor=face_color,
+            fill=fill, joinstyle=join_style, label=label,
+            linestyle=line_style, linewidth=line_width, zorder=z_order
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        ellipse = Ellipse(
-            xy=(x_center, y_center), width=width, height=height, angle=angle,
-            **kwargs
-        )
-        self._axes.add_artist(ellipse)
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            kwargs['xy'] = kwargs.pop('x_center'), kwargs.pop('y_center')
+            ellipse = Ellipse(**kwargs)
+            self._axes.add_artist(ellipse)
+
         return self
 
     def add_fancy_arrow(
-            self, x_tail: float, y_tail: float,
-            x_head: Optional[float] = None,
-            y_head: Optional[float] = None,
-            dx: Optional[float] = None,
-            dy: Optional[float] = None,
-            tail_width: float = 0.001,
-            length_includes_head: bool = False,
-            head_width: Optional[float] = None,
-            head_length: Optional[float] = None,
-            shape: str = 'full',
-            overhang: float = 0.0,
-            head_starts_at_zero: bool = False,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            self,
+            x_tail: FloatOrFloatIterable,
+            y_tail: FloatOrFloatIterable,
+            x_head: Optional[FloatOrFloatIterable] = None,
+            y_head: Optional[FloatOrFloatIterable] = None,
+            dx: Optional[FloatOrFloatIterable] = None,
+            dy: Optional[FloatOrFloatIterable] = None,
+            tail_width: FloatOrFloatIterable = 0.001,
+            length_includes_head: BoolOrBoolIterable = False,
+            head_width: Optional[FloatOrFloatIterable] = None,
+            head_length: Optional[FloatOrFloatIterable] = None,
+            shape: StrOrStrIterable = 'full',
+            overhang: FloatOrFloatIterable = 0.0,
+            head_starts_at_zero: BoolOrBoolIterable = False,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ):
         """
         Like Arrow, but lets you set head width and head height independently.
@@ -1220,67 +1203,65 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the arrow.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
         if not one_is_not_none(dx, x_head):
             raise ValueError('Must give dx or x_head')
         if not one_is_not_none(dy, y_head):
             raise ValueError('Must give dy or y_head')
-        if x_head is not None:
-            dx = x_head - x_tail
-        if y_head is not None:
-            dy = y_head - y_tail
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+                x=x_tail, y=y_tail, x_head=x_head, y_head=y_head,
+                dx=dx, dy=dy, width=tail_width,
+                length_includes_head=length_includes_head,
+                head_width=head_width, head_length=head_length,
+                shape=shape, overhang=overhang,
+                head_starts_at_zero=head_starts_at_zero,
+                alpha=alpha, capstyle=cap_style,
+                color=color, edgecolor=edge_color, facecolor=face_color,
+                fill=fill, joinstyle=join_style, label=label,
+                linestyle=line_style, linewidth=line_width,
+                zorder=z_order
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        arrow = FancyArrow(
-            x=x_tail, y=y_tail, dx=dx, dy=dy, width=tail_width,
-            length_includes_head=length_includes_head,
-            head_width=head_width,
-            head_length=head_length,
-            shape=shape,
-            overhang=overhang,
-            head_starts_at_zero=head_starts_at_zero,
-            **kwargs
-        )
-        self._axes.add_artist(arrow)
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            if kwargs['x_head'] is not None:
+                kwargs['dx'] = kwargs['x_head'] - kwargs['x']
+                kwargs.pop('x_head')
+            if kwargs['y_head'] is not None:
+                kwargs['dy'] = kwargs['y_head'] - kwargs['y']
+                kwargs.pop('y_head')
+            arrow = FancyArrow(**kwargs)
+            self._axes.add_artist(arrow)
+
         return self
 
     def add_fancy_arrow_patch(
-            self, x: float, y: float, dx: float, dy: float,
-            path: Optional[Path] = None,
-            arrow_style: Union[str, ARROW_STYLE] = 'simple',
+            self,
+            x: FloatOrFloatIterable,
+            y: FloatOrFloatIterable,
+            dx: FloatOrFloatIterable,
+            dy: FloatOrFloatIterable,
+            path: Optional[Union[Path, PathIterable]] = None,
+            arrow_style: Union[ArrowStyle, ArrowStyleIterable] = 'simple',
             connection_style: Union[
-                str, CONNECTION_STYLE
+                ConnectionStyle, ConnectionStyleIterable
             ] = CONNECTION_STYLE.arc_3,
-            tail_patch: Optional[Patch] = None,
-            head_patch: Optional[Patch] = None,
-            tail_shrink_factor: Optional[float] = 2,
-            head_shrink_factor: Optional[float] = 2,
-            mutation_scale: Optional[float] = 1,
-            mutation_aspect: Optional[float] = None,
-            dpi_cor: Optional[float] = 1,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            tail_patch: Optional[Union[Patch, PatchIterable]] = None,
+            head_patch: Optional[Union[Patch, PatchIterable]] = None,
+            tail_shrink_factor: Optional[FloatOrFloatIterable] = 2,
+            head_shrink_factor: Optional[FloatOrFloatIterable] = 2,
+            mutation_scale: Optional[FloatOrFloatIterable] = 1,
+            mutation_aspect: Optional[FloatOrFloatIterable] = None,
+            dpi_cor: Optional[FloatOrFloatIterable] = 1,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[LineStyle, LineStyleIterable] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ):
         """
         Like Arrow, but lets you set head width and head height independently.
@@ -1322,52 +1303,53 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the arrow.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        arrow_style = ARROW_STYLE.get_arrow_style(arrow_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+                x=x, y=y, dx=dx, dy=dy, path=path,
+                arrowstyle=arrow_style, connectionstyle=connection_style,
+                patchA=tail_patch, patchB=head_patch,
+                shrinkA=tail_shrink_factor, shrinkB=head_shrink_factor,
+                mutation_scale=mutation_scale, mutation_aspect=mutation_aspect,
+                dpi_cor=dpi_cor,
+                alpha=alpha, capstyle=cap_style,
+                color=color, edgecolor=edge_color, facecolor=face_color,
+                fill=fill, joinstyle=join_style, label=label,
+                linestyle=line_style, linewidth=line_width,
+                zorder=z_order
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        arrow = FancyArrowPatch(
-            posA=(x, y), posB=(x + dx, y + dy),
-            path=path, arrowstyle=arrow_style,
-            connectionstyle=connection_style,
-            patchA=tail_patch, patchB=head_patch,
-            shrinkA=tail_shrink_factor, shrinkB=head_shrink_factor,
-            mutation_scale=mutation_scale, mutation_aspect=mutation_aspect,
-            dpi_cor=dpi_cor,
-            **kwargs
-        )
-        self._axes.add_artist(arrow)
+            x = kwargs.pop('x')
+            y = kwargs.pop('y')
+            dx = kwargs.pop('dx')
+            dy = kwargs.pop('dy')
+            kwargs['posA'] = x, y
+            kwargs['posB'] = x + dx, y + dy
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            arrow = FancyArrowPatch(**kwargs)
+            self._axes.add_artist(arrow)
+
         return self
 
     def add_fancy_box_patch(
-            self, x: float, y: float,
-            width: float, height: float,
-            box_style: BoxStyleType = BOX_STYLE.round,
-            mutation_scale: Optional[float] = 1,
-            mutation_aspect: Optional[float] = None,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            self,
+            x: FloatOrFloatIterable,
+            y: FloatOrFloatIterable,
+            width: FloatOrFloatIterable,
+            height: FloatOrFloatIterable,
+            box_style: Union[
+                BoxStyleType, BoxStyleTypeIterable] = BOX_STYLE.round,
+            mutation_scale: Optional[FloatOrFloatIterable] = 1,
+            mutation_aspect: Optional[FloatOrFloatIterable] = None,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ):
         """
         A fancy box around a rectangle with lower left at xy = (x, y)
@@ -1379,7 +1361,7 @@ class AxesFormatter(object):
         :param height: The rectangle height.
         :param box_style: The box style.
         :param mutation_scale: Value with which attributes of arrowstyle
-                               (e.g., head_length) will be scaled.
+                               (e.g. head_length) will be scaled.
         :param mutation_aspect: The height of the rectangle will be squeezed by
                                 this value before the mutation and the mutated
                                 box will be stretched by the inverse of it.
@@ -1395,45 +1377,40 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the box.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        box_style = BOX_STYLE.get_box_style(box_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+                x=x, y=y, width=width, height=height,
+                boxstyle=box_style,
+                mutation_scale=mutation_scale, mutation_aspect=mutation_aspect,
+                alpha=alpha, fill=fill,
+                color=color, edgecolor=edge_color, facecolor=face_color,
+                capstyle=cap_style, joinstyle=join_style,
+                label=label,
+                linestyle=line_style, linewidth=line_width,
+                zorder=z_order,
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        fancy_box = FancyBboxPatch(
-            xy=(x, y), width=width, height=height,
-            boxstyle=box_style,
-            mutation_scale=mutation_scale,
-            mutation_aspect=mutation_aspect,
-            **kwargs
-        )
-        self._axes.add_artist(fancy_box)
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            kwargs['xy'] = kwargs.pop('x'), kwargs.pop('y')
+            fancy_box = FancyBboxPatch(**kwargs)
+            self._axes.add_artist(fancy_box)
+
         return self
 
     def add_polygon(
-            self, xy: ndarray, closed: bool = True,
-            alpha: Optional[float] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            z_order: Optional[int] = None
+            self,
+            xy: Union[ndarray, NdArrayIterable],
+            closed: BoolOrBoolIterable = True,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ) -> 'AxesFormatter':
         """
         Add a general polygon patch.
@@ -1453,45 +1430,42 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the polygon.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+                xy=xy, closed=closed,
+                alpha=alpha, color=color, edgecolor=edge_color,
+                facecolor=face_color, fill=fill,
+                label=label,
+                linestyle=line_style, linewidth=line_width,
+                capstyle=cap_style, joinstyle=join_style,
+                zorder=z_order,
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        polygon = Polygon(
-            xy=xy, closed=closed,
-            **kwargs
-        )
-        self._axes.add_artist(polygon)
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            polygon = Polygon(**kwargs)
+            self._axes.add_artist(polygon)
+
         return self
 
     def add_rectangle(
             self,
-            width: float, height: float,
-            angle: float = 0.0,
-            x_left: Optional[float] = None, y_bottom: Optional[float] = None,
-            x_center: Optional[float] = None, y_center: Optional[float] = None,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            width: FloatOrFloatIterable, 
+            height: FloatOrFloatIterable,
+            angle: FloatOrFloatIterable = 0.0,
+            x_left: Optional[FloatOrFloatIterable] = None, 
+            y_bottom: Optional[FloatOrFloatIterable] = None,
+            x_center: Optional[FloatOrFloatIterable] = None, 
+            y_center: Optional[FloatOrFloatIterable] = None,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ) -> 'AxesFormatter':
         """
         Add a rectangle to the Axes.
@@ -1517,70 +1491,73 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the rectangle.
         """
-        if not one_is_not_none(x_left, x_center):
-            raise ValueError('Give one of {x_left, x_center}')
-        if not one_is_not_none(y_bottom, y_center):
-            raise ValueError('Give one of {y_bottom, y_center}')
-        if not (
-                all_are_none(x_left, y_bottom) or
-                all_are_none(x_center, y_center)
+        for kwargs in smart_zip_kwargs(
+                width=width, height=height, angle=angle,
+                x_left=x_left, y_bottom=y_bottom,
+                x_center=x_center, y_center=y_center,
+                alpha=alpha, fill=fill, label=label,
+                color=color, edgecolor=edge_color, facecolor=face_color,
+                capstyle=cap_style, joinstyle=join_style,
+                linestyle=line_style, linewidth=line_width,
+                zorder=z_order
         ):
-            raise ValueError(
-                'Give either {x_left, y_bottom} or {x_center, y_center}'
-            )
-        if all_are_none(x_left, y_bottom):
-            x_l = x_center - width / 2
-            y_b = y_center - height / 2
-            r = ((width / 2) ** 2 + (height / 2) ** 2) ** 0.5
-            theta = atan2(height, width)
-            xc_new = x_l + r * cos(theta + pi * angle / 180)
-            yc_new = y_b + r * sin(theta + pi * angle / 180)
-            x = x_l + x_center - xc_new
-            y = y_b + y_center - yc_new
-        else:
-            x = x_left
-            y = y_bottom
 
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
-        ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        rectangle = Rectangle(
-            xy=(x, y), width=width, height=height, angle=angle,
-            **kwargs
-        )
-        self._axes.add_artist(rectangle)
+            if not one_is_not_none(x_left, x_center):
+                raise ValueError('Give one of {x_left, x_center}')
+            if not one_is_not_none(y_bottom, y_center):
+                raise ValueError('Give one of {y_bottom, y_center}')
+            if not (
+                    all_are_none(x_left, y_bottom) or
+                    all_are_none(x_center, y_center)
+            ):
+                raise ValueError(
+                    'Give either {x_left, y_bottom} or {x_center, y_center}'
+                )
+
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+
+            if all_are_none(x_left, y_bottom):
+                x_c = kwargs['x_center']
+                y_c = kwargs['y_center']
+                w = kwargs['width']
+                h = kwargs['height']
+                a = kwargs['angle']
+                x_l = x_c - w / 2
+                y_b = y_c - h / 2
+                r = ((w / 2) ** 2 + (h / 2) ** 2) ** 0.5
+                theta = atan2(h, w)
+                xc_new = x_l + r * cos(theta + pi * a / 180)
+                yc_new = y_b + r * sin(theta + pi * a / 180)
+                kwargs['x'] = x_l + x_c - xc_new
+                kwargs['y'] = y_b + y_c - yc_new
+            else:
+                kwargs['x'] = kwargs['x_left']
+                kwargs['y'] = kwargs['y_bottom']
+
+            rectangle = Rectangle(**kwargs)
+            self._axes.add_artist(rectangle)
+
         return self
 
     def add_regular_polygon(
             self,
-            x_center: float,
-            y_center: float,
-            num_vertices: int,
-            radius: float,
-            angle: float = 0,
-            alpha: Optional[float] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            z_order: Optional[int] = None
+            x_center: FloatOrFloatIterable,
+            y_center: FloatOrFloatIterable,
+            num_vertices: IntOrIntIterable,
+            radius: FloatOrFloatIterable,
+            angle: FloatOrFloatIterable = 0,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ) -> 'AxesFormatter':
         """
         Add a rectangle to the Axes.
@@ -1603,48 +1580,42 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the polygon.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+                x_center=x_center, y_center=y_center,
+                numVertices=num_vertices, radius=radius, angle=angle,
+                alpha=alpha, fill=fill, label=label,
+                color=color, edgecolor=edge_color, facecolor=face_color,
+                linestyle=line_style, linewidth=line_width,
+                capstyle=cap_style, joinstyle=join_style,
+                zorder=z_order,
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        polygon = RegularPolygon(
-            xy=(x_center, y_center), numVertices=num_vertices, radius=radius,
-            orientation=pi * angle / 180,
-            **kwargs
-        )
-        self._axes.add_artist(polygon)
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            kwargs['orientation'] = pi * kwargs.pop('angle') / 180
+            polygon = RegularPolygon(**kwargs)
+            self._axes.add_artist(polygon)
+
         return self
 
     def add_wedge(
             self,
-            x_center: float,
-            y_center: float,
-            radius: float,
-            theta_start: float,
-            theta_end: float,
-            width: Optional[float] = None,
-            alpha: Optional[float] = None,
-            cap_style: Optional[Union[str, CAP_STYLE]] = None,
-            color: Optional[Color] = None,
-            edge_color: Optional[Color] = None,
-            face_color: Optional[Color] = None,
-            fill: bool = True,
-            join_style: Optional[Union[str, JOIN_STYLE]] = None,
-            label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
-            line_width: Optional[float] = None,
-            z_order: Optional[int] = None
+            x_center: FloatOrFloatIterable,
+            y_center: FloatOrFloatIterable,
+            radius: FloatOrFloatIterable,
+            theta_start: FloatOrFloatIterable,
+            theta_end: FloatOrFloatIterable,
+            width: Optional[FloatOrFloatIterable] = None,
+            alpha: Optional[FloatOrFloatIterable] = None,
+            cap_style: Optional[Union[CapStyle, CapStyleIterable]] = None,
+            color: Optional[ColorOrColorIterable] = None,
+            edge_color: Optional[ColorOrColorIterable] = None,
+            face_color: Optional[ColorOrColorIterable] = None,
+            fill: BoolOrBoolIterable = True,
+            join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
+            label: Optional[StrOrStrIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+            line_width: Optional[FloatOrFloatIterable] = None,
+            z_order: Optional[IntOrIntIterable] = None
     ):
         """
         Add a wedge-shaped patch.
@@ -1670,28 +1641,21 @@ class AxesFormatter(object):
         :param line_width: Line width for edge.
         :param z_order: z-order for the wedge.
         """
-        line_style = LINE_STYLE.get_line_style(line_style)
-        cap_style = CAP_STYLE.get_cap_style(cap_style)
-        join_style = JOIN_STYLE.get_join_style(join_style)
-        # convert args to matplotlib names
-        kwargs = {}
-        for arg, mpl_arg in zip(
-            [alpha, cap_style, color, edge_color, face_color,
-             fill, join_style, label, line_style, line_width,
-             z_order],
-            ['alpha', 'capstyle', 'color', 'edgecolor', 'facecolor',
-             'fill', 'joinstyle', 'label', 'linestyle', 'linewidth',
-             'zorder']
+        for kwargs in smart_zip_kwargs(
+                x_center=x_center, y_center=y_center, r=radius,
+                theta1=theta_start, theta2=theta_end,
+                width=width, alpha=alpha, fill=fill,
+                color=color, edgecolor=edge_color, facecolor=face_color,
+                capstyle=cap_style, joinstyle=join_style, linestyle=line_style,
+                linewidth=line_width,
+                label=label, zorder=z_order,
         ):
-            if arg is not None:
-                kwargs[mpl_arg] = arg
-        arc = Wedge(
-            center=(x_center, y_center), r=radius,
-            theta1=theta_start, theta2=theta_end,
-            width=width,
-            **kwargs
-        )
-        self._axes.add_artist(arc)
+            kwargs = drop_none_values(kwargs)
+            kwargs = apply_mappings(kwargs, kwarg_mappings)
+            kwargs['orientation'] = pi * kwargs.pop('angle') / 180
+            wedge = Wedge(**kwargs)
+            self._axes.add_artist(wedge)
+
         return self
 
     @property
@@ -2094,7 +2058,7 @@ class AxesFormatter(object):
             color: Optional[Color] = None,
             draw_style: Optional[Union[str, DRAW_STYLE]] = None,
             label: Optional[str] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None,
+            line_style: Optional[LineStyle] = None,
             line_width: Optional[float] = None,
             marker: Optional[Union[str, MARKER_STYLE]] = None,
             marker_edge_color: Optional[Color] = None,
@@ -2330,7 +2294,7 @@ class AxesFormatter(object):
             axis: str = 'both',
             color: Optional[Color] = None,
             line_width: Optional[float] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None
+            line_style: Optional[LineStyle] = None
     ) -> 'AxesFormatter':
         """
         Turn the grid on or off.
@@ -2359,7 +2323,7 @@ class AxesFormatter(object):
             self,
             color: Optional[Color] = '#888888',
             line_width: Optional[float] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None
+            line_style: Optional[LineStyle] = None
     ) -> 'AxesFormatter':
         """
         Add a major grid to both axes.
@@ -2379,7 +2343,7 @@ class AxesFormatter(object):
             self,
             color: Optional[Color] = '#bbbbbb',
             line_width: Optional[float] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None
+            line_style: Optional[LineStyle] = None
     ) -> 'AxesFormatter':
         """
         Add a minor grid to both axes.
@@ -2399,7 +2363,7 @@ class AxesFormatter(object):
             self,
             color: Optional[Color] = '#888888',
             line_width: Optional[float] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None
+            line_style: Optional[LineStyle] = None
     ) -> 'AxesFormatter':
         """
         Add a major grid to the x-axis.
@@ -2419,7 +2383,7 @@ class AxesFormatter(object):
             self,
             color: Optional[Color] = '#bbbbbb',
             line_width: Optional[float] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None
+            line_style: Optional[LineStyle] = None
     ) -> 'AxesFormatter':
         """
         Add a minor grid to the x-axis.
@@ -2439,7 +2403,7 @@ class AxesFormatter(object):
             self,
             color: Optional[Color] = '#888888',
             line_width: Optional[float] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None
+            line_style: Optional[LineStyle] = None
     ) -> 'AxesFormatter':
         """
         Add a major grid to the y-axis.
@@ -2459,7 +2423,7 @@ class AxesFormatter(object):
             self,
             color: Optional[Color] = '#bbbbbb',
             line_width: Optional[float] = None,
-            line_style: Optional[Union[str, LINE_STYLE]] = None
+            line_style: Optional[LineStyle] = None
     ) -> 'AxesFormatter':
         """
         Add a minor grid to the y-axis.
