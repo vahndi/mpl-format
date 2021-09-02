@@ -62,7 +62,7 @@ def map_text(
     if isinstance(text, Text):
         text = text.get_text()
     if not isinstance(text, str):
-        return [map_text(t, mapping) for t in text]
+        return [map_text(str(t), mapping) for t in text]
 
     if mapping is None:
         return text

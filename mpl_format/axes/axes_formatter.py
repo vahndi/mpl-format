@@ -1259,7 +1259,7 @@ class AxesFormatter(object):
             fill: BoolOrBoolIterable = True,
             join_style: Optional[Union[JoinStyle, JoinStyleIterable]] = None,
             label: Optional[StrOrStrIterable] = None,
-            line_style: Optional[LineStyle, LineStyleIterable] = None,
+            line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
             line_width: Optional[FloatOrFloatIterable] = None,
             z_order: Optional[IntOrIntIterable] = None
     ):
