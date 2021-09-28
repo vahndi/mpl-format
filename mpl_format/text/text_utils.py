@@ -28,7 +28,7 @@ def wrap_text(text: Union[str, Text, Iterable[str], Iterable[Text]],
     if isinstance(text, str):
         return '\n'.join(wrap(text=text, width=max_chars))
     elif isinstance(text, Iterable):
-        return [wrap_text(t, max_width) for t in text]
+        return [wrap_text(str(t), max_width) for t in text]
     else:
         raise ValueError(f'Cannot wrap text for type {type(text)}.')
 
