@@ -2,6 +2,11 @@ from math import pi, atan2
 from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING
 
 import matplotlib.pyplot as plt
+from compound_types.arrays import ArrayLike
+from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
+    DictOrDictIterable, BoolOrBoolIterable, FloatIterable, Scalar, \
+    IntOrIntIterable, NdArrayIterable
+from compound_types.type_checks import all_are_none, one_is_not_none
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
@@ -15,11 +20,6 @@ from numpy.ma import cos, sin
 from pandas import DataFrame, Series
 from scipy.interpolate import interp1d
 
-from compound_types.arrays import ArrayLike
-from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
-    DictOrDictIterable, BoolOrBoolIterable, FloatIterable, Scalar, \
-    IntOrIntIterable, NdArrayIterable
-from compound_types.type_checks import all_are_none, one_is_not_none
 from mpl_format.axes.axis_formatter import AxisFormatter
 from mpl_format.axes.axis_utils import new_axes
 from mpl_format.axes.ticks_formatter import TicksFormatter
@@ -35,13 +35,11 @@ from mpl_format.enums.cap_style import CAP_STYLE
 from mpl_format.enums.connection_style import CONNECTION_STYLE
 from mpl_format.enums.draw_style import DRAW_STYLE
 from mpl_format.enums.font_weight import FONT_WEIGHT
-from mpl_format.enums.join_style import JOIN_STYLE
 from mpl_format.enums.line_style import LINE_STYLE
 from mpl_format.enums.mappings import kwarg_mappings
 from mpl_format.enums.marker_style import MARKER_STYLE
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
-from mpl_format.patches.rectangle_list_formatter import RectangleListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
 from mpl_format.utils.arg_checks import check_h_align, check_v_align
@@ -105,6 +103,11 @@ class AxesFormatter(object):
             axis='y', which='major', axes=self._axes)
         self._y_minor_ticks = TicksFormatter(
             axis='y', which='minor', axes=self._axes)
+
+    @staticmethod
+    def gca() -> 'AxesFormatter':
+
+        return AxesFormatter(axes=plt.gca())
 
     # region properties
 
@@ -1535,6 +1538,8 @@ class AxesFormatter(object):
                 kwargs['x'] = kwargs['x_left']
                 kwargs['y'] = kwargs['y_bottom']
 
+            kwargs['xy'] = kwargs['x'], kwargs['y']
+
             rectangle = Rectangle(**kwargs)
             self._axes.add_artist(rectangle)
 
@@ -1736,16 +1741,6 @@ class AxesFormatter(object):
         return PatchListFormatter([
             p for p in self._axes.get_children()
             if isinstance(p, Polygon)
-        ])
-
-    @property
-    def rectangles(self) -> RectangleListFormatter:
-        """
-        Return a list of the Rectangles on the axes.
-        """
-        return RectangleListFormatter([
-            r for r in self._axes.get_children()
-            if isinstance(r, Rectangle)
         ])
 
     @property
@@ -2604,6 +2599,14 @@ class AxesFormatter(object):
                 kwargs[mpl_arg] = kwarg
         self._legend = LegendFormatter(self._axes.legend(**kwargs))
         return self._legend
+
+    def twin_x(self) -> 'AxesFormatter':
+
+        return AxesFormatter(self.axes.twinx())
+
+    def twin_y(self) -> 'AxesFormatter':
+
+        return AxesFormatter(self.axes.twiny())
 
     def show(self) -> 'AxesFormatter':
         """

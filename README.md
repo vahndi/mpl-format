@@ -6,4 +6,4 @@ Library for easier formatting of matplotlib plots written in a functional style.
 Installation
 ============
 
-    pip install probability
+    pip install mpl-format

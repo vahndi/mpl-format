@@ -66,6 +66,11 @@ class FigureFormatter(object):
                 isinstance(self._axes, ndarray) or isinstance(self._axes, list)
         )
 
+    @staticmethod
+    def gcf() -> 'FigureFormatter':
+
+        return FigureFormatter(fig_or_axes=plt.gcf())
+
     # region properties
 
     @property

@@ -17,7 +17,11 @@ def smart_zip(*args):
     values = []
     # find longest sized arg
     for arg in args:
-        if isinstance(arg, Sized) and not isinstance(arg, dict):
+        if (
+                isinstance(arg, Sized) and
+                not isinstance(arg, dict) and
+                not isinstance(arg, str)
+        ):
             arg_length = len(arg)
             if arg_length > max_arg_length:
                 max_arg_length = arg_length
