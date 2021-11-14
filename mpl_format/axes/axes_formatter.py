@@ -1521,8 +1521,8 @@ class AxesFormatter(object):
             kwargs = apply_mappings(kwargs, kwarg_mappings)
 
             if all_are_none(x_left, y_bottom):
-                x_c = kwargs['x_center']
-                y_c = kwargs['y_center']
+                x_c = kwargs.pop('x_center')
+                y_c = kwargs.pop('y_center')
                 w = kwargs['width']
                 h = kwargs['height']
                 a = kwargs['angle']
@@ -1538,7 +1538,7 @@ class AxesFormatter(object):
                 kwargs['x'] = kwargs['x_left']
                 kwargs['y'] = kwargs['y_bottom']
 
-            kwargs['xy'] = kwargs['x'], kwargs['y']
+            kwargs['xy'] = kwargs.pop('x'), kwargs.pop('y')
 
             rectangle = Rectangle(**kwargs)
             self._axes.add_artist(rectangle)

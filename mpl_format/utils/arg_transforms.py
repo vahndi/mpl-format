@@ -13,7 +13,7 @@ def smart_zip(*args):
                 len(Sized) times like any non-Sized arg. Dicts are treated as
                 non-Sizeds.
     """
-    max_arg_length = 0
+    max_arg_length = 1
     values = []
     # find longest sized arg
     for arg in args:
@@ -30,6 +30,7 @@ def smart_zip(*args):
         if (
                 isinstance(arg, Sized) and
                 not isinstance(arg, dict) and
+                not isinstance(arg, str) and
                 len(arg) == max_arg_length
         ):
             values.append(arg)
