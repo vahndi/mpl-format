@@ -17,6 +17,8 @@ def categorical_discrete_values_histogram(
         categories: Optional[List[str]] = None,
         colors: Union[Color, List[Color]] = 'k',
         norm: str = 'single',
+        mean: Optional[Color] = None,
+        median: Optional[Color] = None,
         ax: Optional[Axes] = None
 ):
     """
@@ -33,6 +35,8 @@ def categorical_discrete_values_histogram(
                    each histogram.
     :param norm: Whether to normalize the density to the max of each category
                  ('single'), or the max of all categories ('all').
+    :param mean: Color for lines showing the mean of each distribution.
+    :param median: Color for lines showing the median of each distribution.
     :param ax: Optional matplotlib Axes instance to plot on.
     """
     ax: Axes = ax or new_axes()
@@ -54,7 +58,7 @@ def categorical_discrete_values_histogram(
     z_max = z.max()
 
     for c, category, color in zip(
-        range(num_cats),
+        range(1, num_cats + 1),
         categories,
         colors
     ):
@@ -68,10 +72,20 @@ def categorical_discrete_values_histogram(
         for (_, y_i), z_i in cat_hist.items():
             axf.add_rectangle(
                 width=0.8, height=1,
-                x_center=c + 1, y_center=y_i,
+                x_center=c, y_center=y_i,
                 alpha=z_i / z_max_cat,
                 color=color
             )
+        if mean is not None:
+            cat_mean = data.loc[data[x] == category, y].mean()
+            axf.add_line(x=[c - 0.4, c + 0.4],
+                         y=[cat_mean, cat_mean],
+                         color=mean)
+        if median is not None:
+            cat_median = data.loc[data[x] == category, y].median()
+            axf.add_line(x=[c - 0.4, c + 0.4],
+                         y=[cat_median, cat_median],
+                         color=median)
     axf.set_x_lim(0.5)
     axf.set_x_max(len(categories) + 0.5)
     axf.set_y_min(y_min - 1)
@@ -107,7 +121,7 @@ def do_test_plot():
     AxesFormatter(ax).set_axis_below().grid()
     ax = categorical_discrete_values_histogram(
         data=d, x='x', y='y', categories=['c', 'a'], colors=['r', 'g'],
-        norm='all'
+        norm='all', mean='b', median='purple'
     )
     AxesFormatter(ax).set_axis_below().grid()
     plt.show()
