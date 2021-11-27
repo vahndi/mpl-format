@@ -1,6 +1,7 @@
 from typing import List
 
 from mpl_format.compound_types import FontSize
+from mpl_format.literals import TEXT_V_ALIGN
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import \
     HORIZONTAL_ALIGNMENTS, VERTICAL_ALIGNMENTS
@@ -132,7 +133,7 @@ class TextListFormatter(object):
 
     # region set alignment
 
-    def set_ha(self, alignment: str) -> 'TextListFormatter':
+    def set_ha(self, alignment: H_ALIGN) -> 'TextListFormatter':
 
         if alignment not in HORIZONTAL_ALIGNMENTS:
             raise ValueError(
@@ -154,7 +155,7 @@ class TextListFormatter(object):
 
         return self.set_ha('right')
 
-    def set_va(self, alignment: str) -> 'TextListFormatter':
+    def set_va(self, alignment: TEXT_V_ALIGN) -> 'TextListFormatter':
 
         if alignment not in VERTICAL_ALIGNMENTS:
             raise ValueError(

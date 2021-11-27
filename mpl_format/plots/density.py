@@ -5,7 +5,6 @@ from typing import Optional, List, Union, Tuple
 from matplotlib.axes import Axes
 from numpy import concatenate
 from pandas import DataFrame, cut
-from scipy.stats import poisson, norm
 
 from mpl_format.axes import AxesFormatter
 from mpl_format.axes.axis_utils import new_axes
@@ -218,6 +217,7 @@ def categorical_continuous_values_histogram(
 
 def do_test_discrete_plot():
 
+    from scipy.stats import poisson
     p = concatenate([
         poisson(3).rvs(1_000),
         poisson(7).rvs(1_000),
@@ -249,6 +249,7 @@ def do_test_discrete_plot():
 
 def do_test_continuous_plot():
 
+    from scipy.stats import norm
     n = concatenate([
         norm(5, 1).rvs(10_000),
         norm(7, 2).rvs(10_000),

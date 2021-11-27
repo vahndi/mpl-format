@@ -2,6 +2,7 @@ from matplotlib.text import Text
 from typing import Dict, Union, Callable
 
 from mpl_format.compound_types import FontSize
+from mpl_format.literals import ROTATION_MODE, H_ALIGN, TEXT_V_ALIGN
 from mpl_format.text.text_utils import wrap_text, remove_parenthesized_text, \
     HORIZONTAL_ALIGNMENTS, VERTICAL_ALIGNMENTS
 
@@ -40,7 +41,8 @@ class TextFormatter(object):
         return self
 
     def rotate(
-            self, rotation: Union[str, int], how: str = 'absolute'
+            self, rotation: Union[str, int],
+            how: ROTATION_MODE = 'absolute'
     ) -> 'TextFormatter':
         """
         Set the rotation of the text.
@@ -225,7 +227,7 @@ class TextFormatter(object):
 
     # region set alignment
 
-    def set_ha(self, alignment: str) -> 'TextFormatter':
+    def set_ha(self, alignment: H_ALIGN) -> 'TextFormatter':
 
         if alignment not in HORIZONTAL_ALIGNMENTS:
             raise ValueError(
@@ -246,7 +248,7 @@ class TextFormatter(object):
 
         return self.set_ha('right')
 
-    def set_va(self, alignment: str) -> 'TextFormatter':
+    def set_va(self, alignment: TEXT_V_ALIGN) -> 'TextFormatter':
 
         if alignment not in VERTICAL_ALIGNMENTS:
             raise ValueError(

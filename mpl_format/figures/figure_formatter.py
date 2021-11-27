@@ -14,6 +14,8 @@ from mpl_format.axes.axes_formatter_array import AxesFormatterArray
 from mpl_format.axes.axis_formatter_array import AxisFormatterArray
 from mpl_format.compound_types import StringMapper, Color
 from mpl_format.enums.line_style import LINE_STYLE
+from mpl_format.literals import ROTATION_MODE, WHICH_TICKS, SHARE_AXES, \
+    WHICH_AXIS
 from mpl_format.utils.io_utils import save_plot
 
 TextSetter = TypeVar(
@@ -29,8 +31,8 @@ class FigureFormatter(object):
     def __init__(self, fig_or_axes: Union[Figure, Axes] = None,
                  n_rows: int = 1, n_cols: int = 1,
                  fig_size: Tuple[Scalar, Scalar] = (16, 9),
-                 share_x: str = 'none',
-                 share_y: str = 'none',
+                 share_x: SHARE_AXES = 'none',
+                 share_y: SHARE_AXES = 'none',
                  constrained_layout: bool = True):
 
         if fig_or_axes is not None:
@@ -591,7 +593,7 @@ class FigureFormatter(object):
 
     def rotate_x_labels(self,
                         rotation: int,
-                        how: str = 'absolute') -> 'FigureFormatter':
+                        how: ROTATION_MODE = 'absolute') -> 'FigureFormatter':
         """
         Set the rotation of each x-axis label.
 
@@ -607,7 +609,7 @@ class FigureFormatter(object):
 
     def rotate_y_labels(self,
                         rotation: int,
-                        how: str = 'absolute') -> 'FigureFormatter':
+                        how: ROTATION_MODE = 'absolute') -> 'FigureFormatter':
         """
         Set the rotation of each x-axis label.
 
@@ -770,8 +772,8 @@ class FigureFormatter(object):
 
     def grids(
             self, value: bool = True,
-            which: str = 'major',
-            axis: str = 'both',
+            which: WHICH_TICKS = 'major',
+            axis: WHICH_AXIS = 'both',
             color: Optional[Color] = None,
             line_width: Optional[float] = None,
             line_style: Optional[Union[str, LINE_STYLE]] = None

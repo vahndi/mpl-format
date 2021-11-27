@@ -39,6 +39,8 @@ from mpl_format.enums.line_style import LINE_STYLE
 from mpl_format.enums.mappings import kwarg_mappings
 from mpl_format.enums.marker_style import MARKER_STYLE
 from mpl_format.legend.legend_formatter import LegendFormatter
+from mpl_format.literals import H_ALIGN, V_ALIGN, ROTATION_MODE, WHICH_TICKS, \
+    FIGURE_UNITS, WHICH_AXIS, LINE_STYLE_STR
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
@@ -525,7 +527,7 @@ class AxesFormatter(object):
 
     def rotate_x_label(self,
                        rotation: int,
-                       how: str = 'absolute') -> 'AxesFormatter':
+                       how: ROTATION_MODE = 'absolute') -> 'AxesFormatter':
         """
         Set the rotation of the x-axis label.
 
@@ -537,7 +539,7 @@ class AxesFormatter(object):
 
     def rotate_y_label(self,
                        rotation: int,
-                       how: str = 'absolute') -> 'AxesFormatter':
+                       how: ROTATION_MODE = 'absolute') -> 'AxesFormatter':
         """
         Set the rotation of the x-axis label.
 
@@ -650,7 +652,8 @@ class AxesFormatter(object):
     def add_h_lines(self, y: FloatOrFloatIterable,
                     x_min: FloatOrFloatIterable,
                     x_max: FloatOrFloatIterable,
-                    colors='k', line_styles: str = 'solid',
+                    colors='k',
+                    line_styles: LINE_STYLE_STR = 'solid',
                     label: Optional[str] = '') -> 'AxesFormatter':
         """
         Plot horizontal lines at each y from x_min to x_max.
@@ -670,7 +673,8 @@ class AxesFormatter(object):
     def add_v_lines(self, x: FloatOrFloatIterable,
                     y_min: FloatOrFloatIterable,
                     y_max: FloatOrFloatIterable,
-                    colors='k', line_styles: str = 'solid',
+                    colors='k',
+                    line_styles: LINE_STYLE_STR = 'solid',
                     label: Optional[str] = '') -> 'AxesFormatter':
         """
         Plot vertical lines at each x from y_min to y_max.
@@ -1774,7 +1778,7 @@ class AxesFormatter(object):
             color_min: Optional[Color] = None,
             width: float = 0.8,
             z_max: Optional[float] = None,
-            h_align: str = 'center'
+            h_align: H_ALIGN = 'center'
     ) -> 'AxesFormatter':
         """
         Add a vertical density bar to the plot.
@@ -1801,8 +1805,10 @@ class AxesFormatter(object):
             x_left = x
         elif h_align == 'center':
             x_left = x - width / 2
-        else:
+        elif h_align == 'right':
             x_left = x - width
+        else:
+            raise ValueError(f'h_align must be one of {H_ALIGN}')
 
         alphas = (
                 y_to_z / z_max
@@ -1831,7 +1837,7 @@ class AxesFormatter(object):
             color_min: Optional[Color] = None,
             height: float = 0.8,
             z_max: Optional[float] = None,
-            v_align: str = 'center'
+            v_align: V_ALIGN = 'center'
     ) -> 'AxesFormatter':
         """
         Add a horizontal density bar to the plot.
@@ -1893,7 +1899,7 @@ class AxesFormatter(object):
             box_style: Union[BoxStyle, Iterable[BoxStyle]],
             data: Optional[DataFrame] = None,
             y_0: Optional[Union[str, FloatOrFloatIterable]] = 0.0,
-            h_align: str = 'center',
+            h_align: H_ALIGN = 'center',
             mutation_scale: Union[str, FloatOrFloatIterable] = 1,
             mutation_aspect: Optional[Union[str, FloatOrFloatIterable]] = None,
             alpha: Optional[Union[str, FloatOrFloatIterable]] = None,
@@ -2002,7 +2008,7 @@ class AxesFormatter(object):
             width: float,
             data: Optional[DataFrame] = None,
             y_0: Optional[Union[str, FloatOrFloatIterable]] = 0.0,
-            h_align: str = 'center',
+            h_align: H_ALIGN = 'center',
             alpha: Optional[Union[str, FloatOrFloatIterable]] = None,
             color: Optional[ColorOrColorIterable] = None,
             edge_color: Optional[ColorOrColorIterable] = None,
@@ -2227,7 +2233,7 @@ class AxesFormatter(object):
         self.set_y_lim(None, top)
         return self
 
-    def width(self, units: str = 'inches') -> float:
+    def width(self, units: FIGURE_UNITS = 'inches') -> float:
         """
         Return the width of the subplot.
 
@@ -2244,7 +2250,7 @@ class AxesFormatter(object):
             width *= fig.dpi
         return width
 
-    def height(self, units: str = 'inches') -> float:
+    def height(self, units: FIGURE_UNITS = 'inches') -> float:
         """
         Return the height of the subplot.
 
@@ -2285,8 +2291,8 @@ class AxesFormatter(object):
 
     def grid(
             self, value: bool = True,
-            which: str = 'major',
-            axis: str = 'both',
+            which: WHICH_TICKS = 'major',
+            axis: WHICH_AXIS = 'both',
             color: Optional[Color] = None,
             line_width: Optional[float] = None,
             line_style: Optional[LineStyle] = None
@@ -2296,7 +2302,7 @@ class AxesFormatter(object):
 
         :param value: True or False. Defaults to True.
         :param which: 'major', 'minor' or 'both'
-        :param axis: 'x', 'y' or 'both
+        :param axis: 'x', 'y' or 'both'
         :param color: Color of the lines.
         :param line_width: Line width.
         :param line_style: Line Style. One of {'-', '--', '-.', ':', '',

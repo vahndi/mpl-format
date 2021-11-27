@@ -1,6 +1,7 @@
 from itertools import product
 from typing import Union, List, Tuple, Iterator, Iterable
 
+import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 
@@ -266,9 +267,11 @@ class TicksFormatter(object):
 
         :param mapping: Dictionary or a function mapping old text to new text.
         """
+        plt.draw()  # make sure labels are drawn
         for axis, minor in self._iter_axis_minor():
             labels = [label.get_text()
                       for label in axis.get_ticklabels(minor=minor)]
+            print(labels)
             axis.set_ticklabels(
                 ticklabels=map_text(labels, mapping),
                 minor=minor

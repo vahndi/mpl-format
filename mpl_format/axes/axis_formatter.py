@@ -7,6 +7,7 @@ from matplotlib.ticker import FuncFormatter, MultipleLocator, FixedLocator
 
 from mpl_format.axes.ticks_formatter import TicksFormatter
 from mpl_format.compound_types import FontSize, StringMapper
+from mpl_format.literals import ROTATION_MODE, AXIS_SCALE
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_list_formatter import TextListFormatter
 from mpl_format.utils.number_utils import format_as_integer
@@ -121,7 +122,8 @@ class AxisFormatter(object):
         return self
 
     def rotate_label(
-            self, rotation: int, how: str = 'absolute'
+            self, rotation: int,
+            how: ROTATION_MODE = 'absolute'
     ) -> 'AxisFormatter':
         """
         Set the rotation of the axis label.
@@ -281,7 +283,7 @@ class AxisFormatter(object):
 
     # region set scale
 
-    def set_scale(self, scale: str) -> 'AxisFormatter':
+    def set_scale(self, scale: AXIS_SCALE) -> 'AxisFormatter':
         """
         Set the scale for the Axis.
 

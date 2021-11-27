@@ -4,6 +4,7 @@ from numpy import ndarray
 
 from mpl_format.axes import AxisFormatter
 from mpl_format.compound_types import StringMapper, FontSize
+from mpl_format.literals import ROTATION_MODE, AXIS_SCALE
 
 
 class AxisFormatterArray(object):
@@ -86,7 +87,8 @@ class AxisFormatterArray(object):
         return self
 
     def rotate_label(
-            self, rotation: int, how: str = 'absolute'
+            self, rotation: int,
+            how: ROTATION_MODE = 'absolute'
     ) -> 'AxisFormatterArray':
         """
         Set the rotation of the axis label.
@@ -134,7 +136,8 @@ class AxisFormatterArray(object):
     # region tick labels
 
     def rotate_tick_labels(
-            self, rotation: int, how: str = 'absolute'
+            self, rotation: int,
+            how: ROTATION_MODE = 'absolute'
     ) -> 'AxisFormatterArray':
         """
         Set the rotation of axis tick labels.
@@ -247,7 +250,7 @@ class AxisFormatterArray(object):
 
     # region set scale
 
-    def set_scale(self, scale: str) -> 'AxisFormatterArray':
+    def set_scale(self, scale: AXIS_SCALE) -> 'AxisFormatterArray':
         """
         Set the scale for the Axis.
 
