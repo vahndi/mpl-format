@@ -1,4 +1,4 @@
-from typing import Literal
+from typing_extensions import Literal   # can't use typing.Literal for Python < 3.8
 
 H_ALIGN = Literal['left', 'center', 'right']
 V_ALIGN = Literal['top', 'center', 'bottom']
