@@ -7,7 +7,7 @@ from matplotlib.ticker import FuncFormatter, MultipleLocator, FixedLocator
 
 from mpl_format.axes.ticks_formatter import TicksFormatter
 from mpl_format.compound_types import FontSize, StringMapper
-from mpl_format.literals import ROTATION_MODE, AXIS_SCALE
+from mpl_format.literals import ROTATION_MODE, AXIS_SCALE, WHICH_AXIS
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_list_formatter import TextListFormatter
 from mpl_format.utils.number_utils import format_as_integer
@@ -15,7 +15,7 @@ from mpl_format.utils.number_utils import format_as_integer
 
 class AxisFormatter(object):
 
-    def __init__(self, axis: Axis, direction: str, axes: Axes):
+    def __init__(self, axis: Axis, direction: WHICH_AXIS, axes: Axes):
         """
         Create a new AxisFormatter
 
@@ -195,7 +195,9 @@ class AxisFormatter(object):
         return self
 
     def set_format_currency(
-            self, symbol: str = '$', num_decimals: int = 0,
+            self,
+            symbol: str = '$',
+            num_decimals: int = 0,
             categorical: bool = False,
             kmbt: bool = False
     ) -> 'AxisFormatter':
@@ -245,9 +247,12 @@ class AxisFormatter(object):
 
         return self
 
-    def set_format_percent(self, num_decimals: int = 0,
-                           multiply_100: bool = True,
-                           categorical: bool = False) -> 'AxisFormatter':
+    def set_format_percent(
+            self,
+            num_decimals: int = 0,
+            multiply_100: bool = True,
+            categorical: bool = False
+    ) -> 'AxisFormatter':
         """
         Format an axis as a percentage.
 

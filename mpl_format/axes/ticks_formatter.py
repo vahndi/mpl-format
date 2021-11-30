@@ -1,19 +1,20 @@
 from itertools import product
-from typing import Union, List, Tuple, Iterator, Iterable
+from typing import Union, List, Tuple, Iterator, Iterable, Callable
 
 import matplotlib.pyplot as plt
+from compound_types.built_ins import FloatIterable
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 
-from compound_types.built_ins import FloatIterable
 from mpl_format.compound_types import Color, FontSize, StringMapper
 from mpl_format.enums.line_style import LINE_STYLE
+from mpl_format.literals import WHICH_TICKS, WHICH_AXIS
 from mpl_format.text.text_utils import wrap_text, map_text
 
 
 class TicksFormatter(object):
 
-    def __init__(self, axis: str, which: str, axes: Axes):
+    def __init__(self, axis: WHICH_AXIS, which: WHICH_TICKS, axes: Axes):
         """
         Create a new TicksFormatter.
 
@@ -40,20 +41,20 @@ class TicksFormatter(object):
     def _is_minor(self) -> bool:
         return self._which == 'minor'
 
-    # region values and labels
+    # region locations, values and labels
 
-    def set_values(self, values: FloatIterable) -> 'TicksFormatter':
+    def set_locations(self, locations: FloatIterable) -> 'TicksFormatter':
         """
-        Set the values of the ticks.
+        Set the locations of the ticks.
 
-        :param values: List of values where the ticks should be located.
+        :param locations: List of locations where the ticks should be located.
         """
         x_axis = self._axes.xaxis
         y_axis = self._axes.yaxis
         if self._axis in ('x', 'both'):
-            x_axis.set_ticks(ticks=values, minor=self._is_minor)
+            x_axis.set_ticks(ticks=locations, minor=self._is_minor)
         if self._axis in ('y', 'both'):
-            y_axis.set_ticks(ticks=values, minor=self._is_minor)
+            y_axis.set_ticks(ticks=locations, minor=self._is_minor)
         return self
 
     def set_labels(self, labels: Iterable[str]) -> 'TicksFormatter':
@@ -70,9 +71,45 @@ class TicksFormatter(object):
             y_axis.set_ticklabels(ticklabels=labels, minor=self._is_minor)
         return self
 
-    def get_labels(self):
+    def get_labels(
+            self,
+            fix_negatives: bool = True
+    ) -> List[str]:
+        """
+        Get the labels for the ticks.
 
-        raise NotImplementedError
+        :param fix_negatives: Whether to replace the negative sign that
+                              matplotlib uses with an actual negative sign.
+        """
+        plt.draw()
+        if self._axis == 'x':
+            x_labels = self._axes.xaxis.get_ticklabels(which=self._which)
+            if fix_negatives:
+                x_labels = [label.replace('\u2212', '-') for label in x_labels]
+            return x_labels
+        elif self._axis == 'y':
+            y_labels = self._axes.yaxis.get_ticklabels(which=self._which)
+            if fix_negatives:
+                y_labels = [label.replace('\u2212', '-') for label in y_labels]
+            return y_labels
+        else:  # 'both'
+            raise TypeError("Can't return labels for more than one axis")
+
+    def get_label_values(
+            self,
+    ) -> List[float]:
+        """
+        Get the values of the labels for the ticks (assuming the labels are
+        strings of actual values e.g. ['0', '1.5'].
+        """
+        if self._axis == 'x':
+            return [float(label) for label in
+                    self.get_labels(fix_negatives=True)]
+        elif self._axis == 'y':
+            return [float(label) for label in
+                    self.get_labels(fix_negatives=True)]
+        else:  # 'both'
+            raise TypeError("Can't return labels for more than one axis")
 
     # endregion
 
@@ -228,7 +265,10 @@ class TicksFormatter(object):
         return self
 
     def _iter_axis_minor(self) -> Iterator[Tuple[Axis, bool]]:
-
+        """
+        Iterate over the axes, and the major / minor components
+        attached to the ticks.
+        """
         axes: List[Axis] = []
         axis: Axis
         if self._axis in ('x', 'both'):
@@ -271,11 +311,23 @@ class TicksFormatter(object):
         for axis, minor in self._iter_axis_minor():
             labels = [label.get_text()
                       for label in axis.get_ticklabels(minor=minor)]
-            print(labels)
             axis.set_ticklabels(
                 ticklabels=map_text(labels, mapping),
                 minor=minor
             )
+        return self
+
+    def map_label_values(
+            self, mapping: Callable[[float], float]
+    ) -> 'TicksFormatter':
+        """
+        Map the values of tick label text using a dictionary or function.
+
+        :param mapping: Dictionary or a function mapping old text to new text.
+        """
+        self.set_labels([
+            str(mapping(value)) for value in self.get_label_values()
+        ])
         return self
 
     # region show labels
