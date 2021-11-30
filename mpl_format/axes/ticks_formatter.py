@@ -85,12 +85,14 @@ class TicksFormatter(object):
         if self._axis == 'x':
             x_labels = self._axes.xaxis.get_ticklabels(which=self._which)
             if fix_negatives:
-                x_labels = [label.replace('\u2212', '-') for label in x_labels]
+                x_labels = [label.get_text().replace('\u2212', '-')
+                            for label in x_labels]
             return x_labels
         elif self._axis == 'y':
             y_labels = self._axes.yaxis.get_ticklabels(which=self._which)
             if fix_negatives:
-                y_labels = [label.replace('\u2212', '-') for label in y_labels]
+                y_labels = [label.get_text().replace('\u2212', '-')
+                            for label in y_labels]
             return y_labels
         else:  # 'both'
             raise TypeError("Can't return labels for more than one axis")
