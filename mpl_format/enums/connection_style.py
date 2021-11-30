@@ -22,7 +22,7 @@ class CONNECTION_STYLE(Enum):
 
     @staticmethod
     def get_connection_style(
-            connection_style: Union[str, 'ARROW_STYLE']
+            connection_style: Union[str, 'CONNECTION_STYLE']
     ) -> str:
         if connection_style and isinstance(connection_style, CONNECTION_STYLE):
             connection_style = connection_style.get_name()

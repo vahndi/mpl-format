@@ -91,7 +91,7 @@ def categorical_discrete_values_histogram(
     axf.set_x_max(len(categories) + 0.5)
     axf.set_y_min(y_min - 1)
     axf.set_y_max(y_max + 1)
-    axf.x_ticks.set_values(list(range(1, 1 + len(categories))))
+    axf.x_ticks.set_locations(list(range(1, 1 + len(categories))))
     axf.x_ticks.set_labels(categories)
     axf.set_text(x_label=x, y_label=y)
 
@@ -208,7 +208,7 @@ def categorical_continuous_values_histogram(
     axf.set_x_max(len(categories) + 0.5)
     axf.set_y_min(y_min - 1)
     axf.set_y_max(y_max + 1)
-    axf.x_ticks.set_values(list(range(1, 1 + len(categories))))
+    axf.x_ticks.set_locations(list(range(1, 1 + len(categories))))
     axf.x_ticks.set_labels(categories)
     axf.set_text(x_label=x, y_label=y)
 
