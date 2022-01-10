@@ -1539,8 +1539,8 @@ class AxesFormatter(object):
                 kwargs['x'] = x_l + x_c - xc_new
                 kwargs['y'] = y_b + y_c - yc_new
             else:
-                kwargs['x'] = kwargs['x_left']
-                kwargs['y'] = kwargs['y_bottom']
+                kwargs['x'] = kwargs.pop('x_left')
+                kwargs['y'] = kwargs.pop('y_bottom')
 
             kwargs['xy'] = kwargs.pop('x'), kwargs.pop('y')
 
@@ -2066,7 +2066,8 @@ class AxesFormatter(object):
             marker_edge_width: Optional[float] = None,
             marker_face_color: Optional[Color] = None,
             marker_face_color_alt: Optional[Color] = None,
-            marker_size: Optional[float] = None
+            marker_size: Optional[float] = None,
+            z_order: Optional[int] = None
     ) -> 'AxesFormatter':
         """
         Add a line to the plot.
@@ -2089,6 +2090,7 @@ class AxesFormatter(object):
         :param marker_face_color: Marker face color.
         :param marker_face_color_alt: Alt marker face color.
         :param marker_size: Marker size.
+        :param z_order: z-order for the line.
         """
         if smooth is not False:
             if smooth is True:
@@ -2120,7 +2122,8 @@ class AxesFormatter(object):
             mec=marker_edge_color,
             mew=marker_edge_width,
             mfc=marker_face_color,
-            mfcalt=marker_face_color_alt
+            mfcalt=marker_face_color_alt,
+            zorder=z_order
         )
         return self
 
