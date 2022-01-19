@@ -2,6 +2,7 @@ from matplotlib.text import Text
 from typing import Dict, Union, Callable
 
 from mpl_format.compound_types import FontSize
+from mpl_format.enums import FONT_SIZE
 from mpl_format.literals import ROTATION_MODE, H_ALIGN, TEXT_V_ALIGN
 from mpl_format.text.text_utils import wrap_text, remove_parenthesized_text, \
     HORIZONTAL_ALIGNMENTS, VERTICAL_ALIGNMENTS
@@ -115,6 +116,8 @@ class TextFormatter(object):
         """
         Set the font size for the Text.
         """
+        if isinstance(font_size, FONT_SIZE):
+            font_size = font_size.get_name()
         self._text.set_fontsize(font_size)
         return self
     
