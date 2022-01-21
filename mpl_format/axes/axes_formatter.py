@@ -15,6 +15,7 @@ from matplotlib.patches import \
     FancyArrow, FancyArrowPatch, FancyBboxPatch, \
     Patch, Polygon, Rectangle, RegularPolygon, Wedge
 from matplotlib.path import Path
+from mpl_format.enums.font_size import FONT_SIZE
 from numpy import ndarray, linspace
 from numpy.ma import cos, sin
 from pandas import DataFrame, Series
@@ -323,13 +324,20 @@ class AxesFormatter(object):
 
     # region set font sizes
 
+    def _get_font_size(self, font_size: FontSize):
+
+        if isinstance(font_size, FONT_SIZE):
+            return font_size.get_name()
+        else:
+            return font_size
+
     def set_title_size(self, font_size: FontSize) -> 'AxesFormatter':
         """
         Set the font size for the title of the wrapped Axes.
 
         :param font_size: Size of the font in points, or size name.
         """
-        self.title.set_size(font_size)
+        self.title.set_size(self._get_font_size(font_size))
         return self
 
     def set_x_label_size(self, font_size: FontSize) -> 'AxesFormatter':
@@ -338,7 +346,7 @@ class AxesFormatter(object):
 
         :param font_size: Size of the font in points, or size name.
         """
-        self.x_axis.set_label_size(font_size)
+        self.x_axis.set_label_size(self._get_font_size(font_size))
         return self
 
     def set_y_label_size(self, font_size: FontSize) -> 'AxesFormatter':
@@ -347,7 +355,7 @@ class AxesFormatter(object):
 
         :param font_size: Size of the font in points, or size name.
         """
-        self.y_axis.set_label_size(font_size)
+        self.y_axis.set_label_size(self._get_font_size(font_size))
         return self
 
     def set_axis_label_sizes(self, font_size: FontSize) -> 'AxesFormatter':
@@ -412,8 +420,12 @@ class AxesFormatter(object):
         if y_minor_tick_labels is not None:
             self.y_minor_ticks.set_label_size(y_major_tick_labels)
         if legend is not None:
+            if isinstance(legend, FONT_SIZE):
+                legend = legend.get_name()
             ax.legend(fontsize=legend)
         if figure_title is not None:
+            if isinstance(figure_title, FONT_SIZE):
+                figure_title = figure_title.get_name()
             ax.figure.suptitle(ax.get_title(), fontsize=figure_title)
 
         return self
