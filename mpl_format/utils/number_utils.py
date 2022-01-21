@@ -26,3 +26,13 @@ def format_as_integer(number: Scalar, kmbt: bool = False) -> str:
         if number == int(number):
             number = int(number)
         return f'{number:,}'
+
+
+def format_as_percent(number: Scalar, ndp: int = 1) -> str:
+    """
+    Format a proportion as a percentage with a given number of decimal places.
+
+    :param number: The number to format.
+    :param ndp: Number of decimal places.
+    """
+    return f'{number:.{ndp}%}'
