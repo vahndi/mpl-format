@@ -1837,7 +1837,7 @@ class AxesFormatter(object):
             self.add_rectangle(
                 x_left=x_left, y_bottom=y_lower,
                 width=width, height=y_upper - y_lower,
-                face_color=color, alpha=alpha
+                face_color=color, alpha=alpha, line_width=0
             )
 
         return self
@@ -1876,8 +1876,10 @@ class AxesFormatter(object):
             y_bottom = y
         elif v_align == 'center':
             y_bottom = y - height / 2
-        else:
+        elif v_align == 'top':
             y_bottom = y - height
+        else:
+            raise ValueError(f'v_align must be one of {V_ALIGN}')
 
         alphas = (
                 x_to_z / z_max
@@ -1894,7 +1896,7 @@ class AxesFormatter(object):
             self.add_rectangle(
                 x_left=x_left, y_bottom=y_bottom,
                 width=x_right-x_left, height=height,
-                face_color=color, alpha=alpha
+                face_color=color, alpha=alpha, line_width=0
             )
 
         return self

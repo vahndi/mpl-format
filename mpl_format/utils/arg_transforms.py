@@ -10,8 +10,9 @@ def smart_zip(*args):
 
     :param args: Each arg should be a single value or a Sized of values. Sized
                  args which are shorter than the longest Sized will be repeated
-                len(Sized) times like any non-Sized arg. Dicts are treated as
-                non-Sizeds.
+                 len(Sized) times like any non-Sized arg. dicts, strs and tuples
+                 are treated as non-Sizeds as there are contexts in matplotlib
+                 where they are treated as single arguments.
     """
     max_arg_length = 1
     values = []
@@ -20,7 +21,8 @@ def smart_zip(*args):
         if (
                 isinstance(arg, Sized) and
                 not isinstance(arg, dict) and
-                not isinstance(arg, str)
+                not isinstance(arg, str) and
+                not isinstance(arg, tuple)
         ):
             arg_length = len(arg)
             if arg_length > max_arg_length:
