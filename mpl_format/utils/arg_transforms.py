@@ -33,6 +33,7 @@ def smart_zip(*args):
                 isinstance(arg, Sized) and
                 not isinstance(arg, dict) and
                 not isinstance(arg, str) and
+                not isinstance(arg, tuple) and
                 len(arg) == max_arg_length
         ):
             values.append(arg)
