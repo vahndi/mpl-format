@@ -67,3 +67,136 @@ GREEN_ACCENT_6_LIGHTER_60 = '#cbdfb8'
 GREEN_ACCENT_6_LIGHTER_40 = '#b1ce94'
 GREEN_ACCENT_6_DARKER_25 = '#5e803f'
 GREEN_ACCENT_6_DARKER_50 = '#3e5529'
+
+
+class OfficeColors(object):
+
+    # light rainbow
+    SALMON = '#ef857d'
+    CANTALOUPE = '#f8d686'
+    BANANA = '#fffb8b'
+    HONEYDEW = '#dcfa8a'
+    FLORA = '#99f788'
+    SPINDRIFT = '#98fad8'
+    ICE = '#98fbfd'
+    SKY = '#8dd4fb'
+    ORCHID = '#7a82f7'
+    LAVENDER = '#cc89f8'
+    BUBBLEGUM = '#ee8df9'
+    CARNATION = '#f091d4'
+
+    # medium rainbow
+    MARASCHINO = '#eb4025'
+    TANGERINGE = '#f19737'
+    LEMON = '#fffb54'
+    LIME = '#a7f64d'
+    SPRING = '#73f54a'
+    SEA_FOAM = '#73f69c'
+    TURQUOISE = '#73f8fd'
+    AQUA = '#3f95f7'
+    BLUEBERRY = '#0838f5'
+    GRAPE = '#8843f5'
+    MAGENTA = '#ec55f7'
+    STRAWBERRY = '#eb4791'
+
+    # dark rainbow
+    CAYENNE = '#882111'
+    MOCHA = '#8b551b'
+    ASPARAGUS = '#928f2c'
+    FERN = '#5e8d28'
+    CLOVER = '#3f8c27'
+    MOSS = '#3f8d57'
+    TEAL = '#3f8f92'
+    OCEAN = '#20538e'
+    MIDNIGHT = '#021c8d'
+    EGGPLANT = '#4b228d'
+    PLUM = '#882d8e'
+    MAROON = '#882450'
+
+    # greys
+    LICORICE = '#000000'
+    LEAD = '#212121'
+    TUNGSTEN = '#424242'
+    IRON = '#5e5e5e'
+    STEEL = '#797979'
+    TIN = '#929292'
+    NICKEL = '#929292'
+    ALUMINIUM = '#aaaaaa'
+    MAGNESIUM = '#c1c1c1'
+    SILVER = '#d6d6d6'
+    MERCURY = '#ebebeb'
+    SNOW = '#ffffff'
+
+
+class OfficeSpectra(object):
+
+    light_rainbow_12 = [
+        OfficeColors.SALMON,
+        OfficeColors.CANTALOUPE,
+        OfficeColors.BANANA,
+        OfficeColors.HONEYDEW,
+        OfficeColors.FLORA,
+        OfficeColors.SPINDRIFT,
+        OfficeColors.ICE,
+        OfficeColors.SKY,
+        OfficeColors.ORCHID,
+        OfficeColors.LAVENDER,
+        OfficeColors.BUBBLEGUM,
+        OfficeColors.CARNATION
+    ]
+
+    medium_rainbow_12 = [
+        OfficeColors.MARASCHINO,
+        OfficeColors.TANGERINGE,
+        OfficeColors.LEMON,
+        OfficeColors.LIME,
+        OfficeColors.SPRING,
+        OfficeColors.SEA_FOAM,
+        OfficeColors.TURQUOISE,
+        OfficeColors.AQUA,
+        OfficeColors.BLUEBERRY,
+        OfficeColors.GRAPE,
+        OfficeColors.MAGENTA,
+        OfficeColors.STRAWBERRY
+    ]
+
+    dark_rainbow_12 = [
+        OfficeColors.CAYENNE,
+        OfficeColors.MOCHA,
+        OfficeColors.ASPARAGUS,
+        OfficeColors.FERN,
+        OfficeColors.CLOVER,
+        OfficeColors.MOSS,
+        OfficeColors.TEAL,
+        OfficeColors.OCEAN,
+        OfficeColors.MIDNIGHT,
+        OfficeColors.EGGPLANT,
+        OfficeColors.PLUM,
+        OfficeColors.MAROON
+    ]
+
+    greys_11 = [
+        OfficeColors.LICORICE,
+        OfficeColors.LEAD,
+        OfficeColors.TUNGSTEN,
+        OfficeColors.IRON,
+        OfficeColors.STEEL,
+        OfficeColors.NICKEL,
+        OfficeColors.ALUMINIUM,
+        OfficeColors.MAGNESIUM,
+        OfficeColors.SILVER,
+        OfficeColors.MERCURY,
+        OfficeColors.SNOW,
+    ]
+
+    reds_3 = [
+        OfficeColors.CAYENNE,
+        OfficeColors.MARASCHINO,
+        OfficeColors.SALMON
+    ]
+
+    oranges_3 = [
+        OfficeColors.MOCHA,
+        OfficeColors.TANGERINGE,
+        OfficeColors.CANTALOUPE
+    ]
