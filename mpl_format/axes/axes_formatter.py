@@ -617,7 +617,8 @@ class AxesFormatter(object):
                    y_min: Union[float, str] = 0,
                    y_max: Union[float, str] = 1,
                    color: Optional[Color] = None, alpha: Optional[float] = None,
-                   line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+                   line_style: Optional[Union[
+                       LineStyle, LineStyleIterable]] = None,
                    line_width: Optional[float] = None,
                    label: Optional[str] = None,
                    marker_edge_color: Optional[Color] = None,
@@ -1788,6 +1789,7 @@ class AxesFormatter(object):
             y_to_z: Series,
             color: Optional[Color] = 'k',
             color_min: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
             width: float = 0.8,
             z_max: Optional[float] = None,
             h_align: H_ALIGN = 'center'
@@ -1799,6 +1801,7 @@ class AxesFormatter(object):
         :param y_to_z: A mapping of the bar's y-coordinate to it density.
         :param color: The color of the density bar.
         :param color_min: Optional 2nd color to fade out to.
+        :param edge_color: Optional color for the outer edge of the density.
         :param width: The bar width.
         :param z_max: Value to scale down densities by to get to a range of
                       0 to 1. Defaults to max value of y_to_z.
@@ -1830,7 +1833,7 @@ class AxesFormatter(object):
             color_min = color
         colors = cross_fade(from_color=color_min, to_color=color,
                             amount=alphas)
-
+        # add segments
         for y_lower, y_upper, alpha, color in zip(
                 y_lowers, y_uppers, alphas, colors
         ):
@@ -1838,6 +1841,13 @@ class AxesFormatter(object):
                 x_left=x_left, y_bottom=y_lower,
                 width=width, height=y_upper - y_lower,
                 face_color=color, alpha=alpha, line_width=0
+            )
+        # add edge
+        if edge_color is not None:
+            self.add_rectangle(
+                x_left=x_left, y_bottom=y_lowers[0],
+                width=width, height=y_uppers[-1] - y_lowers[0],
+                edge_color=edge_color, fill=False
             )
 
         return self
@@ -1847,6 +1857,7 @@ class AxesFormatter(object):
             x_to_z: Series,
             color: Optional[Color] = 'k',
             color_min: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
             height: float = 0.8,
             z_max: Optional[float] = None,
             v_align: V_ALIGN = 'center'
@@ -1858,6 +1869,7 @@ class AxesFormatter(object):
         :param x_to_z: A mapping of the bar's x-coordinate to it density.
         :param color: The color of the density bar.
         :param color_min: Optional 2nd color to fade out to.
+        :param edge_color: Optional color for the outer edge of the density.
         :param height: The bar width.
         :param z_max: Value to scale down densities by to get to a range of
                       0 to 1. Defaults to max value of x_to_z.
@@ -1889,7 +1901,7 @@ class AxesFormatter(object):
             color_min = color
         colors = cross_fade(from_color=color_min, to_color=color,
                             amount=alphas)
-
+        # add segments
         for x_left, x_right, alpha, color in zip(
                 x_lefts, x_rights, alphas, colors
         ):
@@ -1898,7 +1910,13 @@ class AxesFormatter(object):
                 width=x_right-x_left, height=height,
                 face_color=color, alpha=alpha, line_width=0
             )
-
+        # add edge
+        if edge_color is not None:
+            self.add_rectangle(
+                x_left=x_lefts[0], y_bottom=y_bottom,
+                width=x_rights[-1] - x_rights[0], height=height,
+                edge_color=edge_color, fill=False
+            )
         return self
 
     # endregion
