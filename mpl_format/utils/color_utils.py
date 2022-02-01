@@ -1,8 +1,10 @@
 from typing import Iterable, Union, List
 
-from matplotlib.colors import to_rgb, to_rgba
+from matplotlib.colors import to_rgb, to_rgba, ListedColormap
 
 from compound_types.built_ins import FloatOrFloatIterable
+from numpy import linspace
+
 from mpl_format.compound_types import Color
 
 
@@ -24,9 +26,9 @@ def cross_fade(
             for amt in amount
         ]
     if isinstance(from_color, str):
-        from_color = to_rgb(from_color)
+        from_color = to_rgba(from_color)
     if isinstance(to_color, str):
-        to_color = to_rgb(to_color)
+        to_color = to_rgba(to_color)
 
     return tuple([from_value + amount * (to_value - from_value)
                   for from_value, to_value in zip(from_color, to_color)])
