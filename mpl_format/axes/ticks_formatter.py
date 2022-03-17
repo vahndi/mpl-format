@@ -1,3 +1,4 @@
+from datetime import date
 from itertools import product
 from typing import Union, List, Tuple, Iterator, Iterable, Callable
 
@@ -44,7 +45,10 @@ class TicksFormatter(object):
 
     # region locations, values and labels
 
-    def set_locations(self, locations: FloatIterable) -> 'TicksFormatter':
+    def set_locations(
+            self,
+            locations: Union[FloatIterable, Iterable[date]]
+    ) -> 'TicksFormatter':
         """
         Set the locations of the ticks.
 

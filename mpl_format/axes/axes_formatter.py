@@ -1,5 +1,7 @@
+from datetime import date
 from math import pi, atan2
-from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING
+from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING, \
+    Callable
 
 import matplotlib.pyplot as plt
 from compound_types.arrays import ArrayLike
@@ -9,6 +11,7 @@ from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
 from compound_types.type_checks import all_are_none, one_is_not_none
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
+from matplotlib.figure import Figure
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import \
     Arc, Arrow, BoxStyle, Circle, Ellipse, \
@@ -111,6 +114,24 @@ class AxesFormatter(object):
     def gca() -> 'AxesFormatter':
 
         return AxesFormatter(axes=plt.gca())
+
+    @staticmethod
+    def find_in_figure(
+            figure: Figure,
+            match: Callable[['AxesFormatter'], bool]
+    ):
+        """
+        Return and AxesFormatter matching the first Axes in the instance where
+        an AxesFormatter wrapping the Axes matches the lambda function.
+
+        :param figure: Figure e.g. plt.gcf()
+        :param match: Method that return True for the matching Axes.
+        """
+        for axes in figure.axes:
+            axf = AxesFormatter(axes)
+            if match(axf):
+                return axf
+        raise ValueError('No matching Axes')
 
     # region properties
 
@@ -240,6 +261,10 @@ class AxesFormatter(object):
         self.title.map(mapping=mapping)
         return self
 
+    def get_x_label_text(self) -> str:
+
+        return self.x_axis.get_label_text()
+
     def set_x_label_text(self, text: str) -> 'AxesFormatter':
         """
         Set the text for the x-axis label.
@@ -248,6 +273,10 @@ class AxesFormatter(object):
         """
         self.x_axis.set_label_text(text)
         return self
+
+    def get_y_label_text(self) -> str:
+
+        return self.y_axis.get_label_text()
 
     def set_y_label_text(self, text: str) -> 'AxesFormatter':
         """
@@ -565,7 +594,7 @@ class AxesFormatter(object):
 
     # region spans
 
-    def add_h_line(self, y: Union[float, str] = 0,
+    def add_h_line(self, y: Union[float, str, date] = 0,
                    x_min: Union[float, str] = 0,
                    x_max: Union[float, str] = 1,
                    color: Optional[Color] = None,
@@ -613,7 +642,7 @@ class AxesFormatter(object):
         )
         return self
 
-    def add_v_line(self, x: Union[float, str] = 0,
+    def add_v_line(self, x: Union[float, str, date] = 0,
                    y_min: Union[float, str] = 0,
                    y_max: Union[float, str] = 1,
                    color: Optional[Color] = None, alpha: Optional[float] = None,
@@ -810,8 +839,8 @@ class AxesFormatter(object):
 
     def add_text(
             self,
-            x: FloatOrFloatIterable,
-            y: FloatOrFloatIterable,
+            x: Union[FloatOrFloatIterable, date, Iterable[date]],
+            y: Union[FloatOrFloatIterable, date, Iterable[date]],
             text: StrOrStrIterable,
             max_width: Optional[IntOrIntIterable] = None,
             font_dict: Optional[DictOrDictIterable] = None,
@@ -2186,8 +2215,11 @@ class AxesFormatter(object):
         """
         return self._axes.get_ylim()
 
-    def set_x_lim(self, left: Optional[float] = None,
-                  right: Optional[float] = None) -> 'AxesFormatter':
+    def set_x_lim(
+            self,
+            left: Optional[Union[float, date]] = None,
+            right: Optional[Union[float, date]] = None
+    ) -> 'AxesFormatter':
         """
         Set the limits of the x-axis.
 
@@ -2228,14 +2260,14 @@ class AxesFormatter(object):
 
         return abs(self.get_y_max() - self.get_y_min())
 
-    def set_x_min(self, left: float = None) -> 'AxesFormatter':
+    def set_x_min(self, left: Union[float, date]) -> 'AxesFormatter':
         """
         Set the x-axis lower view limit.
         """
         self.set_x_lim(left, None)
         return self
 
-    def set_x_max(self, right: float = None) -> 'AxesFormatter':
+    def set_x_max(self, right: Union[float, date] = None) -> 'AxesFormatter':
         """
         Set the x-axis upper view limit.
         """
@@ -2254,14 +2286,14 @@ class AxesFormatter(object):
         """
         return self.get_y_lim()[1]
 
-    def set_y_min(self, bottom: float = None) -> 'AxesFormatter':
+    def set_y_min(self, bottom: Union[float, date] = None) -> 'AxesFormatter':
         """
         Set the y-axis lower view limit.
         """
         self.set_y_lim(bottom, None)
         return self
 
-    def set_y_max(self, top: float = None) -> 'AxesFormatter':
+    def set_y_max(self, top: Union[float, date] = None) -> 'AxesFormatter':
         """
         Set the y-axis upper view limit.
         """

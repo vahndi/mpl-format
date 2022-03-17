@@ -2,6 +2,7 @@ from typing import Optional, Tuple
 
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
+from matplotlib.dates import DateFormatter
 from matplotlib.text import Text
 from matplotlib.ticker import FuncFormatter, MultipleLocator, FixedLocator
 
@@ -81,6 +82,10 @@ class AxisFormatter(object):
     # endregion
 
     # region labels
+
+    def get_label_text(self) -> str:
+
+        return self.axis.get_label_text()
 
     def set_label_text(self, text: str) -> 'AxisFormatter':
         """
@@ -283,6 +288,14 @@ class AxisFormatter(object):
             ])
 
         return self
+
+    def set_format_date(self, date_format: str):
+        """
+        Format the appearance of tick labels on a date axis.
+
+        :param date_format: Format for the date. See https://strftime.org/
+        """
+        self.axis.set_major_formatter(DateFormatter(date_format))
 
     # endregion
 

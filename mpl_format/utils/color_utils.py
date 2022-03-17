@@ -1,9 +1,7 @@
 from typing import Iterable, Union, List
 
-from matplotlib.colors import to_rgb, to_rgba, ListedColormap
-
 from compound_types.built_ins import FloatOrFloatIterable
-from numpy import linspace
+from matplotlib.colors import to_rgba
 
 from mpl_format.compound_types import Color
 
