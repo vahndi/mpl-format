@@ -1,5 +1,7 @@
+from datetime import date
 from math import pi, atan2
-from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING
+from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING, \
+    Callable
 
 import matplotlib.pyplot as plt
 from compound_types.arrays import ArrayLike
@@ -9,6 +11,7 @@ from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
 from compound_types.type_checks import all_are_none, one_is_not_none
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
+from matplotlib.figure import Figure
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import \
     Arc, Arrow, BoxStyle, Circle, Ellipse, \
@@ -111,6 +114,24 @@ class AxesFormatter(object):
     def gca() -> 'AxesFormatter':
 
         return AxesFormatter(axes=plt.gca())
+
+    @staticmethod
+    def find_in_figure(
+            figure: Figure,
+            match: Callable[['AxesFormatter'], bool]
+    ):
+        """
+        Return and AxesFormatter matching the first Axes in the instance where
+        an AxesFormatter wrapping the Axes matches the lambda function.
+
+        :param figure: Figure e.g. plt.gcf()
+        :param match: Method that return True for the matching Axes.
+        """
+        for axes in figure.axes:
+            axf = AxesFormatter(axes)
+            if match(axf):
+                return axf
+        raise ValueError('No matching Axes')
 
     # region properties
 
@@ -240,6 +261,10 @@ class AxesFormatter(object):
         self.title.map(mapping=mapping)
         return self
 
+    def get_x_label_text(self) -> str:
+
+        return self.x_axis.get_label_text()
+
     def set_x_label_text(self, text: str) -> 'AxesFormatter':
         """
         Set the text for the x-axis label.
@@ -248,6 +273,10 @@ class AxesFormatter(object):
         """
         self.x_axis.set_label_text(text)
         return self
+
+    def get_y_label_text(self) -> str:
+
+        return self.y_axis.get_label_text()
 
     def set_y_label_text(self, text: str) -> 'AxesFormatter':
         """
@@ -565,7 +594,7 @@ class AxesFormatter(object):
 
     # region spans
 
-    def add_h_line(self, y: Union[float, str] = 0,
+    def add_h_line(self, y: Union[float, str, date] = 0,
                    x_min: Union[float, str] = 0,
                    x_max: Union[float, str] = 1,
                    color: Optional[Color] = None,
@@ -613,11 +642,12 @@ class AxesFormatter(object):
         )
         return self
 
-    def add_v_line(self, x: Union[float, str] = 0,
+    def add_v_line(self, x: Union[float, str, date] = 0,
                    y_min: Union[float, str] = 0,
                    y_max: Union[float, str] = 1,
                    color: Optional[Color] = None, alpha: Optional[float] = None,
-                   line_style: Optional[Union[LineStyle, LineStyleIterable]] = None,
+                   line_style: Optional[Union[
+                       LineStyle, LineStyleIterable]] = None,
                    line_width: Optional[float] = None,
                    label: Optional[str] = None,
                    marker_edge_color: Optional[Color] = None,
@@ -809,8 +839,8 @@ class AxesFormatter(object):
 
     def add_text(
             self,
-            x: FloatOrFloatIterable,
-            y: FloatOrFloatIterable,
+            x: Union[FloatOrFloatIterable, date, Iterable[date]],
+            y: Union[FloatOrFloatIterable, date, Iterable[date]],
             text: StrOrStrIterable,
             max_width: Optional[IntOrIntIterable] = None,
             font_dict: Optional[DictOrDictIterable] = None,
@@ -1788,6 +1818,7 @@ class AxesFormatter(object):
             y_to_z: Series,
             color: Optional[Color] = 'k',
             color_min: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
             width: float = 0.8,
             z_max: Optional[float] = None,
             h_align: H_ALIGN = 'center'
@@ -1799,6 +1830,7 @@ class AxesFormatter(object):
         :param y_to_z: A mapping of the bar's y-coordinate to it density.
         :param color: The color of the density bar.
         :param color_min: Optional 2nd color to fade out to.
+        :param edge_color: Optional color for the outer edge of the density.
         :param width: The bar width.
         :param z_max: Value to scale down densities by to get to a range of
                       0 to 1. Defaults to max value of y_to_z.
@@ -1830,14 +1862,21 @@ class AxesFormatter(object):
             color_min = color
         colors = cross_fade(from_color=color_min, to_color=color,
                             amount=alphas)
-
+        # add segments
         for y_lower, y_upper, alpha, color in zip(
                 y_lowers, y_uppers, alphas, colors
         ):
             self.add_rectangle(
                 x_left=x_left, y_bottom=y_lower,
                 width=width, height=y_upper - y_lower,
-                face_color=color, alpha=alpha
+                face_color=color, alpha=alpha, line_width=0
+            )
+        # add edge
+        if edge_color is not None:
+            self.add_rectangle(
+                x_left=x_left, y_bottom=y_lowers[0],
+                width=width, height=y_uppers[-1] - y_lowers[0],
+                edge_color=edge_color, fill=False
             )
 
         return self
@@ -1847,6 +1886,7 @@ class AxesFormatter(object):
             x_to_z: Series,
             color: Optional[Color] = 'k',
             color_min: Optional[Color] = None,
+            edge_color: Optional[Color] = None,
             height: float = 0.8,
             z_max: Optional[float] = None,
             v_align: V_ALIGN = 'center'
@@ -1858,6 +1898,7 @@ class AxesFormatter(object):
         :param x_to_z: A mapping of the bar's x-coordinate to it density.
         :param color: The color of the density bar.
         :param color_min: Optional 2nd color to fade out to.
+        :param edge_color: Optional color for the outer edge of the density.
         :param height: The bar width.
         :param z_max: Value to scale down densities by to get to a range of
                       0 to 1. Defaults to max value of x_to_z.
@@ -1876,8 +1917,10 @@ class AxesFormatter(object):
             y_bottom = y
         elif v_align == 'center':
             y_bottom = y - height / 2
-        else:
+        elif v_align == 'top':
             y_bottom = y - height
+        else:
+            raise ValueError(f'v_align must be one of {V_ALIGN}')
 
         alphas = (
                 x_to_z / z_max
@@ -1887,16 +1930,22 @@ class AxesFormatter(object):
             color_min = color
         colors = cross_fade(from_color=color_min, to_color=color,
                             amount=alphas)
-
+        # add segments
         for x_left, x_right, alpha, color in zip(
                 x_lefts, x_rights, alphas, colors
         ):
             self.add_rectangle(
                 x_left=x_left, y_bottom=y_bottom,
                 width=x_right-x_left, height=height,
-                face_color=color, alpha=alpha
+                face_color=color, alpha=alpha, line_width=0
             )
-
+        # add edge
+        if edge_color is not None:
+            self.add_rectangle(
+                x_left=x_lefts[0], y_bottom=y_bottom,
+                width=x_rights[-1] - x_rights[0], height=height,
+                edge_color=edge_color, fill=False
+            )
         return self
 
     # endregion
@@ -2166,8 +2215,11 @@ class AxesFormatter(object):
         """
         return self._axes.get_ylim()
 
-    def set_x_lim(self, left: Optional[float] = None,
-                  right: Optional[float] = None) -> 'AxesFormatter':
+    def set_x_lim(
+            self,
+            left: Optional[Union[float, date]] = None,
+            right: Optional[Union[float, date]] = None
+    ) -> 'AxesFormatter':
         """
         Set the limits of the x-axis.
 
@@ -2208,14 +2260,14 @@ class AxesFormatter(object):
 
         return abs(self.get_y_max() - self.get_y_min())
 
-    def set_x_min(self, left: float = None) -> 'AxesFormatter':
+    def set_x_min(self, left: Union[float, date]) -> 'AxesFormatter':
         """
         Set the x-axis lower view limit.
         """
         self.set_x_lim(left, None)
         return self
 
-    def set_x_max(self, right: float = None) -> 'AxesFormatter':
+    def set_x_max(self, right: Union[float, date] = None) -> 'AxesFormatter':
         """
         Set the x-axis upper view limit.
         """
@@ -2234,14 +2286,14 @@ class AxesFormatter(object):
         """
         return self.get_y_lim()[1]
 
-    def set_y_min(self, bottom: float = None) -> 'AxesFormatter':
+    def set_y_min(self, bottom: Union[float, date] = None) -> 'AxesFormatter':
         """
         Set the y-axis lower view limit.
         """
         self.set_y_lim(bottom, None)
         return self
 
-    def set_y_max(self, top: float = None) -> 'AxesFormatter':
+    def set_y_max(self, top: Union[float, date] = None) -> 'AxesFormatter':
         """
         Set the y-axis upper view limit.
         """
