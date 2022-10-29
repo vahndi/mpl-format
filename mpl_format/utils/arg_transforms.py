@@ -20,7 +20,8 @@ def smart_zip(*args):
         if (
                 isinstance(arg, Sized) and
                 not isinstance(arg, dict) and
-                not isinstance(arg, str)
+                not isinstance(arg, str) and
+                not isinstance(arg, tuple)
         ):
             arg_length = len(arg)
             if arg_length > max_arg_length:
