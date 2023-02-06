@@ -23,6 +23,11 @@ class ColorMapGenerator(object):
             from_color, to_color, linspace(0, 1, 256)))
 
     @staticmethod
+    def cross_fade(from_color: Color, to_color: Color):
+        return ListedColormap(cross_fade(
+            from_color, to_color, linspace(0, 1, 256)))
+
+    @staticmethod
     def diverging_fade_in_to_colors(
         low_color: Color,
         high_color: Color
