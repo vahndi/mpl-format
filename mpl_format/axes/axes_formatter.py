@@ -18,6 +18,7 @@ from matplotlib.patches import \
     FancyArrow, FancyArrowPatch, FancyBboxPatch, \
     Patch, Polygon, Rectangle, RegularPolygon, Wedge
 from matplotlib.path import Path
+
 from mpl_format.enums.font_size import FONT_SIZE
 from numpy import ndarray, linspace
 from numpy.ma import cos, sin
@@ -44,7 +45,7 @@ from mpl_format.enums.mappings import kwarg_mappings
 from mpl_format.enums.marker_style import MARKER_STYLE
 from mpl_format.legend.legend_formatter import LegendFormatter
 from mpl_format.literals import H_ALIGN, V_ALIGN, ROTATION_MODE, WHICH_TICKS, \
-    FIGURE_UNITS, WHICH_AXIS, LINE_STYLE_STR
+    FIGURE_UNITS, WHICH_AXIS, LINE_STYLE_STR, ASPECT, ANCHOR
 from mpl_format.patches.patch_list_formatter import PatchListFormatter
 from mpl_format.text.text_formatter import TextFormatter
 from mpl_format.text.text_utils import wrap_text
@@ -2509,6 +2510,80 @@ class AxesFormatter(object):
 
     # endregion
 
+    def set_aspect(self, aspect: ASPECT) -> 'AxesFormatter':
+        """
+        Set the aspect of the axis scaling, i.e. the ratio of y-unit to x-unit.
+        """
+        self._axes.set_aspect(aspect=aspect)
+        return self
+
+    def set_aspect_equal(self) -> 'AxesFormatter':
+        """
+        Set the aspect of the axis scaling to equal.
+        """
+        return self.set_aspect('equal')
+
+    def set_anchor(self, anchor: ANCHOR) -> 'AxesFormatter':
+        """
+        Define the anchor location.
+        """
+        self._axes.set_anchor(anchor=anchor)
+        return self
+
+    def set_anchor_north(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the top of the figure.
+        """
+        return self.set_anchor('N')
+
+    def set_anchor_east(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the right of the figure.
+        """
+        return self.set_anchor('E')
+
+    def set_anchor_south(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the bottom of the figure.
+        """
+        return self.set_anchor('S')
+
+    def set_anchor_west(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the left of the figure.
+        """
+        return self.set_anchor('W')
+
+    def set_anchor_center(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the middle of the figure.
+        """
+        return self.set_anchor('C')
+
+    def set_anchor_north_east(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the top right of the figure.
+        """
+        return self.set_anchor('NE')
+
+    def set_anchor_north_west(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the top left of the figure.
+        """
+        return self.set_anchor('NW')
+
+    def set_anchor_south_east(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the bottom right of the figure.
+        """
+        return self.set_anchor('SE')
+
+    def set_anchor_south_west(self) -> 'AxesFormatter':
+        """
+        Set the anchor location to the bottom left of the figure.
+        """
+        return self.set_anchor('SW')
+
     def set_axis_below(self,
                        value: bool = True) -> 'AxesFormatter':
         """
@@ -2517,21 +2592,6 @@ class AxesFormatter(object):
         :param value: True or False
         """
         self._axes.set_axisbelow(b=value)
-        return self
-
-    def save(self,
-             file_path: Union[str, Path],
-             file_type: Optional[str] = None) -> 'AxesFormatter':
-        """
-        Save the plot to disk.
-
-        :param file_path: The file path to save the plot object to.
-        :param file_type: The type of file to save.
-                          Defaults to png if can't be auto-detected from name.
-        """
-        save_plot(plot_object=self._axes,
-                  file_path=file_path,
-                  file_type=file_type)
         return self
 
     def tight_layout(self) -> 'AxesFormatter':
@@ -2554,6 +2614,22 @@ class AxesFormatter(object):
         """
         self.y_axis.invert()
         return self
+
+    def save(self,
+             file_path: Union[str, Path],
+             file_type: Optional[str] = None) -> 'AxesFormatter':
+        """
+        Save the plot to disk.
+
+        :param file_path: The file path to save the plot object to.
+        :param file_type: The type of file to save.
+                          Defaults to png if can't be auto-detected from name.
+        """
+        save_plot(plot_object=self._axes,
+                  file_path=file_path,
+                  file_type=file_type)
+        return self
+
 
     def add_legend(
             self,
