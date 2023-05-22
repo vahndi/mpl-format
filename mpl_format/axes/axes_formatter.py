@@ -402,9 +402,11 @@ class AxesFormatter(object):
             self,
             title: Optional[FontSize] = None,
             axis_labels: Optional[FontSize] = None,
+            tick_labels: Optional[FontSize] = None,
+            legend: Optional[FontSize] = None,
+            figure_title: Optional[FontSize] = None,
             x_axis_label: Optional[FontSize] = None,
             y_axis_label: Optional[FontSize] = None,
-            tick_labels: Optional[FontSize] = None,
             major_tick_labels: Optional[FontSize] = None,
             minor_tick_labels: Optional[FontSize] = None,
             x_tick_labels: Optional[FontSize] = None,
@@ -413,8 +415,6 @@ class AxesFormatter(object):
             y_tick_labels: Optional[FontSize] = None,
             y_major_tick_labels: Optional[FontSize] = None,
             y_minor_tick_labels: Optional[FontSize] = None,
-            legend: Optional[FontSize] = None,
-            figure_title: Optional[FontSize] = None
     ) -> 'AxesFormatter':
         """
         Set font sizes for different axes elements.
@@ -1815,7 +1815,8 @@ class AxesFormatter(object):
     # region custom shapes
 
     def add_v_density(
-            self, x: float,
+            self,
+            x: float,
             y_to_z: Series,
             color: Optional[Color] = 'k',
             color_min: Optional[Color] = None,
