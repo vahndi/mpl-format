@@ -4,7 +4,7 @@ from setuptools import find_packages
 setup(
     name='mpl_format',
     packages=find_packages(),
-    version='0.315',
+    version='0.316',
     license='MIT',
     description='Library for easier formatting of matplotlib plots written in '
                 'a functional style.',
@@ -13,7 +13,6 @@ setup(
     keywords=['matplotlib'],
     install_requires=[
         'celluloid',
-        'compound-types',
         'matplotlib',
         'numpy',
         'pandas',

@@ -4,11 +4,11 @@ from typing import Optional, Union, List, Tuple, Iterable, TYPE_CHECKING, \
     Callable
 
 import matplotlib.pyplot as plt
-from compound_types.arrays import ArrayLike
-from compound_types.built_ins import FloatOrFloatIterable, StrOrStrIterable, \
+from mpl_format.compound_types import ArrayLike
+from mpl_format.compound_types import FloatOrFloatIterable, StrOrStrIterable, \
     DictOrDictIterable, BoolOrBoolIterable, FloatIterable, Scalar, \
     IntOrIntIterable, NdArrayIterable
-from compound_types.type_checks import all_are_none, one_is_not_none
+from mpl_format.utils.type_checks import all_are_none, one_is_not_none
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.figure import Figure

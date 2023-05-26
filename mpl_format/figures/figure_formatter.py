@@ -7,7 +7,7 @@ from matplotlib.figure import Figure
 from numpy import ndarray, reshape
 from numpy.ma import empty_like
 
-from compound_types.built_ins import Scalar
+from mpl_format.compound_types import Scalar
 from mpl_format.axes import AxisFormatter
 from mpl_format.axes.axes_formatter import AxesFormatter
 from mpl_format.axes.axes_formatter_array import AxesFormatterArray

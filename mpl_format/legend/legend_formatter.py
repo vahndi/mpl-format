@@ -4,7 +4,7 @@ from matplotlib.collections import PathCollection
 from matplotlib.font_manager import FontProperties
 from matplotlib.legend import Legend
 
-from compound_types.arrays import ArrayLike
+from mpl_format.compound_types import ArrayLike
 from mpl_format.compound_types import Color, FontSize, LegendLocation, \
     StringMapper
 from mpl_format.text.text_formatter import TextFormatter

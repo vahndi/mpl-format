@@ -2,6 +2,7 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 from matplotlib.path import Path
+from numpy import ndarray
 from seaborn import JointGrid, PairGrid
 from typing import TypeVar, Tuple, Union, Dict, Callable, Iterable
 
@@ -10,7 +11,44 @@ from mpl_format.enums import FONT_SIZE, FONT_STRETCH, FONT_WEIGHT, FONT_STYLE, \
     CONNECTION_STYLE
 from mpl_format.enums.box_style import BoxStyleType
 
+# built-ins
+BoolIterable = Iterable[bool]
+DictIterable = Iterable[dict]
+FloatIterable = Iterable[float]
+IntIterable = Iterable[int]
+StrIterable = Iterable[str]
+NdArrayIterable = Iterable[ndarray]
+BoolList = List[bool]
+DictList = List[dict]
+FloatList = List[float]
+IntList = List[int]
+StrList = List[str]
+BoolOrBoolIterable = Union[bool, BoolIterable]
+DictOrDictIterable = Union[dict, DictIterable]
+FloatOrFloatIterable = Union[float, FloatIterable]
+IntOrIntIterable = Union[int, IntIterable]
+StrOrStrIterable = Union[str, StrIterable]
+BoolOrBoolList = Union[bool, BoolList]
+DictOrDictList = Union[dict, DictList]
+FloatOrFloatList = Union[float, FloatList]
+IntOrIntList = Union[int, IntList]
+StrOrStrList = Union[str, StrList]
+BoolOrDict = Union[bool, dict]
+BoolOrFloat = Union[bool, float]
+BoolOrInt = Union[bool, int]
+BoolOrStr = Union[bool, str]
+DictOrFloat = Union[dict, float]
+DictOrInt = Union[dict, int]
+DictOrStr = Union[dict, str]
+FloatOrInt = Union[float, int]
+FloatOrStr = Union[float, str]
+IntOrStr = Union[int, str]
+Scalar = Union[int, float]
+SizedOrIterable = Union[Sized, Iterable]
+ArrayLike = Union[ndarray, list]
 
+
+# matplotlib
 ArrowStyle = TypeVar('ArrowStyle', str, ARROW_STYLE)
 ArrowStyleIterable = Iterable[ArrowStyle]
 

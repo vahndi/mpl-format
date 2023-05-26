@@ -1,6 +1,6 @@
 from typing import Iterable, Union, List
 
-from compound_types.built_ins import FloatOrFloatIterable
+from mpl_format.compound_types import FloatOrFloatIterable
 from matplotlib.colors import to_rgba
 
 from mpl_format.compound_types import Color

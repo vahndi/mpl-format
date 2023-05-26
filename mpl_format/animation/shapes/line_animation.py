@@ -3,7 +3,7 @@ from typing import Union, Optional
 from numpy import linspace
 from scipy.interpolate import interp1d
 
-from compound_types.built_ins import FloatIterable
+from mpl_format.compound_types import FloatIterable
 from mpl_format.animation.kwarg_animations.float_animation import FloatAnimation
 from mpl_format.animation.shapes.base import ShapeAnimation
 from mpl_format.animation.type_animations import \
