@@ -4,7 +4,7 @@ from setuptools import find_packages
 setup(
     name='mpl_format',
     packages=find_packages(),
-    version='0.316',
+    version='0.317',
     license='MIT',
     description='Library for easier formatting of matplotlib plots written in '
                 'a functional style.',

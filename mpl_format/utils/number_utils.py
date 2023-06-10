@@ -1,4 +1,4 @@
-from mpl_format.compound_types.built_ins import Scalar
+from mpl_format.compound_types import Scalar
 
 
 def format_as_integer(number: Scalar, kmbt: bool = False) -> str:

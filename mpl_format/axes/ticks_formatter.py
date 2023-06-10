@@ -3,7 +3,7 @@ from itertools import product
 from typing import Union, List, Tuple, Iterator, Iterable, Callable
 
 import matplotlib.pyplot as plt
-from mpl_format.compound_types.built_ins import FloatIterable
+from mpl_format.compound_types import FloatIterable
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 

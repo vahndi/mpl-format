@@ -4,7 +4,7 @@ from matplotlib.patches import Patch
 from matplotlib.path import Path
 from numpy import ndarray
 from seaborn import JointGrid, PairGrid
-from typing import TypeVar, Tuple, Union, Dict, Callable, Iterable
+from typing import TypeVar, Tuple, Union, Dict, Callable, Iterable, List, Sized
 
 from mpl_format.enums import FONT_SIZE, FONT_STRETCH, FONT_WEIGHT, FONT_STYLE, \
     FONT_VARIANT, CAP_STYLE, JOIN_STYLE, LINE_STYLE, ARROW_STYLE, \
