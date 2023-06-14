@@ -2384,9 +2384,14 @@ class AxesFormatter(object):
             kwargs['lw'] = line_width
         if line_style is not None:
             kwargs['ls'] = LINE_STYLE.get_line_style(line_style)
-
-        self._axes.grid(b=value, which=which, axis=axis,
-                        **kwargs)
+        try:
+            # older matplotlib versions
+            self._axes.grid(b=value, which=which, axis=axis,
+                            **kwargs)
+        except:
+            # newer matplotlib versions
+            self._axes.grid(visible=value, which=which, axis=axis,
+                            **kwargs)
         return self
 
     def add_major_xy_grid(
