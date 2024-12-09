@@ -1,7 +1,7 @@
 from matplotlib.patches import Patch
 from typing import List, Iterable
 
-from mpl_format.compound_types import Color
+from mpl_format.compound_types import Color, FloatIterable
 
 
 class PatchListFormatter(object):
@@ -55,7 +55,7 @@ class PatchListFormatter(object):
                 for patch in self._patches]
 
     @alphas.setter
-    def alphas(self, values: Iterable[float]):
+    def alphas(self, values: FloatIterable):
         """
         Set the alphas of each patch.
 

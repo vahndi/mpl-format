@@ -3,16 +3,16 @@ from typing import Union, Optional
 from numpy import linspace
 from scipy.interpolate import interp1d
 
-from mpl_format.compound_types import FloatIterable
 from mpl_format.animation.kwarg_animations.float_animation import FloatAnimation
 from mpl_format.animation.shapes.base import ShapeAnimation
 from mpl_format.animation.type_animations import \
     FloatOrFloatAnimation, ColorOrColorAnimation, StrOrFloatAnimation, \
     StrOrFloatOrFloatAnimation
 from mpl_format.axes import AxesFormatter
-from mpl_format.enums.marker_style import MARKER_STYLE
+from mpl_format.compound_types import FloatIterable
 from mpl_format.enums.draw_style import DRAW_STYLE
 from mpl_format.enums.line_style import LINE_STYLE
+from mpl_format.enums.marker_style import MARKER_STYLE
 
 
 class LineAnimation(ShapeAnimation, object):
